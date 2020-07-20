@@ -3452,19 +3452,6 @@
           "lib/netstandard2.0/X.PagedList.Web.Common.dll": {}
         }
       },
-      "AppResources/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0"
-        },
-        "compile": {
-          "bin/placeholder/AppResources.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/AppResources.dll": {}
-        }
-      },
       "Data.Model/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -10799,11 +10786,6 @@
         "x.pagedlist.web.common.nuspec"
       ]
     },
-    "AppResources/1.0.0": {
-      "type": "project",
-      "path": "../AppResources/AppResources.csproj",
-      "msbuildProject": "../AppResources/AppResources.csproj"
-    },
     "Data.Model/1.0.0": {
       "type": "project",
       "path": "../Data.Model/Data.Model.csproj",
@@ -10817,7 +10799,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "AppResources >= 1.0.0",
       "Data.Model >= 1.0.0",
       "Data.Tools >= 1.0.0",
       "Fancybox >= 2.1.5",
@@ -10873,9 +10854,6 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Work\\MerchantEFC\\AppResources\\AppResources.csproj": {
-              "projectPath": "C:\\Work\\MerchantEFC\\AppResources\\AppResources.csproj"
-            },
             "C:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj": {
               "projectPath": "C:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj"
             },

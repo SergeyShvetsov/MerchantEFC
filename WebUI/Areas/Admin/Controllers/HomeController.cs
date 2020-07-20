@@ -1,7 +1,9 @@
 ﻿using Data.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -21,7 +23,15 @@ namespace WebUI.Areas.Admin.Controllers
             _env = env;
             _httpContextAccessor = httpContextAccessor;
         }
-
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+            return LocalRedirect(returnUrl);
+        }
         public IActionResult Index()
         {
             // Samples

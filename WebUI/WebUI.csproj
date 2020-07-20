@@ -56,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppResources\AppResources.csproj" />
     <ProjectReference Include="..\Data.Model\Data.Model.csproj" />
     <ProjectReference Include="..\Data.Tools\Data.Tools.csproj" />
   </ItemGroup>

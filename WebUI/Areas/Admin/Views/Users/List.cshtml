@@ -83,8 +83,7 @@ else
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", "Users", new { id = item.UserId }, htmlAttributes: new { @class = "btn btn-primary" })
-                        @Html.ActionLink("Details", "Details", "Users", new { id = item.UserId }, htmlAttributes: new { @class = "btn btn-info" })
+                        @Html.ActionLink("Edit", "EditUser", "Users", new { id = item.UserId }, htmlAttributes: new { @class = "btn btn-primary" })
                         @Html.ActionLink("Delete", "DeleteUser", "Users", new { id = item.UserId , roleId = ViewBag.SelectedRole }, htmlAttributes: new { @class = "btn btn-danger delete" })
                     </td>
                 </tr>

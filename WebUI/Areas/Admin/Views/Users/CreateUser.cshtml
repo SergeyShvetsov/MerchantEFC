@@ -5,15 +5,13 @@
     ViewData["Title"] = "CreateUser";
 }
 
-<h1>Create User</h1>
+<h4>Create User</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateUser">
-            @{
-                string password = Model == null || string.IsNullOrEmpty(Model.Password) ? ViewBag.NewPassword : Model.Password;
-            }
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserId" class="form-control" />
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
                 <input asp-for="UserName" class="form-control" />
@@ -36,33 +34,78 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" value="@password" />
+                <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                @if (ViewBag.Roles != null || ViewBag.Roles.Any())
-                {
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            <h4>Select Roles</h4>
-                        </li>
-                        @foreach (var role in ViewBag.Roles as List<RoleVM>)
+            @if (ViewBag.AvailableStores != null || ViewBag.AvailableStoresStores.Any())
+            {
+                <div class="form-group">
+                    <label asp-for="AssignedStoreId" class="control-label"></label>
+                    <select asp-for="AssignedStoreId" class="form-control">
+                        @if (Model.AssignedStoreId == null)
                         {
-                            <li class="list-group-item">
-                                @if (role.isCheked)
-                                {
-                                    <input type="checkbox" name="chk_@role.RoleId" id="chk_@role.RoleId" checked="checked" value="@role.RoleId" />
-                                }
-                                else
-                                {
-                                    <input type="checkbox" name="chk_@role.RoleId" id="chk_@role.RoleId" value="@role.RoleId" />
-                                }
-                                <label for="chk_@role.RoleId">@role.RoleName</label>
-                            </li>
+                            <option value="0">None</option>
                         }
-                    </ul>
-                }
-            </div>
+                        else
+                        {
+                            <option selected="selected" value="0">None</option>
+                        }
+                        @foreach (var item in ViewBag.AvailableStores as List<StoreVM>)
+                        {
+                            if (Model.AssignedStoreId != null && item.StoreId == Model.AssignedStoreId)
+                            {
+                                <option selected="selected" value="@item.StoreId">@item.StoreName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.StoreId">@item.StoreName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+            @if (ViewBag.AvailableRoles != null || ViewBag.AvailableRoles.Any())
+            {
+                <div class="form-group">
+                    <label asp-for="UserRoles" class="control-label"></label>
+                    <select asp-for="UserRoles" multiple class="form-control">
+                        @foreach (var item in ViewBag.AvailableRoles as List<RoleVM>)
+                        {
+                            if (Model.UserRoles != null && Model.UserRoles.Select(s => s.RoleId).Contains(item.RoleId))
+                            {
+                                <option selected="selected" value="@item.RoleId">@item.RoleName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.RoleId">@item.RoleName</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="UserRoles" class="text-danger"></span>
+                </div>
+            }
+            @if (ViewBag.AvailableStatuses != null || ViewBag.AvailableStatuses.Any())
+            {
+                <div class="form-group">
+                    <label asp-for="UserStatus" class="control-label"></label>
+                    <span asp-validation-for="UserStatus" class="text-danger"></span>
+                    <select asp-for="UserStatus" class="form-control">
+                        @foreach (var item in ViewBag.AvailableStatuses)
+                        {
+                            if (Model.UserStatus == item)
+                            {
+                                <option selected="selected" value="@((int)item)">@item</option>
+                            }
+                            else
+                            {
+                                <option value="@((int)item) ">@item</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <br />
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -71,5 +114,5 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="List">Back to List</a>
 </div>

@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Model;
+using Data.Model.Extensions;
+using Data.Model.Interfaces;
 using Data.Model.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WebUI.Areas.Admin.Models;
+using WebUI.Extensions;
 using X.PagedList;
 
 namespace WebUI.Areas.Admin.Controllers
@@ -16,44 +21,54 @@ namespace WebUI.Areas.Admin.Controllers
     [Area("Admin")]
     public class UsersController : Controller
     {
-        private ApplicationContext _db;
+        //private ApplicationContext _cntx;
         private readonly AppConfig _config;
+        private readonly IEntityContext _cntx;
+        private readonly IStringLocalizer _resources;
 
-        public UsersController(ApplicationContext cntx, IOptions<AppConfig> config)
+        public UsersController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer)
         {
-            _db = cntx;
+            // _cntx = cntx;
             _config = config.Value;
+            _cntx = context;
+            _resources = localizer.GetLocalResources();
+        }
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+            return LocalRedirect(returnUrl);
         }
         // GET: UsersController
-        public ActionResult List(int? page, Guid? roleId, IFormCollection collection)
+        public ActionResult List(int? page, Guid? roleId)
         {
-            var aaa = collection;
-
             // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_Users_List_UsersPerPage;
 
-            // Заполняем категории данными
-            ViewBag.Roles = new SelectList(_db.Roles.OrderBy(o => (int)o.RoleType).ToList(), dataValueField: "RoleId", dataTextField: "DisplayName");
-            // Устанавливаем выбранную категорию
+            // Заполняем список ролей данными
+            ViewBag.Roles = new SelectList(_cntx.Roles.GetAll().OrderBy(o => (int)o.RoleType).ToList(), dataValueField: "RoleId", dataTextField: "DisplayName");
+            //// Заполняем список stores данными
+            //ViewBag.Stores = new SelectList(_cntx.Stores.GetAll().OrderBy(o => o.StoreName).ToList(), dataValueField: "Id", dataTextField: "StoreName");
+
+            // Устанавливаем выбранную роль
             ViewBag.SelectedRole = roleId.ToString();
 
             // Инициализируем List и заполняем данными
-            var listOfUsers = from u in _db.Users
-                              join ur in _db.UserRoles on u.UserId equals ur.UserId
-                              join r in _db.Roles on ur.RoleId equals r.RoleId
-                              where roleId == null || roleId == Guid.Empty || r.RoleId == (Guid)roleId
-                              select u;
+            var listOfUsers = from ur in _cntx.UserRoles.GetAll().ApplyArchivedFilter()
+                              where roleId == null || roleId == Guid.Empty || ur.RoleId == (Guid)roleId
+                              select ur.AppUser;
 
-            var listOfUsersVM = (from u in _db.Users
-                                 join ur in _db.UserRoles on u.UserId equals ur.UserId
-                                 join r in _db.Roles on ur.RoleId equals r.RoleId
-                                 where roleId == null || roleId == Guid.Empty || r.RoleId == (Guid)roleId
-                                 select new UserListVM(u))
-                                             .ToList()
-                                             .GroupBy(gr => gr.UserId)
-                                             .Select(user => user.First())
-                                             .OrderBy(o=>o.UserName);
+            var listOfUsersVM = listOfUsers
+                .Select(s => new UserListVM(s))
+                .ToList()
+                .GroupBy(gr => gr.UserId)
+                .Select(user => user.First())
+                .OrderBy(o => o.UserName);
+
             // Устанавливаем постраничную навигацию
             var onePageOfUsers = listOfUsersVM.ToPagedList(pageNumber, pageSize: pageSize);
             // Возвращаем в преставление
@@ -61,44 +76,65 @@ namespace WebUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateUser(Guid? roleId)
+        public IActionResult DeleteUser(Guid id)
         {
-            ViewBag.NewPassword = Data.Tools.Pasword.Generate(_config.PasswordLenght);
-            ViewBag.Roles = _db.Roles.OrderByDescending(x => (int)x.RoleType).Select(s => new RoleVM { RoleId = s.RoleId, RoleName = s.DisplayName, isCheked = s.RoleId == roleId }).ToList();
-            return View("CreateUser");
+            var user = _cntx.Users.GetById(id);
+            // Удаляем связи с ролями
+            _cntx.Context.RemoveAllRolesFromUser(user);
+            // Удаляем пользователя из БД
+            _cntx.Users.Delete(user);
+            _cntx.Save();
+
+            TempData["SM"] = _resources["UserWasDeleted"];
+            return RedirectToAction("List");
         }
+
+        [HttpGet]
+        public IActionResult CreateUser(Guid? roleId, int? storeId)
+        {
+            ViewBag.AvailableRoles = GetAvailableRoles(new List<Guid>());
+            ViewBag.AvailableStores = GetAvailableStores();
+            ViewBag.AvailableStatuses = AvailableStatuses();
+
+            var model = new UserEditVM()
+            {
+                Password = Data.Tools.Pasword.Generate(_config.PasswordLenght),
+                UserStatus = Status.Active
+            };
+            return View("CreateUser", model);
+        }
+
         [HttpPost]
         //[ActionName("create-account")]
         public IActionResult CreateUser(UserEditVM model, IFormCollection collection)
         {
-            var rolesCol = collection.Where(w => w.Key.StartsWith("chk_")).Select(s => new Guid(s.Value)).ToList();
+            var rolesIdsCol = collection["UserRoles"].Select(s => new Guid(s));
 
             //Проверяем модель на валидность
             if (!ModelState.IsValid)
             {
-                ViewBag.Roles = _db.Roles.OrderByDescending(x => (int)x.RoleType).Select(s => new RoleVM { RoleId = s.RoleId, RoleName = s.DisplayName, isCheked = rolesCol.Contains(s.RoleId) }).ToList();
-                return View(model);
-            }
-
-            if (!rolesCol.Any())
-            {
-                ViewBag.Roles = _db.Roles.OrderByDescending(x => (int)x.RoleType).Select(s => new RoleVM { RoleId = s.RoleId, RoleName = s.DisplayName, isCheked = rolesCol.Contains(s.RoleId) }).ToList();
-                ModelState.AddModelError("", "Assign a user role!");
+                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableStores = GetAvailableStores();
+                ViewBag.AvailableStatuses = AvailableStatuses();
                 return View(model);
             }
 
             if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
             {
-                ViewBag.Roles = _db.Roles.OrderByDescending(x => (int)x.RoleType).Select(s => new RoleVM { RoleId = s.RoleId, RoleName = s.DisplayName, isCheked = rolesCol.Contains(s.RoleId) }).ToList();
-                ModelState.AddModelError("", $"Password must be at least {_config.PasswordLenght} characters!");
+                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableStores = GetAvailableStores();
+                ViewBag.AvailableStatuses = AvailableStatuses();
+                ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
                 return View(model);
             }
 
             // Проверяем имя на уникальность
-            if (_db.Users.Any(a => a.UserName.Equals(model.UserName)))
+            if (!_cntx.Users.IsUniqName(model.UserName))
             {
-                ViewBag.Roles = _db.Roles.OrderByDescending(x => (int)x.RoleType).Select(s => new RoleVM { RoleId = s.RoleId, RoleName = s.DisplayName, isCheked = rolesCol.Contains(s.RoleId) }).ToList();
-                ModelState.AddModelError("", $"Login {model.UserName} is taken!");
+                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableStores = GetAvailableStores();
+                ViewBag.AvailableStatuses = AvailableStatuses();
+                ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                 model.UserName = string.Empty;
                 return View(model);
             }
@@ -112,43 +148,108 @@ namespace WebUI.Areas.Admin.Controllers
                 UserName = model.UserName,
                 Password = model.Password
             };
-            _db.Users.Add(userDTO);
+            if (model.AssignedStoreId != null)
+            {
+                userDTO.AssignedStore = _cntx.Stores.GetById((int)model.AssignedStoreId);
+            }
+            else
+            {
+                userDTO.AssignedStore = null;
+            }
+
+            _cntx.Users.Insert(userDTO);
+            _cntx.Save();
 
             // Добавить роли пользователю
-            var userRoles = new List<UserRole>();
-            foreach (var role in rolesCol)
-            {
-                _db.UserRoles.Add(new UserRole()
-                {
-                    UserId = userDTO.UserId,
-                    RoleId = role
-                });
-            }
+            _cntx.Context.AddRolesToUser(userDTO, rolesIdsCol);
 
             // Сохранить данные
-            _db.SaveChanges();
+            _cntx.Save();
+
             Emailer.SendUserRegistrationMail(_config.AdministrationEmail, userDTO);
             // Записать сообщение
-            TempData["SM"] = "You are added a new user.";
+            TempData["SM"] = _resources["NewUserAdded"];
             return RedirectToAction("List");
         }
-        [HttpGet]
-        public IActionResult DeleteUser(Guid id)
-        {
-            // Удаляем связи с ролями
-            var roles = _db.UserRoles.Where(x => x.UserId == id);
-            foreach (var role in roles)
-            {
-                _db.UserRoles.Remove(role);
-            }
-            // Удаляем пользователя из БД
-            var dto = _db.Users.Find(id);
-            _db.Users.Remove(dto);
-            _db.SaveChanges();
 
-            TempData["SM"] = "The user was deleted!";
+        [HttpGet]
+        public IActionResult EditUser(Guid id)
+        {
+            ViewBag.AvailableRoles = GetAvailableRoles(new List<Guid>());
+            ViewBag.AvailableStores = GetAvailableStores();
+            ViewBag.AvailableStatuses = AvailableStatuses();
+            var user = _cntx.Users.GetById(id);
+
+            return View("EditUser", new UserEditVM(user));
+        }
+        [HttpPost]
+        public IActionResult EditUser(UserEditVM model, IFormCollection collection)
+        {
+            var rolesIdsCol = collection["UserRoles"].Select(s => new Guid(s));
+
+            //Проверяем модель на валидность
+            if (!ModelState.IsValid)
+            {
+                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableStores = GetAvailableStores();
+                ViewBag.AvailableStatuses = AvailableStatuses();
+                return View(model);
+            }
+
+            if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
+            {
+                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableStores = GetAvailableStores();
+                ViewBag.AvailableStatuses = AvailableStatuses();
+                ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
+                return View(model);
+            }
+
+            // Получить экземпляр UserDTO
+            var userDTO = _cntx.Users.GetById(model.UserId);
+
+            userDTO.FirstName = model.FirstName;
+            userDTO.LastName = model.LastName;
+            userDTO.EmailAddress = model.Email;
+            userDTO.UserName = model.UserName;
+            userDTO.Password = model.Password;
+
+            if (model.AssignedStoreId != null)
+            {
+                userDTO.AssignedStore = _cntx.Stores.GetById((int)model.AssignedStoreId);
+            }
+            else
+            {
+                userDTO.AssignedStore = null;
+            }
+
+            // Добавить роли пользователю
+            _cntx.Context.RemoveAllRolesFromUser(userDTO);
+            _cntx.Context.AddRolesToUser(userDTO, rolesIdsCol);
+
+            _cntx.Users.Update(userDTO);
+
+            // Сохранить данные
+            _cntx.Save();
+
+            // Записать сообщение
+            TempData["SM"] = _resources["UserWasEdited"];
             return RedirectToAction("List");
         }
+        private List<RoleVM> GetAvailableRoles(IEnumerable<Guid> rolesIds)
+        {
+            return _cntx.Roles.GetAll().OrderByDescending(x => (int)x.RoleType).Select(s => new RoleVM { RoleId = s.RoleId, RoleName = s.DisplayName, isCheked = rolesIds.Contains(s.RoleId) }).ToList();
+        }
+        private List<StoreVM> GetAvailableStores()
+        {
+            return _cntx.Stores.GetAll().OrderBy(x => x.StoreName).Select(s => new StoreVM { StoreId = s.Id, StoreCode = s.StoreCode, StoreName = s.StoreName }).ToList();
+        }
+        private List<Status> AvailableStatuses()
+        {
+            return Enum.GetValues(typeof(Status)).Cast<Status>().Select(v => v).ToList();
+        }
+
+
     }
 }
 

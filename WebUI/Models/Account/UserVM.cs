@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using WebUI.Resources;
 
 namespace WebUI.Models.Account
 {
@@ -13,7 +14,7 @@ namespace WebUI.Models.Account
         public UserVM() { }
         public UserVM(AppUser row)
         {
-            Id = row.UserId;
+            Id = row.AppUserId;
             FirstName = row.FirstName;
             LastName = row.LastName;
             EmailAddress = row.EmailAddress;
@@ -21,24 +22,25 @@ namespace WebUI.Models.Account
             Password = row.Password;
         }
         public Guid Id { get; set; }
-        [Required]
-        [DisplayName("First Name")]
+        [Required(ErrorMessage = "FirstNameRequired")]
+        [DisplayName("FirstName")]
         public string FirstName { get; set; }
-        [Required]
-        [DisplayName("Last Name")]
+        [Required(ErrorMessage = "LastNameRequired")]
+        [DisplayName("LastName")]
         public string LastName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "EmailRequired")]
         [DisplayName("Email")]
-        [DataType(DataType.EmailAddress)]
+        [DataType(DataType.EmailAddress, ErrorMessage = "EmailWrongFormat")]
         public string EmailAddress { get; set; }
-        [Required]
-        [DisplayName("Login")]
+        [Required(ErrorMessage = "UserNameRequired")]
+        [DisplayName("UserName")]
         public string UserName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "PasswordRequired")]
         [DataType(DataType.Password)]
+        [DisplayName("Password")]
         public string Password { get; set; }
-        [Required]
-        [DisplayName("Confirm Password")]
+        [Required(ErrorMessage = "ConfirmPasswordRequired")]
+        [DisplayName("ConfirmPassword")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
     }

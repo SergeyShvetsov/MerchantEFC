@@ -4,12 +4,19 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Data.Model;
+using Data.Model.Entities;
+using Data.Model.Extensions;
+using Data.Model.Interfaces;
 using Data.Model.Models;
 using Data.Tools.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using WebUI.Extensions;
 using WebUI.Models.Account;
@@ -18,10 +25,27 @@ namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ApplicationContext db;
-        public AccountController(ApplicationContext cntx)
+        private readonly AppConfig _config;
+        private readonly EntityContext _cntx;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IStringLocalizer _resources;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
+
+        public AccountController(IOptions<AppConfig> config, IEntityContext context, IHttpContextAccessor httpContextAccessor, IStringLocalizerFactory localizer)
         {
-            db = cntx;
+            _config = config.Value;
+            _cntx = context as EntityContext;
+            _httpContextAccessor = httpContextAccessor;
+            _resources = localizer.GetLocalResources();
+        }
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+            return LocalRedirect(returnUrl);
         }
         public IActionResult Index()
         {
@@ -44,13 +68,13 @@ namespace WebUI.Controllers
             //  Проверяем соответствие пароля
             if (!model.Password.Equals(model.ConfirmPassword))
             {
-                ModelState.AddModelError("", "Password do not match!");
+                ModelState.AddModelError("", _resources["PasswordDoNotMatch"]);
                 return View(model);
             }
             // Проверяем имя на уникальность
-            if (db.Users.Any(a => a.UserName.Equals(model.UserName)))
+            if (!_cntx.Users.IsUniqName(model.UserName))
             {
-                ModelState.AddModelError("", $"Login {model.UserName} is taken!");
+                ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                 model.UserName = string.Empty;
                 return View(model);
             }
@@ -61,23 +85,21 @@ namespace WebUI.Controllers
                 LastName = model.LastName,
                 EmailAddress = model.EmailAddress,
                 UserName = model.UserName,
-                Password = model.Password
+                Password = model.Password,
+                UserStatus = Status.Active
             };
+            _cntx.Users.Insert(userDTO);
+            _cntx.Save();
 
             // Добавить роль пользователю
-            var userRoleDto = new UserRole()
-            {
-                UserId = userDTO.UserId,
-                RoleId = db.Roles.First(x => x.RoleType == RoleType.User).RoleId
-            };
 
-            db.Users.Add(userDTO);
-            db.UserRoles.Add(userRoleDto);
+            var role = _cntx.Roles.GetByName("Usr");
+            _cntx.Context.AddRoleToUser(userDTO, role);
             // Сохранить данные
-            db.SaveChanges();
+            _cntx.Save();
 
             // Записать сообщение
-            TempData["SM"] = "You are registered and can login.";
+            TempData["SM"] = _resources["YouAreRegistered"];
             return RedirectToAction("Login");
         }
 
@@ -101,20 +123,60 @@ namespace WebUI.Controllers
         {
             // Проверяем модель на валидность
             if (!ModelState.IsValid) return View(model);
-
-            if (!db.Users.Any(x => x.UserName.Equals(model.UserName) && x.Password.Equals(model.Password)))
+            var user = _cntx.Users.GetByName(model.UserName);
+            bool hasError = false;
+            if (user == null || user.IsArchived || user.Password != model.Password)
             {
-                ModelState.AddModelError("", "Invalid login or password.");
+                hasError = true;
+                ModelState.AddModelError("", _resources["InvalidLoginOrPassword"]);
+                user.AttemptsCount++;
+                if (user.AttemptsCount >= _config.Admin_Users_List_UsersPerPage)
+                {
+                    user.UserStatus = Status.Blocked;
+                    user.AttemptsCount = 0;
+
+                }
+            }
+
+            switch (user.UserStatus)
+            {
+                case Status.Pending:
+                    hasError = true;
+                    ModelState.AddModelError("", _resources["AccountIsInPending"]);
+                    break;
+                case Status.InActive:
+                    hasError = true;
+                    ModelState.AddModelError("", _resources["AccountIsInactive"]);
+                    break;
+                case Status.Blocked:
+                    var date = user.LastVisit.AddDays(1);
+                    if (DateTime.Now > date) break;
+                    hasError = true;
+                    ModelState.AddModelError("", string.Format(_resources["AccountIsBlocked"], date.ToShortDateString(), date.ToShortTimeString()));
+                    break;
+            }
+
+            if (hasError)
+            {
+                user.LastVisit = DateTime.Now;
+                _cntx.Users.Update(user);
+                _cntx.Save();
                 return View(model);
             }
+
+            user.LastVisit = DateTime.Now;
+            user.AttemptsCount = 0;
+            user.UserStatus = Status.Active;
+            _cntx.Users.Update(user);
+            _cntx.Save();
 
             await Authenticate(model.UserName); // аутентификация
             return Redirect("~/");
         }
         private async Task Authenticate(string userName)
         {
-            var userId = db.Users.FirstOrDefault(x => x.UserName == userName).UserId;
-            var roles = db.UserRoles.Where(x => x.UserId == userId);
+            var user = _cntx.Users.GetByName(userName);
+            var roles = user.UserRoles;
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
@@ -122,9 +184,12 @@ namespace WebUI.Controllers
             foreach (var role in roles)
             {
                 // добавляем роли
-                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, db.Roles.Find(role.RoleId).RoleType.ToString()));
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, _cntx.Roles.GetById(role.RoleId).RoleType.ToString()));
             }
-
+            if (user.AssignedStore != null)
+            {
+                _session.Set<int?>("StoreFilter", user.AssignedStore.Id);
+            }
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             // установка аутентификационных куки
@@ -145,7 +210,7 @@ namespace WebUI.Controllers
             // получаем имя пользователя
             var userName = User.Identity.Name;
             // Получаем пользователя
-            var user = db.Users.FirstOrDefault(x => x.UserName == userName);
+            var user = _cntx.Users.GetByName(userName);
 
             return View(new UserProfileVM(user));
         }
@@ -160,20 +225,19 @@ namespace WebUI.Controllers
             {
                 if (!model.Password.Equals(model.ConfirmPassword))
                 {
-                    ModelState.AddModelError("", "Password do not match!");
+                    ModelState.AddModelError("", _resources["PasswordDoNotMatch"]);
                     return View(model);
                 }
             }
 
-
             // Получить экземпляр UserDTO
-            var dto = db.Users.Find(model.Id);
+            var dto = _cntx.Users.GetById(model.Id);
             if (!dto.UserName.Equals(model.UserName))
             {
                 // Проверяем имя на уникальность
-                if (db.Users.Any(a => a.UserName.Equals(model.UserName)))
+                if (!_cntx.Users.IsUniqName(model.UserName))
                 {
-                    ModelState.AddModelError("", $"Login {model.UserName} already exist!");
+                    ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                     model.UserName = string.Empty;
                     return View(model);
                 }
@@ -184,16 +248,14 @@ namespace WebUI.Controllers
             dto.LastName = model.LastName;
             dto.EmailAddress = model.EmailAddress;
             dto.UserName = model.UserName;
+            dto.Password = model.Password;
 
-            if (!string.IsNullOrWhiteSpace(model.Password))
-            {
-                dto.Password = model.Password;
-            }
             // Сохранить данные
-            db.SaveChanges();
+            _cntx.Users.Update(dto);
+            _cntx.Save();
 
             // Записать сообщение
-            TempData["SM"] = "You have edited your profile.";
+            TempData["SM"] = _resources["YourProfileEdited"];
 
             if (User.Identity.Name != model.UserName)
             {

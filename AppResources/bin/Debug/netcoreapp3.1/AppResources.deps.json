@@ -12,6 +12,14 @@
         },
         "runtime": {
           "AppResources.dll": {}
+        },
+        "resources": {
+          "ru/AppResources.resources.dll": {
+            "locale": "ru"
+          },
+          "uz/AppResources.resources.dll": {
+            "locale": "uz"
+          }
         }
       },
       "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {

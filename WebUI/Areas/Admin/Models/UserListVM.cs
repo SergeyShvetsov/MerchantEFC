@@ -12,7 +12,7 @@ namespace WebUI.Areas.Admin.Models
         public UserListVM() { }
         public UserListVM(AppUser usr)
         {
-            UserId = usr.UserId;
+            UserId = usr.AppUserId;
             UserName = usr.UserName;
             FirstName = usr.FirstName;
             LastName = usr.LastName;
@@ -22,11 +22,11 @@ namespace WebUI.Areas.Admin.Models
 
         [DisplayName("Selected")]
         public bool IsChecked { get; set; }
-        [DisplayName("User Name")]
+        [DisplayName("UserName")]
         public string UserName { get; set; }
-        [DisplayName("First Name")]
+        [DisplayName("FirstName")]
         public string FirstName { get; set; }
-        [DisplayName("Last Name")]
+        [DisplayName("LastName")]
         public string LastName { get; set; }
         [DisplayName("Email")]
         public string Email { get; set; }

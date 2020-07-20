@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Messages.resx">
+    <EmbeddedResource Update="SharedResource.resx">
       <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>

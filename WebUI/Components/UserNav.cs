@@ -25,7 +25,7 @@ namespace WebUI.Components
             // получаем имя пользователя
             var userName = User.Identity.Name;
             // Получаем пользователя
-            var user = db.Users.FirstOrDefault(x => x.UserName == userName);
+            var user = db.AppUsers.FirstOrDefault(x => x.UserName == userName);
             var res = new StringBuilder();
             res.Append("<li class=\"navbar-text");
             if (isActive)

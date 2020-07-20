@@ -1,4 +1,5 @@
-﻿using Data.Model.Models;
+﻿using Data.Model;
+using Data.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,31 +12,42 @@ namespace WebUI.Areas.Admin.Models
     public class UserEditVM
     {
         public UserEditVM() { }
-        public UserEditVM(AppUser usr, IEnumerable<Role> roles)
+        public UserEditVM(AppUser usr)
         {
-            UserId = usr.UserId;
+            UserId = usr.AppUserId;
             UserName = usr.UserName;
             FirstName = usr.FirstName;
             LastName = usr.LastName;
             Email = usr.EmailAddress;
+            Password = usr.Password;
+            AssignedStoreId = usr.AssignedStore?.Id;
+            UserRoles = usr.UserRoles.ToList();
+            UserStatus = usr.UserStatus;
         }
+       
         public Guid UserId { get; set; }
 
-        [Required]
-        [DisplayName("User Name")]
+        [Required(ErrorMessage = "UserNameRequired")]
+        [DisplayName("UserName")]
         public string UserName { get; set; }
-        [Required]
-        [DisplayName("First Name")]
+        [Required(ErrorMessage = "FirstNameRequired")]
+        [DisplayName("FirstName")]
         public string FirstName { get; set; }
-        [Required]
-        [DisplayName("Last Name")]
+        [Required(ErrorMessage = "LastNameRequired")]
+        [DisplayName("LastName")]
         public string LastName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "EmailRequired")]
         [DisplayName("Email")]
-        [DataType(DataType.EmailAddress)]
+        [DataType(DataType.EmailAddress, ErrorMessage = "EmailWrongFormat")]
         public string Email { get; set; }
-        [Required]
-        [DisplayName("Password")]
+        [Required(ErrorMessage = "PasswordRequired")]
         public string Password { get; set; }
+        [Required(ErrorMessage = "AssignedRolesRequired")]
+        [DisplayName("AssignedRoles")]
+        public IEnumerable<UserRole> UserRoles { get; set; }
+        [DisplayName("AssignedStore")]
+        public int? AssignedStoreId { get; set; }
+        [DisplayName("UserStatus")]
+        public Status UserStatus { get; set; } = Status.Active;
     }
 }

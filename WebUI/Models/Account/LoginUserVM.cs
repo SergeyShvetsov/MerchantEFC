@@ -9,11 +9,12 @@ namespace WebUI.Models.Account
 {
     public class LoginUserVM
     {
-        [Required]
-        [DisplayName("Login")]
+        [Required(ErrorMessage = "UserNameRequired")]
+        [DisplayName("UserName")]
         public string UserName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "PasswordRequired")]
         [DataType(DataType.Password)]
+        [DisplayName("Password")]
         public string Password { get; set; }
 
         [DisplayName("Remember Me")]

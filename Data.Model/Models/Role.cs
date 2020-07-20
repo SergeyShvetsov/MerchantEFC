@@ -9,19 +9,14 @@ namespace Data.Model.Models
     [Table("Roles")]
     public class Role
     {
-        public Role()
-        {
-            RoleId = Guid.NewGuid();
-            RoleType = RoleType.User;
-        }
-
         [Key]
-        public Guid RoleId { get; set; }
+        public Guid RoleId { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public string DisplayName { get; set; }
 
-        public RoleType RoleType { get; set; }
+        public RoleType RoleType { get; set; } = RoleType.User;
 
-        public virtual ICollection<UserRole> UserRoles { get; set; }
+        //[ForeignKey("RoleId")]
+        public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

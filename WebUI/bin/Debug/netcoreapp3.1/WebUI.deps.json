@@ -24,7 +24,6 @@
     ".NETCoreApp,Version=v3.1": {
       "WebUI/1.0.0": {
         "dependencies": {
-          "AppResources": "1.0.0",
           "Data.Model": "1.0.0",
           "Data.Tools": "1.0.0",
           "Fancybox": "2.1.5",
@@ -309,6 +308,14 @@
         },
         "runtime": {
           "WebUI.dll": {}
+        },
+        "resources": {
+          "ru/WebUI.resources.dll": {
+            "locale": "ru"
+          },
+          "uz/WebUI.resources.dll": {
+            "locale": "uz"
+          }
         },
         "compile": {
           "WebUI.dll": {}
@@ -2716,17 +2723,6 @@
         },
         "compile": {
           "lib/netstandard2.0/X.PagedList.Web.Common.dll": {}
-        }
-      },
-      "AppResources/1.0.0": {
-        "dependencies": {
-          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0"
-        },
-        "runtime": {
-          "AppResources.dll": {}
-        },
-        "compile": {
-          "AppResources.dll": {}
         }
       },
       "Data.Model/1.0.0": {
@@ -5860,11 +5856,6 @@
       "sha512": "sha512-h03M+ZeaucubfLPlaKoFB/rxBxV17pddp3FVjwKO0QM47frt+QIIABHs2KB3Eay9Xc/sDPGvKkYsm0ZdUpF/lg==",
       "path": "x.pagedlist.web.common/8.0.7",
       "hashPath": "x.pagedlist.web.common.8.0.7.nupkg.sha512"
-    },
-    "AppResources/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     },
     "Data.Model/1.0.0": {
       "type": "project",

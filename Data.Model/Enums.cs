@@ -11,4 +11,11 @@ namespace Data.Model
         Superuser = 500,
         Admin = 999
     }
+    public enum Status
+    {
+        Active,
+        Pending,
+        InActive,
+        Blocked
+    }
 }
