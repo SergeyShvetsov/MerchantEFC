@@ -9,5 +9,6 @@ namespace WebUI.Areas.Admin.Models
     {
         public Guid UserId { get; set; }
         public int RoleId { get; set; }
+        public string UserName { get; set; }
     }
 }

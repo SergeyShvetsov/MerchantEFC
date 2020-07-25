@@ -72,16 +72,20 @@ namespace WebUI.Areas.Admin.Controllers
             // Устанавливаем постраничную навигацию
             var onePageOfUsers = listOfUsersVM.ToPagedList(pageNumber, pageSize: pageSize);
             // Возвращаем в преставление
+            //var view = View(onePageOfUsers);
+            //view.
             return View(onePageOfUsers);
         }
 
         [HttpGet]
         public IActionResult DeleteUser(Guid id, int roleId)
         {
+            var user = _cntx.Users.GetById(id);
             var model = new UserDeleteVM
             {
                 UserId = id,
-                RoleId = roleId
+                RoleId = roleId,
+                UserName = user.UserName
             };
 
             return PartialView("_DeleteUserModal", model);

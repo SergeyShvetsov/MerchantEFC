@@ -159,6 +159,9 @@
   <data name="Blocked" xml:space="preserve">
     <value>Заблокирован</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
   <data name="cat01" xml:space="preserve">
     <value>Продукты питания</value>
   </data>
@@ -360,6 +363,12 @@
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="DeleteUser" xml:space="preserve">
+    <value>Удаление пользователя.</value>
+  </data>
+  <data name="DeleteUserConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить пользователя {0}?</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Редактировать</value>
   </data>
@@ -379,7 +388,7 @@
     <value>Неверный формат адреса</value>
   </data>
   <data name="FilteredByRole" xml:space="preserve">
-    <value>Фильтровать по роли :</value>
+    <value>Фильтровать по роле :</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Имя</value>

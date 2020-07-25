@@ -5072,25 +5072,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Sergey Shvetsov\\.nuget\\packages\\": {},
+    "C:\\Users\\Hal.10\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
+      "projectUniqueName": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
       "projectName": "Data.Model",
-      "projectPath": "C:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
-      "packagesPath": "C:\\Users\\Sergey Shvetsov\\.nuget\\packages\\",
-      "outputPath": "C:\\Work\\MerchantEFC\\Data.Model\\obj\\",
+      "projectPath": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
+      "packagesPath": "C:\\Users\\Hal.10\\.nuget\\packages\\",
+      "outputPath": "D:\\Work\\MerchantEFC\\Data.Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Sergey Shvetsov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Hal.10\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -5138,12 +5138,18 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[3.1.2, 3.1.2]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
       }
     }
   }

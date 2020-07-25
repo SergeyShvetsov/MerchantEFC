@@ -10,7 +10,9 @@
     ViewData["Title"] = "User List";
     ViewData["PageCode"] = "AdminUsersList";
 }
+
 <div id="ModalDialog"></div>
+
 <h1>@resources["UserList"]</h1>
 <div>
     @resources["FilteredByRole"]
@@ -34,6 +36,7 @@
 <hr />
 @if (TempData["SM"] != null)
 {
+
     <div class="alert alert-success">
         @TempData["SM"]
     </div>
@@ -90,7 +93,7 @@ else
                     </td>
                     <td>
                         @Html.ActionLink(resources["Edit"], "EditUser", "Users", new { id = item.UserId }, htmlAttributes: new { @class = "btn btn-outline-primary" })
-                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal" 
+                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
                                 data-target="#deleteUser" data-url="@Url.Action($"DeleteUser/{item.UserId}?roleId={ViewBag.SelectedRole}")">
                             @resources["Delete"]
                         </button>
