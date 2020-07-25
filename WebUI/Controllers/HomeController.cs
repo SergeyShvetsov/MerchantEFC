@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -6,12 +7,14 @@ using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using WebUI.Extensions;
 using WebUI.Resources;
+using WebUI.Services;
 
 namespace WebUI.Controllers
 {
@@ -19,10 +22,12 @@ namespace WebUI.Controllers
     {
         private readonly IEntityContext _cntx;
         private readonly IStringLocalizer _resources;
-        public HomeController(IEntityContext context, IStringLocalizerFactory localizer)
+        private readonly List<Category> _catalog;
+        public HomeController(IEntityContext context, IStringLocalizerFactory localizer, ICatalogService catalog, IWebHostEnvironment _env)
         {
             _cntx = context;
             _resources = localizer.GetLocalResources();
+            _catalog = catalog.GetCategories(_env.WebRootPath).ToList();
         }
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
@@ -36,27 +41,18 @@ namespace WebUI.Controllers
         }
         public IActionResult Index()
         {
-            var roles = _cntx.Roles.GetAll();
             var users = _cntx.Users.GetAll().ApplyArchivedFilter();
 
-            if (!roles.Any())
+            if (!users.Any())
             {
-                var adminRole = new Role() { Name = "Admin", DisplayName = "Administrator", RoleType = RoleType.Admin };
-                var superUserRole = new Role() { Name = "SU", DisplayName = "Super User", RoleType = RoleType.Superuser };
-                var managerRole = new Role() { Name = "Mgr", DisplayName = "Manager", RoleType = RoleType.Manager };
-                var userRole = new Role() { Name = "Usr", DisplayName = "User", RoleType = RoleType.User };
-                _cntx.Roles.Insert(adminRole);
-                _cntx.Roles.Insert(superUserRole);
-                _cntx.Roles.Insert(managerRole);
-                _cntx.Roles.Insert(userRole);
-
                 var admin = new AppUser()
                 {
                     FirstName = "Admin",
                     LastName = "Administrator",
                     EmailAddress = "admin@fake.com",
                     UserName = "admin",
-                    Password = "admin"
+                    Password = "admin",
+                    UserRole = RoleType.Admin
                 };
                 var store = new Store { StoreCode = "test", StoreName = "Test Store" };
                 var store1 = new Store { StoreCode = "test1", StoreName = "Test Store 1" };
@@ -68,17 +64,20 @@ namespace WebUI.Controllers
                 _cntx.Stores.Insert(store2);
                 _cntx.Save();
 
-                var role = _cntx.Roles.GetById(adminRole.RoleId);
-                _cntx.Context.AddRoleToUser(admin, role);
                 _cntx.Users.AssignToStore(admin, store);
 
                 _cntx.Save();
             }
-            var aaa = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => x.Name.StartsWith("uz"));
-            //return $"CurrentCulture:{CultureInfo.CurrentCulture.Name}, CurrentUICulture:{CultureInfo.CurrentUICulture.Name}";
 
             ViewBag.Title = "Home";
             return View();
+        }
+        public IActionResult Category(string cat, IFormCollection form)
+        {
+            var c = cat == null ? (string)TempData["cat"] : cat;
+
+            var model = _catalog.First(x => x.Code == c);
+            return View(model);
         }
     }
 }

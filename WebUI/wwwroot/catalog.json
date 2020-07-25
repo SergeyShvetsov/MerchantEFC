@@ -1,0 +1,436 @@
+[
+  {
+    "code": "01",
+    "name": "Продукты питания",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": [
+      {
+        "code": "0101",
+        "name": "Бакалея ",
+        "isActive": true,
+        "sortOrder": 1,
+        "subCategories": [
+          {
+            "code": "010101",
+            "name": "Инградиенты для выпечки",
+            "isActive": true,
+            "sortOrder": 1,
+            "subCategories": null
+          },
+          {
+            "code": "010102",
+            "name": "Крупы",
+            "isActive": true,
+            "sortOrder": 2,
+            "subCategories": null
+          },
+          {
+            "code": "010103",
+            "name": "Макаронные изделия",
+            "isActive": true,
+            "sortOrder": 3,
+            "subCategories": null
+          },
+          {
+            "code": "010104",
+            "name": "Масла растительные",
+            "isActive": true,
+            "sortOrder": 4,
+            "subCategories": null
+          },
+          {
+            "code": "010105",
+            "name": "Мука",
+            "isActive": true,
+            "sortOrder": 5,
+            "subCategories": null
+          },
+          {
+            "code": "010106",
+            "name": "Орехи, орешки",
+            "isActive": true,
+            "sortOrder": 6,
+            "subCategories": null
+          },
+          {
+            "code": "010107",
+            "name": "Продукты быстрого приготовления",
+            "isActive": true,
+            "sortOrder": 7,
+            "subCategories": null
+          },
+          {
+            "code": "010108",
+            "name": "Сахар",
+            "isActive": true,
+            "sortOrder": 8,
+            "subCategories": null
+          },
+          {
+            "code": "010109",
+            "name": "Соль",
+            "isActive": true,
+            "sortOrder": 9,
+            "subCategories": null
+          },
+          {
+            "code": "010110",
+            "name": "Яйца",
+            "isActive": true,
+            "sortOrder": 10,
+            "subCategories": null
+          },
+          {
+            "code": "010111",
+            "name": "Сухие завтраки, каши",
+            "isActive": true,
+            "sortOrder": 11,
+            "subCategories": null
+          },
+          {
+            "code": "010112",
+            "name": "Сухофрукты",
+            "isActive": true,
+            "sortOrder": 12,
+            "subCategories": null
+          },
+          {
+            "code": "010113",
+            "name": "Снеки, сухарики, чипсы, курт",
+            "isActive": true,
+            "sortOrder": 13,
+            "subCategories": null
+          }
+        ]
+      },
+      {
+        "code": "0102",
+        "name": "Детское питание",
+        "isActive": true,
+        "sortOrder": 2,
+        "subCategories": [
+          {
+            "code": "010201",
+            "name": "Каши, супы",
+            "isActive": true,
+            "sortOrder": 1,
+            "subCategories": null
+          },
+          {
+            "code": "010202",
+            "name": "Молочные смеси",
+            "isActive": true,
+            "sortOrder": 2,
+            "subCategories": null
+          },
+          {
+            "code": "010203",
+            "name": "Прикорм",
+            "isActive": true,
+            "sortOrder": 3,
+            "subCategories": null
+          }
+        ]
+      },
+      {
+        "code": "0103",
+        "name": "Диетическое питание",
+        "isActive": true,
+        "sortOrder": 3,
+        "subCategories": [
+          {
+            "code": "010301",
+            "name": "Заменители сахара",
+            "isActive": true,
+            "sortOrder": 1,
+            "subCategories": null
+          },
+          {
+            "code": "010302",
+            "name": "Кондитерские изделия",
+            "isActive": true,
+            "sortOrder": 2,
+            "subCategories": null
+          },
+          {
+            "code": "010303",
+            "name": "Прочее",
+            "isActive": true,
+            "sortOrder": 3,
+            "subCategories": null
+          }
+        ]
+      },
+      {
+        "code": "0104",
+        "name": "Кондитерские изделия",
+        "isActive": true,
+        "sortOrder": 4,
+        "subCategories": [
+          {
+            "code": "010401",
+            "name": "Конфеты",
+            "isActive": true,
+            "sortOrder": 1,
+            "subCategories": null
+          },
+          {
+            "code": "010402",
+            "name": "Шоколад, шоколадные наборы",
+            "isActive": true,
+            "sortOrder": 2,
+            "subCategories": null
+          },
+          {
+            "code": "010403",
+            "name": "Торты, пирожные",
+            "isActive": true,
+            "sortOrder": 3,
+            "subCategories": null
+          },
+          {
+            "code": "010404",
+            "name": "Выпечка",
+            "isActive": true,
+            "sortOrder": 4,
+            "subCategories": null
+          },
+          {
+            "code": "010405",
+            "name": "Печенья, пряники, вафли",
+            "isActive": true,
+            "sortOrder": 5,
+            "subCategories": null
+          },
+          {
+            "code": "010406",
+            "name": "Зефир, суфле, восточные сладости",
+            "isActive": true,
+            "sortOrder": 6,
+            "subCategories": null
+          },
+          {
+            "code": "010407",
+            "name": "Жевательная резинка, пастилки, леденцы",
+            "isActive": true,
+            "sortOrder": 7,
+            "subCategories": null
+          },
+          {
+            "code": "010408",
+            "name": "Бутербродные пасты",
+            "isActive": true,
+            "sortOrder": 8,
+            "subCategories": null
+          }
+        ]
+      },
+      {
+        "code": "0105",
+        "name": "Консервированные продукты",
+        "isActive": true,
+        "sortOrder": 5,
+        "subCategories": [
+          {
+            "code": "010501",
+            "name": "Мясные консервы",
+            "isActive": true,
+            "sortOrder": 1,
+            "subCategories": null
+          },
+          {
+            "code": "010502",
+            "name": "Рыбные консервы",
+            "isActive": true,
+            "sortOrder": 2,
+            "subCategories": null
+          },
+          {
+            "code": "010503",
+            "name": "Овощные консервы",
+            "isActive": true,
+            "sortOrder": 3,
+            "subCategories": null
+          },
+          {
+            "code": "010504",
+            "name": "Готовые блюда",
+            "isActive": true,
+            "sortOrder": 4,
+            "subCategories": null
+          },
+          {
+            "code": "010505",
+            "name": "Плодово-ягодные консервы",
+            "isActive": true,
+            "sortOrder": 5,
+            "subCategories": null
+          },
+          {
+            "code": "010506",
+            "name": "Молочные консервы",
+            "isActive": true,
+            "sortOrder": 6,
+            "subCategories": null
+          },
+          {
+            "code": "010507",
+            "name": "Мёд",
+            "isActive": true,
+            "sortOrder": 7,
+            "subCategories": null
+          }
+        ]
+      },
+      {
+        "code": "0106",
+        "name": "Мясные продукты",
+        "isActive": true,
+        "sortOrder": 6,
+        "subCategories": [
+          {
+            "code": "010601",
+            "name": "Мясо",
+            "isActive": true,
+            "sortOrder": 1,
+            "subCategories": null
+          },
+          {
+            "code": "010602",
+            "name": "Птица",
+            "isActive": true,
+            "sortOrder": 2,
+            "subCategories": null
+          },
+          {
+            "code": "010603",
+            "name": "Рыба",
+            "isActive": true,
+            "sortOrder": 3,
+            "subCategories": null
+          },
+          {
+            "code": "010604",
+            "name": "Колбасные изделия",
+            "isActive": true,
+            "sortOrder": 4,
+            "subCategories": null
+          },
+          {
+            "code": "010605",
+            "name": "Сосиски, сардельки, шпикачки",
+            "isActive": true,
+            "sortOrder": 5,
+            "subCategories": null
+          },
+          {
+            "code": "010606",
+            "name": "Мясные деликатесы",
+            "isActive": true,
+            "sortOrder": 6,
+            "subCategories": null
+          },
+          {
+            "code": "010607",
+            "name": "Рыбные деликатесы",
+            "isActive": true,
+            "sortOrder": 7,
+            "subCategories": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "02",
+    "name": "Товары для дома",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "03",
+    "name": "Красота и здоровье",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "04",
+    "name": "Детские товары",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "05",
+    "name": "Одежда и аксессуары",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "06",
+    "name": "Бытовая техника",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "07",
+    "name": "Канцтовары",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "08",
+    "name": "Мебель",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "09",
+    "name": "Зоотовары",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "10",
+    "name": "Рестораны, кафе",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "11",
+    "name": "Отдых, хобби",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "12",
+    "name": "Автотовары",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "13",
+    "name": "Спорттовары",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  },
+  {
+    "code": "14",
+    "name": "Сантехника",
+    "isActive": true,
+    "sortOrder": 1,
+    "subCategories": null
+  }
+]

@@ -6,6 +6,7 @@ namespace Data.Model
 {
     public enum RoleType
     {
+        Undefined,
         User = 1,
         Manager = 200,
         Superuser = 500,

@@ -584,3 +584,6 @@ C:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.Resources.SharedResource
 C:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\uz-Cyrl\WebUI.resources.dll
 C:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\uz-Latn\WebUI.resources.dll
 C:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.Resources.SharedResource.resources
+C:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Home\Category.cshtml.g.cs
+C:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Cities\List.cshtml.g.cs
+C:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Users\_DeleteUserModal.cshtml.g.cs

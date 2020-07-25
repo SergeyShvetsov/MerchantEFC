@@ -86,20 +86,14 @@ namespace WebUI.Controllers
                 EmailAddress = model.EmailAddress,
                 UserName = model.UserName,
                 Password = model.Password,
-                UserStatus = Status.Active
+                UserStatus = Status.Active,
+                UserRole = RoleType.User
             };
             _cntx.Users.Insert(userDTO);
             _cntx.Save();
 
-            // Добавить роль пользователю
-
-            var role = _cntx.Roles.GetByName("Usr");
-            _cntx.Context.AddRoleToUser(userDTO, role);
-            // Сохранить данные
-            _cntx.Save();
-
             // Записать сообщение
-            TempData["SM"] = _resources["YouAreRegistered"];
+            TempData["SM"] = _resources["YouAreRegistered"].Value;
             return RedirectToAction("Login");
         }
 
@@ -125,18 +119,6 @@ namespace WebUI.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = _cntx.Users.GetByName(model.UserName);
             bool hasError = false;
-            if (user == null || user.IsArchived || user.Password != model.Password)
-            {
-                hasError = true;
-                ModelState.AddModelError("", _resources["InvalidLoginOrPassword"]);
-                user.AttemptsCount++;
-                if (user.AttemptsCount >= _config.Admin_Users_List_UsersPerPage)
-                {
-                    user.UserStatus = Status.Blocked;
-                    user.AttemptsCount = 0;
-
-                }
-            }
 
             switch (user.UserStatus)
             {
@@ -151,9 +133,22 @@ namespace WebUI.Controllers
                 case Status.Blocked:
                     var date = user.LastVisit.AddDays(1);
                     if (DateTime.Now > date) break;
+
                     hasError = true;
                     ModelState.AddModelError("", string.Format(_resources["AccountIsBlocked"], date.ToShortDateString(), date.ToShortTimeString()));
                     break;
+            }
+            
+            if (user == null || user.IsArchived || user.Password != model.Password)
+            {
+                hasError = true;
+                ModelState.AddModelError("", _resources["InvalidLoginOrPassword"]);
+                user.AttemptsCount++;
+                if (user.AttemptsCount > _config.Admin_Users_List_UsersPerPage)
+                {
+                    user.UserStatus = Status.Blocked;
+                    user.AttemptsCount = 0;
+                }
             }
 
             if (hasError)
@@ -176,16 +171,12 @@ namespace WebUI.Controllers
         private async Task Authenticate(string userName)
         {
             var user = _cntx.Users.GetByName(userName);
-            var roles = user.UserRoles;
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.UserRole.ToString())
             };
-            foreach (var role in roles)
-            {
-                // добавляем роли
-                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, _cntx.Roles.GetById(role.RoleId).RoleType.ToString()));
-            }
+
             if (user.AssignedStore != null)
             {
                 _session.Set<int?>("StoreFilter", user.AssignedStore.Id);
@@ -255,7 +246,7 @@ namespace WebUI.Controllers
             _cntx.Save();
 
             // Записать сообщение
-            TempData["SM"] = _resources["YourProfileEdited"];
+            TempData["SM"] = _resources["YourProfileEdited"].Value;
 
             if (User.Identity.Name != model.UserName)
             {

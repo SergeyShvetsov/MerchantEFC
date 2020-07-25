@@ -74,7 +74,7 @@ body {
 }
 /*///////////////////////////////////////////////////////////////////////*/
 .body-content {
-    margin-top: 90px;
+    margin-top: 0px;
 }
 
 input,
@@ -161,4 +161,23 @@ span.loader {
 .form.paypalform {
     position: absolute;
     left: -2000px;
+}
+/*---------------------------------------------------------------------------------*/
+.bg-light-green {
+    background: #1fb76e !important;
+}
+div.category-list {
+    column-count: 3;
+    column-gap: 10px;
+    column-rule-style: solid;
+    column-rule-width: 1px;
+    column-rule-color: lightgray;
+}
+.category-header{
+    font: bold 14px arial,verdana;
+    width: 100%;
+}
+.category-item {
+    font: normal 12px arial,verdana;
+    width: 100%;
 }

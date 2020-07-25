@@ -13,12 +13,23 @@ namespace Data.Model.Entities
         public ApplicationContext Context => _context;
         public EntityContext(ApplicationContext context) { _context = context; }
 
-        public Roles Roles => new Roles(Context);
         public Users Users => new Users(Context);
-        public UserRoles UserRoles => new UserRoles(Context);
 
         public Stores Stores => new Stores(Context);
 
+        public Cities Cities => new Cities(Context);
+
+        public Products Products => new Products(Context);
+
+        public ProductCategories ProductCategories => new ProductCategories(Context);
+
+        public ProductComments ProductComments => new ProductComments(Context);
+
+        public ProductImages ProductImages => new ProductImages(Context);
+
+        public ProductModels ProductModels => new ProductModels(Context);
+
+        public ProductOptions ProductOptions => new ProductOptions(Context);
 
         public void Save()
         {

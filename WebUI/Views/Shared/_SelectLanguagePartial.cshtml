@@ -16,12 +16,9 @@
         .ToList();
 }
 
-<form asp-controller="Home" asp-action="SetLanguage" style="margin-top:20px;"
-      asp-route-returnUrl="@Context.Request.Path"
-      method="post" class="form-horizontal">
-    <select name="culture" onchange="this.form.submit();"
+<form asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path" method="post" class="form-horizontal">
+    <select name="culture" onchange="this.form.submit();" class="custom-select"
             asp-for="@requestCulture.RequestCulture.UICulture.Name"
             asp-items="cultureItems">
-        <img src="~/Images/ru.png" />
     </select>
 </form>

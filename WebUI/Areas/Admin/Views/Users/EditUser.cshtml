@@ -1,11 +1,14 @@
 ﻿@using WebUI.Areas.Admin.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@using WebUI.Resources
+@inject LocalizationService resources
 @model UserEditVM
 
 @{
     ViewData["Title"] = "EditUser";
 }
 
-<h4>Edit  User</h4>
+<h4>@resources["EditUser"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -41,7 +44,7 @@
             {
                 <div class="form-group">
                     <label asp-for="AssignedStoreId" class="control-label"></label>
-                    <select asp-for="AssignedStoreId" class="form-control">
+                    <select asp-for="AssignedStoreId" class="form-control custom-select">
                         @if (Model.AssignedStoreId == null)
                         {
                             <option value="0">None</option>
@@ -67,54 +70,52 @@
             @if (ViewBag.AvailableRoles != null || ViewBag.AvailableRoles.Any())
             {
                 <div class="form-group">
-                    <label asp-for="UserRoles" class="control-label"></label>
-                    <span asp-validation-for="UserRoles" class="text-danger"></span>
-                    <select asp-for="UserRoles" multiple class="form-control">
-                        @foreach (var item in ViewBag.AvailableRoles as List<RoleVM>)
+                    <label asp-for="UserRole" class="control-label"></label>
+                    <select asp-for="UserRole" class="form-control custom-select">
+                        @foreach (var item in ViewBag.AvailableRoles as List<RoleType>)
                         {
-                            if (Model.UserRoles.Select(s => s.RoleId).Contains(item.RoleId))
+                            if (Model.UserRole == item)
                             {
-                                <option selected="selected" value="@item.RoleId">@item.RoleName</option>
+                                <option selected="selected" value="@((int)item)">@resources[item.ToString()]</option>
                             }
                             else
                             {
-                                <option value="@item.RoleId">@item.RoleName</option>
+                                <option value="@((int)item)">@resources[item.ToString()]</option>
                             }
                         }
                     </select>
+                    <span asp-validation-for="UserRole" class="text-danger"></span>
                 </div>
             }
             @if (ViewBag.AvailableStatuses != null || ViewBag.AvailableStatuses.Any())
             {
                 <div class="form-group">
                     <label asp-for="UserStatus" class="control-label"></label>
-                    <span asp-validation-for="UserStatus" class="text-danger"></span>
-                    <select asp-for="UserStatus" class="form-control">
+                    <select asp-for="UserStatus" class="form-control custom-select">
                         @foreach (var item in ViewBag.AvailableStatuses)
                         {
                             if (Model.UserStatus == item)
                             {
-                                <option selected="selected" value="@((int)item)">@item</option>
+                                <option selected="selected" value="@((int)item)">@resources[item.ToString()]</option>
                             }
                             else
                             {
-                                <option value="@((int)item) ">@item</option>
+                                <option value="@((int)item)">@resources[item.ToString()]</option>
                             }
                         }
                     </select>
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <span asp-validation-for="UserStatus" class="text-danger"></span>
                 </div>
-                <br />
             }
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="@resources["Save"]" class="btn btn-outline-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="List">Back to List</a>
+    <a asp-action="List">@resources["BackToList"]</a>
 </div>
 
 @section Scripts {

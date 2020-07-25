@@ -31,7 +31,7 @@ namespace Data.Model.Models
         //[NotMapped]
         //public _Store ManagedStore { get; set; }
 
-        public IEnumerable<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public RoleType UserRole { get; set; } = RoleType.User;
 
         public Status UserStatus { get; set; } = Status.Active;
 

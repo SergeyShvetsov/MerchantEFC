@@ -12,7 +12,7 @@ namespace Data.Model.Extensions
     {
         public static IQueryable<T> ApplyArchivedFilter<T>(this IQueryable<T> source, bool includeArchived = false)
         {
-            if (!includeArchived && typeof(T) is IArchivableEntity)
+            if (!includeArchived /*&& typeof(T) is IArchivableEntity*/)
             {
                 source = source.Where(w => !((IArchivableEntity)w).IsArchived);
             }

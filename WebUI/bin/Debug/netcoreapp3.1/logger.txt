@@ -1,0 +1,8 @@
+Start application. 07/23/2020 21:26:27
+Now listening on: http://localhost:5000
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Production
+Content root path: C:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1
+Failed to determine the https port for redirect.
+An unhandled exception has occurred while executing the request.
+Application is shutting down...

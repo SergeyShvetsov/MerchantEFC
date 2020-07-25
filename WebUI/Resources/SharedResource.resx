@@ -138,6 +138,9 @@
   <data name="Administration" xml:space="preserve">
     <value>Администрирование</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>Все</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>Merchant EFC</value>
   </data>
@@ -150,8 +153,194 @@
   <data name="AssignedStore" xml:space="preserve">
     <value>Назначенный магазин</value>
   </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Назад</value>
+  </data>
   <data name="Blocked" xml:space="preserve">
     <value>Заблокирован</value>
+  </data>
+  <data name="cat01" xml:space="preserve">
+    <value>Продукты питания</value>
+  </data>
+  <data name="cat0101" xml:space="preserve">
+    <value>Бакалея</value>
+  </data>
+  <data name="cat010101" xml:space="preserve">
+    <value>Инградиенты для выпечки</value>
+  </data>
+  <data name="cat010102" xml:space="preserve">
+    <value>Крупы</value>
+  </data>
+  <data name="cat010103" xml:space="preserve">
+    <value>Макаронные изделия</value>
+  </data>
+  <data name="cat010104" xml:space="preserve">
+    <value>Масла растительные</value>
+  </data>
+  <data name="cat010105" xml:space="preserve">
+    <value>Мука</value>
+  </data>
+  <data name="cat010106" xml:space="preserve">
+    <value>Орехи, орешки</value>
+  </data>
+  <data name="cat010107" xml:space="preserve">
+    <value>Продукты быстрого приготовления</value>
+  </data>
+  <data name="cat010108" xml:space="preserve">
+    <value>Сахар</value>
+  </data>
+  <data name="cat010109" xml:space="preserve">
+    <value>Соль</value>
+  </data>
+  <data name="cat010110" xml:space="preserve">
+    <value>Яйца</value>
+  </data>
+  <data name="cat010111" xml:space="preserve">
+    <value>Сухие завтраки, каши</value>
+  </data>
+  <data name="cat010112" xml:space="preserve">
+    <value>Сухофрукты</value>
+  </data>
+  <data name="cat010113" xml:space="preserve">
+    <value>Снеки, сухарики, чипсы, курт</value>
+  </data>
+  <data name="cat0102" xml:space="preserve">
+    <value>Детское питание</value>
+  </data>
+  <data name="cat010201" xml:space="preserve">
+    <value>Каши, супы</value>
+  </data>
+  <data name="cat010202" xml:space="preserve">
+    <value>Молочные смеси</value>
+  </data>
+  <data name="cat010203" xml:space="preserve">
+    <value>Прикорм</value>
+  </data>
+  <data name="cat0103" xml:space="preserve">
+    <value>Диетическое питание</value>
+  </data>
+  <data name="cat010301" xml:space="preserve">
+    <value>Заменители сахара</value>
+  </data>
+  <data name="cat010302" xml:space="preserve">
+    <value>Кондитерские изделия</value>
+  </data>
+  <data name="cat010303" xml:space="preserve">
+    <value>Прочее</value>
+  </data>
+  <data name="cat0104" xml:space="preserve">
+    <value>Кондитерские изделия</value>
+  </data>
+  <data name="cat010401" xml:space="preserve">
+    <value>Конфеты</value>
+  </data>
+  <data name="cat010402" xml:space="preserve">
+    <value>Шоколад, шоколадные наборы</value>
+  </data>
+  <data name="cat010403" xml:space="preserve">
+    <value>Торты, пирожные</value>
+  </data>
+  <data name="cat010404" xml:space="preserve">
+    <value>Выпечка</value>
+  </data>
+  <data name="cat010405" xml:space="preserve">
+    <value>Печенья, пряники, вафли</value>
+  </data>
+  <data name="cat010406" xml:space="preserve">
+    <value>Зефир, суфле, восточные сладости</value>
+  </data>
+  <data name="cat010407" xml:space="preserve">
+    <value>Жевательная резинка, пастилки, леденцы</value>
+  </data>
+  <data name="cat010408" xml:space="preserve">
+    <value>Бутербродные пасты</value>
+  </data>
+  <data name="cat0105" xml:space="preserve">
+    <value>Консервированные продукты</value>
+  </data>
+  <data name="cat010501" xml:space="preserve">
+    <value>Мясные консервы</value>
+  </data>
+  <data name="cat010502" xml:space="preserve">
+    <value>Рыбные консервы</value>
+  </data>
+  <data name="cat010503" xml:space="preserve">
+    <value>Овощные консервы</value>
+  </data>
+  <data name="cat010504" xml:space="preserve">
+    <value>Готовые блюда</value>
+  </data>
+  <data name="cat010505" xml:space="preserve">
+    <value>Плодово-ягодные консервы</value>
+  </data>
+  <data name="cat010506" xml:space="preserve">
+    <value>Молочные консервы</value>
+  </data>
+  <data name="cat010507" xml:space="preserve">
+    <value>Мёд</value>
+  </data>
+  <data name="cat0106" xml:space="preserve">
+    <value>Мясные продукты</value>
+  </data>
+  <data name="cat010601" xml:space="preserve">
+    <value>Мясо</value>
+  </data>
+  <data name="cat010602" xml:space="preserve">
+    <value>Птица</value>
+  </data>
+  <data name="cat010603" xml:space="preserve">
+    <value>Рыба</value>
+  </data>
+  <data name="cat010604" xml:space="preserve">
+    <value>Колбасные изделия</value>
+  </data>
+  <data name="cat010605" xml:space="preserve">
+    <value>Сосиски, сардельки, шпикачки</value>
+  </data>
+  <data name="cat010606" xml:space="preserve">
+    <value>Мясные деликатесы</value>
+  </data>
+  <data name="cat010607" xml:space="preserve">
+    <value>Рыбные деликатесы</value>
+  </data>
+  <data name="cat02" xml:space="preserve">
+    <value>Товары для дома</value>
+  </data>
+  <data name="cat03" xml:space="preserve">
+    <value>Красота и здоровье</value>
+  </data>
+  <data name="cat04" xml:space="preserve">
+    <value>Детские товары</value>
+  </data>
+  <data name="cat05" xml:space="preserve">
+    <value>Одежда и аксессуары</value>
+  </data>
+  <data name="cat06" xml:space="preserve">
+    <value>Бытовая техника</value>
+  </data>
+  <data name="cat07" xml:space="preserve">
+    <value>Канцтовары</value>
+  </data>
+  <data name="cat08" xml:space="preserve">
+    <value>Мебель</value>
+  </data>
+  <data name="cat09" xml:space="preserve">
+    <value>Зоотовары</value>
+  </data>
+  <data name="cat10" xml:space="preserve">
+    <value>Рестораны, кафе</value>
+  </data>
+  <data name="cat11" xml:space="preserve">
+    <value>Отдых, хобби</value>
+  </data>
+  <data name="cat12" xml:space="preserve">
+    <value>Автотовары</value>
+  </data>
+  <data name="cat13" xml:space="preserve">
+    <value>Спорттовары</value>
+  </data>
+  <data name="cat14" xml:space="preserve">
+    <value>Сантехника</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Подтвердите пароль</value>
@@ -165,8 +354,20 @@
   <data name="CreateAccount" xml:space="preserve">
     <value>Создать учетную запись</value>
   </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Создать пользователя</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
   <data name="EditProfile" xml:space="preserve">
     <value>Изменить пользователя</value>
+  </data>
+  <data name="EditUser" xml:space="preserve">
+    <value>Редактировать пользователя</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Адрес электронной почты</value>
@@ -176,6 +377,9 @@
   </data>
   <data name="EmailWrongFormat" xml:space="preserve">
     <value>Неверный формат адреса</value>
+  </data>
+  <data name="FilteredByRole" xml:space="preserve">
+    <value>Фильтровать по роли :</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Имя</value>
@@ -231,6 +435,12 @@
   <data name="Pending" xml:space="preserve">
     <value>Ожидает</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Найти</value>
+  </data>
   <data name="Selected" xml:space="preserve">
     <value>Выбрано</value>
   </data>
@@ -242,6 +452,12 @@
   </data>
   <data name="User" xml:space="preserve">
     <value>Пользователь</value>
+  </data>
+  <data name="UserList" xml:space="preserve">
+    <value>Список пользователей.</value>
+  </data>
+  <data name="UserListIsEmpty" xml:space="preserve">
+    <value>Пользователи отсутствуют.</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Имя пользователя</value>

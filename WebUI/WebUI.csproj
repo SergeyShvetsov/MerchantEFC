@@ -61,10 +61,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Images\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\fileman\asp_net\main.ashx" />
     <None Include="wwwroot\fileman\css\images\animated-overlay.gif" />
     <None Include="wwwroot\fileman\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />

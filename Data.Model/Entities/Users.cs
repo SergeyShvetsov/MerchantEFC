@@ -16,10 +16,11 @@ namespace Data.Model.Entities
         {
             _context = context;
         }
-        public IQueryable<AppUser> GetAll() => _context.AppUsers.Include(r => r.UserRoles).Include(s=>s.AssignedStore);
+        public IQueryable<AppUser> GetAll() => _context.AppUsers.Include(s=>s.AssignedStore);
+        public IQueryable<AppUser> GetAllByRole(RoleType role) => _context.AppUsers.Include(s => s.AssignedStore).Where(x => role == RoleType.Undefined ||  x.UserRole == role);
 
-        public AppUser GetById(Guid id) => _context.AppUsers.Include(r => r.UserRoles).Include(s => s.AssignedStore).FirstOrDefault(x => x.AppUserId == id);
-        public AppUser GetByName(string name) => _context.AppUsers.Include(r => r.UserRoles).Include(s => s.AssignedStore).FirstOrDefault(x => x.UserName == name);
+        public AppUser GetById(Guid id) => _context.AppUsers.Include(s => s.AssignedStore).FirstOrDefault(x => x.AppUserId == id);
+        public AppUser GetByName(string name) => _context.AppUsers.Include(s => s.AssignedStore).FirstOrDefault(x => x.UserName == name);
         public AppUser GetById(int id) => throw new NotImplementedException();
 
         public void Insert(AppUser user)

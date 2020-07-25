@@ -8,9 +8,15 @@ namespace Data.Model
     {
 
         public DbSet<AppUser> AppUsers { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Store> Stores { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductComment> ProductComments { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductModel> ProductModels { get; set; }
+        public DbSet<ProductOption> ProductOptions { get; set; }
+
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
@@ -21,19 +27,11 @@ namespace Data.Model
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.AppUser).WithMany(ur => ur.UserRoles).HasForeignKey(r => r.AppUserId);
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role).WithMany(ur => ur.UserRoles).HasForeignKey(r => r.RoleId);
+            //modelBuilder.Entity<UserRole>()
+            //    .HasOne(ur => ur.AppUser).WithMany(ur => ur.UserRoles).HasForeignKey(r => r.AppUserId);
+            //modelBuilder.Entity<UserRole>()
+            //    .HasOne(ur => ur.Role).WithMany(ur => ur.UserRoles).HasForeignKey(r => r.RoleId);
 
-            //modelBuilder.Entity<UserRole>().HasKey(e => new { e.AppUserId, e.RoleId });
-
-            //var adminRole = new Role() { Name = "Admin", DisplayName = "Administrator", RoleType = RoleType.Admin };
-            //var superUserRole = new Role() { Name = "SU", DisplayName="Super User", RoleType = RoleType.Superuser };
-            //var managerRole = new Role() { Name = "Mgr", DisplayName = "Manager", RoleType = RoleType.Manager };
-            //var userRole = new Role() { Name = "Usr", DisplayName = "User", RoleType = RoleType.User };
-            //modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, superUserRole, managerRole, userRole });
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
             //var store = new Store

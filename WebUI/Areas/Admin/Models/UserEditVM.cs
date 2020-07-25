@@ -21,7 +21,7 @@ namespace WebUI.Areas.Admin.Models
             Email = usr.EmailAddress;
             Password = usr.Password;
             AssignedStoreId = usr.AssignedStore?.Id;
-            UserRoles = usr.UserRoles.ToList();
+            UserRole = usr.UserRole;
             UserStatus = usr.UserStatus;
         }
        
@@ -42,9 +42,9 @@ namespace WebUI.Areas.Admin.Models
         public string Email { get; set; }
         [Required(ErrorMessage = "PasswordRequired")]
         public string Password { get; set; }
-        [Required(ErrorMessage = "AssignedRolesRequired")]
+        [Required(ErrorMessage = "AssignedRoleRequired")]
         [DisplayName("AssignedRoles")]
-        public IEnumerable<UserRole> UserRoles { get; set; }
+        public RoleType UserRole { get; set; }
         [DisplayName("AssignedStore")]
         public int? AssignedStoreId { get; set; }
         [DisplayName("UserStatus")]

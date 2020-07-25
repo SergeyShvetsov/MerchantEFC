@@ -29,6 +29,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebUI.Resources;
+using WebUI.Services;
 
 namespace WebUI
 {
@@ -47,6 +48,8 @@ namespace WebUI
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
             services.AddTransient<IEntityContext, EntityContext>();
+
+            services.AddSingleton<ICatalogService, CatalogService>();
 
             //// добавление сервисов Idenity
             //services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)

@@ -28,7 +28,7 @@ namespace Data.Model.Entities
 
         public void Update(Store store)
         {
-            throw new NotImplementedException();
+            _context.Stores.Update(store);
         }
         public void Delete(Store store)
         {

@@ -1,0 +1,29 @@
+﻿@using WebUI.Resources
+@inject LocalizationService Resource
+@model WebUI.Services.Category
+
+@{
+    ViewData["Title"] = "Category";
+    TempData["cat"] = Model.Code;
+}
+
+<h4>@Resource["cat" + Model.Code]</h4>
+<hr />
+@if (Model.Subcategories != null && Model.Subcategories.Any())
+{
+    <div class="category-list">
+        @foreach (var cat in Model.Subcategories)
+        {
+            <span class="category-header">@Resource["cat" + cat.Code]</span>
+            @if (cat.Subcategories != null && cat.Subcategories.Any())
+            {
+                <ul>
+                    @foreach (var sc in cat.Subcategories)
+                    {
+                        <li class="category-item">@Resource["cat" + sc.Code]</li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+}

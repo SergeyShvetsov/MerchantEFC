@@ -6,6 +6,7 @@ using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ using X.PagedList;
 namespace WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles ="Admin,SuperUser")]
     public class UsersController : Controller
     {
         //private ApplicationContext _cntx;
@@ -43,24 +45,22 @@ namespace WebUI.Areas.Admin.Controllers
             return LocalRedirect(returnUrl);
         }
         // GET: UsersController
-        public ActionResult List(int? page, Guid? roleId)
+        public ActionResult List(int? page, int roleId)
         {
-            // Устанавливаем номер страницы
+                       // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_Users_List_UsersPerPage;
 
             // Заполняем список ролей данными
-            ViewBag.Roles = new SelectList(_cntx.Roles.GetAll().OrderBy(o => (int)o.RoleType).ToList(), dataValueField: "RoleId", dataTextField: "DisplayName");
+            ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
             //// Заполняем список stores данными
             //ViewBag.Stores = new SelectList(_cntx.Stores.GetAll().OrderBy(o => o.StoreName).ToList(), dataValueField: "Id", dataTextField: "StoreName");
 
             // Устанавливаем выбранную роль
-            ViewBag.SelectedRole = roleId.ToString();
+            ViewBag.SelectedRole = roleId;
 
             // Инициализируем List и заполняем данными
-            var listOfUsers = from ur in _cntx.UserRoles.GetAll().ApplyArchivedFilter()
-                              where roleId == null || roleId == Guid.Empty || ur.RoleId == (Guid)roleId
-                              select ur.AppUser;
+            var listOfUsers = _cntx.Users.GetAllByRole((RoleType)roleId).ApplyArchivedFilter();
 
             var listOfUsersVM = listOfUsers
                 .Select(s => new UserListVM(s))
@@ -76,23 +76,33 @@ namespace WebUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult DeleteUser(Guid id)
+        public IActionResult DeleteUser(Guid id, int roleId)
         {
-            var user = _cntx.Users.GetById(id);
+            var model = new UserDeleteVM
+            {
+                UserId = id,
+                RoleId = roleId
+            };
+
+            return PartialView("_DeleteUserModal", model);
+        }
+        [HttpPost]
+        public IActionResult DeleteUser(UserDeleteVM model)
+        {
+            var user = _cntx.Users.GetById(model.UserId);
             // Удаляем связи с ролями
-            _cntx.Context.RemoveAllRolesFromUser(user);
             // Удаляем пользователя из БД
             _cntx.Users.Delete(user);
             _cntx.Save();
 
-            TempData["SM"] = _resources["UserWasDeleted"];
+            TempData["SM"] = _resources["UserWasDeleted"].Value;
             return RedirectToAction("List");
         }
 
         [HttpGet]
         public IActionResult CreateUser(Guid? roleId, int? storeId)
         {
-            ViewBag.AvailableRoles = GetAvailableRoles(new List<Guid>());
+            ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
             ViewBag.AvailableStores = GetAvailableStores();
             ViewBag.AvailableStatuses = AvailableStatuses();
 
@@ -113,7 +123,7 @@ namespace WebUI.Areas.Admin.Controllers
             //Проверяем модель на валидность
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
                 ViewBag.AvailableStores = GetAvailableStores();
                 ViewBag.AvailableStatuses = AvailableStatuses();
                 return View(model);
@@ -121,7 +131,7 @@ namespace WebUI.Areas.Admin.Controllers
 
             if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
                 ViewBag.AvailableStores = GetAvailableStores();
                 ViewBag.AvailableStatuses = AvailableStatuses();
                 ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
@@ -131,7 +141,7 @@ namespace WebUI.Areas.Admin.Controllers
             // Проверяем имя на уникальность
             if (!_cntx.Users.IsUniqName(model.UserName))
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
                 ViewBag.AvailableStores = GetAvailableStores();
                 ViewBag.AvailableStatuses = AvailableStatuses();
                 ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
@@ -146,7 +156,8 @@ namespace WebUI.Areas.Admin.Controllers
                 LastName = model.LastName,
                 EmailAddress = model.Email,
                 UserName = model.UserName,
-                Password = model.Password
+                Password = model.Password,
+                UserRole = model.UserRole
             };
             if (model.AssignedStoreId != null)
             {
@@ -161,21 +172,21 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx.Save();
 
             // Добавить роли пользователю
-            _cntx.Context.AddRolesToUser(userDTO, rolesIdsCol);
+            //_cntx.Context.AddRolesToUser(userDTO, rolesIdsCol);
 
             // Сохранить данные
             _cntx.Save();
 
             Emailer.SendUserRegistrationMail(_config.AdministrationEmail, userDTO);
             // Записать сообщение
-            TempData["SM"] = _resources["NewUserAdded"];
+            TempData["SM"] = _resources["NewUserAdded"].Value;
             return RedirectToAction("List");
         }
 
         [HttpGet]
         public IActionResult EditUser(Guid id)
         {
-            ViewBag.AvailableRoles = GetAvailableRoles(new List<Guid>());
+            ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
             ViewBag.AvailableStores = GetAvailableStores();
             ViewBag.AvailableStatuses = AvailableStatuses();
             var user = _cntx.Users.GetById(id);
@@ -190,7 +201,7 @@ namespace WebUI.Areas.Admin.Controllers
             //Проверяем модель на валидность
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
                 ViewBag.AvailableStores = GetAvailableStores();
                 ViewBag.AvailableStatuses = AvailableStatuses();
                 return View(model);
@@ -198,7 +209,7 @@ namespace WebUI.Areas.Admin.Controllers
 
             if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(rolesIdsCol);
+                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
                 ViewBag.AvailableStores = GetAvailableStores();
                 ViewBag.AvailableStatuses = AvailableStatuses();
                 ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
@@ -213,6 +224,7 @@ namespace WebUI.Areas.Admin.Controllers
             userDTO.EmailAddress = model.Email;
             userDTO.UserName = model.UserName;
             userDTO.Password = model.Password;
+            userDTO.UserRole = model.UserRole;
 
             if (model.AssignedStoreId != null)
             {
@@ -224,8 +236,8 @@ namespace WebUI.Areas.Admin.Controllers
             }
 
             // Добавить роли пользователю
-            _cntx.Context.RemoveAllRolesFromUser(userDTO);
-            _cntx.Context.AddRolesToUser(userDTO, rolesIdsCol);
+            //_cntx.Context.RemoveAllRolesFromUser(userDTO);
+            //_cntx.Context.AddRolesToUser(userDTO, rolesIdsCol);
 
             _cntx.Users.Update(userDTO);
 
@@ -233,12 +245,17 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx.Save();
 
             // Записать сообщение
-            TempData["SM"] = _resources["UserWasEdited"];
+            TempData["SM"] = _resources["UserWasEdited"].Value;
             return RedirectToAction("List");
         }
-        private List<RoleVM> GetAvailableRoles(IEnumerable<Guid> rolesIds)
+        private List<RoleType> GetAvailableRoles(bool isRestricted)
         {
-            return _cntx.Roles.GetAll().OrderByDescending(x => (int)x.RoleType).Select(s => new RoleVM { RoleId = s.RoleId, RoleName = s.DisplayName, isCheked = rolesIds.Contains(s.RoleId) }).ToList();
+            var res = Enum.GetValues(typeof(RoleType)).Cast<RoleType>().Where(x => x != RoleType.Undefined).Select(v => v);
+            if (isRestricted)
+            {
+                res = res.Where(w => w == RoleType.Superuser || w == RoleType.Manager);
+            }
+            return res.ToList();
         }
         private List<StoreVM> GetAvailableStores()
         {

@@ -1,30 +1,36 @@
 ﻿@using X.PagedList.Mvc.Core
 @using X.PagedList;
 @using X.PagedList.Mvc.Bootstrap4.Core
+@using Microsoft.AspNetCore.Mvc.Localization
+@using WebUI.Resources
+@inject LocalizationService resources
 @model IEnumerable<WebUI.Areas.Admin.Models.UserListVM>
 
 @{
     ViewData["Title"] = "User List";
     ViewData["PageCode"] = "AdminUsersList";
 }
-        <h1>User List</h1>
-    <div>Filtered By Role:&nbsp;</div>
-    <div>
-        <select id="SelectRole" name="SelectRole">
-            <option value="@Guid.Empty">All</option>
-            @foreach (var item in ViewBag.Roles)
+<div id="ModalDialog"></div>
+<h1>@resources["UserList"]</h1>
+<div>
+    @resources["FilteredByRole"]
+</div>
+<div>
+    <select id="SelectRole" name="SelectRole" class="custom-select">
+        <option value="@((int)RoleType.Undefined)">@resources["All"]</option>
+        @foreach (var item in ViewBag.AvailableRoles)
+        {
+            if (ViewBag.SelectedRole == (int)item)
             {
-                if (ViewBag.SelectedRole == item.Value)
-                {
-                    <option selected="selected" value="@item.Value">@item.Text</option>
-                }
-                else
-                {
-                    <option value="@item.Value">@item.Text</option>
-                }
+                <option selected="selected" value="@((int)item)">@resources[item.ToString()]</option>
             }
-        </select>
-    </div>
+            else
+            {
+                <option value="@((int)item)">@resources[item.ToString()]</option>
+            }
+        }
+    </select>
+</div>
 <hr />
 @if (TempData["SM"] != null)
 {
@@ -33,11 +39,11 @@
     </div>
 }
 <p>
-    @Html.ActionLink("Create User", "CreateUser", "Users", new { roleId = ViewBag.SelectedRole }, htmlAttributes: new { @class = "btn btn-primary" })
+    @Html.ActionLink(resources["CreateUser"], "CreateUser", "Users", new { roleId = ViewBag.SelectedRole }, htmlAttributes: new { @class = "btn btn-outline-primary" })
 </p>
 @if (!Model.Any())
 {
-    <h2 class="text-center">User List is empty.</h2>
+    <h2 class="text-center">@resources["UserListIsEmpty"]</h2>
 }
 else
 {
@@ -83,17 +89,20 @@ else
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "EditUser", "Users", new { id = item.UserId }, htmlAttributes: new { @class = "btn btn-primary" })
-                        @Html.ActionLink("Delete", "DeleteUser", "Users", new { id = item.UserId , roleId = ViewBag.SelectedRole }, htmlAttributes: new { @class = "btn btn-danger delete" })
+                        @Html.ActionLink(resources["Edit"], "EditUser", "Users", new { id = item.UserId }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal" 
+                                data-target="#deleteUser" data-url="@Url.Action($"DeleteUser/{item.UserId}?roleId={ViewBag.SelectedRole}")">
+                            @resources["Delete"]
+                        </button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
     @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", new { page, roleId = ViewBag.SelectedRole }), Bootstrap4PagedListRenderOptions.Default)
-
 }
 @section Scripts
 {
     <script src="~/js/UsersListView.js"></script>
+    <script src="~/js/ModalDialog.js"></script>
 }

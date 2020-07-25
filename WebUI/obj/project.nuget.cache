@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Noz2G1jDv8x/xeHBAQJyu3Lkt6v5vR6DVaMvrgvkRzKr+ZeBySbIWlOVl438NyllDFT7LTv6RIVX9rC8vJMOGg==",
+  "dgSpecHash": "Jpc4BAPfzoSbXd0lVnIP30Np6ldIjgpW+K/pbcsyEGbUfLMAwXn9o+Gz82CqzYvzuUP98I9rEGYiaB3IqJhPuQ==",
   "success": true,
   "projectFilePath": "C:\\Work\\MerchantEFC\\WebUI\\WebUI.csproj",
   "expectedPackageFiles": [
@@ -105,7 +105,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\Sergey Shvetsov\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
+    "C:\\Users\\Sergey Shvetsov\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\newtonsoft.json.bson\\1.0.1\\newtonsoft.json.bson.1.0.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",
     "C:\\Users\\Sergey Shvetsov\\.nuget\\packages\\popper.js\\1.16.0\\popper.js.1.16.0.nupkg.sha512",

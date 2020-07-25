@@ -7,9 +7,14 @@ namespace Data.Model.Interfaces
         ApplicationContext Context { get; }
 
         Users Users { get; }
-        Roles Roles { get; }
-        UserRoles UserRoles { get; }
         Stores Stores { get; }
+        Cities Cities { get; }
+        Products Products { get; }
+        ProductCategories ProductCategories { get; }
+        ProductComments ProductComments { get; }
+        ProductImages ProductImages { get; }
+        ProductModels ProductModels { get; }
+        ProductOptions ProductOptions { get; }
 
         void Save();
     }

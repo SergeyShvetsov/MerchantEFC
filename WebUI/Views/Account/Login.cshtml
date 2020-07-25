@@ -6,7 +6,7 @@
     ViewData["Title"] = "Login";
 }
 
-    <h1>@resources["LoginPage"]</h1>
+<h4>@resources["LoginPage"]</h4>
 @if (TempData["SM"] != null)
 {
     <div class="alert alert-success">
@@ -29,8 +29,8 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="@resources["Login"]" class="btn btn-primary" />
-                &nbsp;<a href="/Account/CreateAccount">@resources["CreateAccount"]</a>
+                <input type="submit" value="@resources["Login"]" class="btn btn-outline-success" />
+                &nbsp;<a href="/Account/CreateAccount" class="btn-outline-success" style="text-decoration: none;">&nbsp;@resources["CreateAccount"]&nbsp;</a>
             </div>
         </form>
     </div>

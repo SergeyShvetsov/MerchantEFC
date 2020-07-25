@@ -7,7 +7,7 @@
     ViewData["Title"] = "User Profile";
 }
 
-<h1>@resources["UserProfile"]</h1>
+<h4>@resources["UserProfile"]</h4>
 @if (TempData["SM"] != null)
 {
     <div class="alert alert-success">
@@ -51,7 +51,7 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="@resources["EditProfile"]" class="btn btn-primary" />
+                <input type="submit" value="@resources["EditProfile"]" class="btn btn-outline-success" />
             </div>
         </form>
     </div>

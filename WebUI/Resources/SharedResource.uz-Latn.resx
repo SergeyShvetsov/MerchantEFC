@@ -123,6 +123,9 @@
   <data name="AppName" xml:space="preserve">
     <value>##Merchant EFC</value>
   </data>
+  <data name="cat01" xml:space="preserve">
+    <value>##Продукты питания</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>##Домашняя</value>
   </data>

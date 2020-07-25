@@ -16,12 +16,11 @@ namespace Data.Model.Models
         public int Id { get; set; }
         public string StoreCode { get; set; }
         public string StoreName { get; set; }
+        public City City { get; set; }
+        public double ExchangeValue { get; set; }
 
-        public List<AppUser> AppUsers { get; set; }
+        public virtual List<AppUser> AppUsers { get; set; }
 
-        //public Guid SuperUserID { get; set; }
-        //[ForeignKey("SuperUserID")]
-        //public IQueryable<_AppUser> SuperUsers { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsArchived { get; set; }
