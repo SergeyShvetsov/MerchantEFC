@@ -1,0 +1,43 @@
+﻿@model WebUI.Areas.Admin.Models.CityListVM
+@using WebUI.Resources
+@inject LocalizationService resources
+
+<div class="modal fade" id="createCity">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCityLabel">@resources["CreateCity"]</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="CreateCity">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Code" class="control-label"></label>
+                        <input asp-for="Code" class="form-control" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name_ru" class="control-label"></label>
+                        <input asp-for="Name_ru" class="form-control" />
+                        <span asp-validation-for="Name_ru" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name_uz_c" class="control-label"></label>
+                        <input asp-for="Name_uz_c" class="form-control" />
+                        <span asp-validation-for="Name_uz_c" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name_uz_l" class="control-label"></label>
+                        <input asp-for="Name_uz_l" class="form-control" />
+                        <span asp-validation-for="Name_uz_l" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">@resources["Cancel"]</button>
+                <button type="button" data-save="modal" class="btn btn-outline-danger">@resources["Append"]</button>
+            </div>
+        </div>
+    </div>
+</div>

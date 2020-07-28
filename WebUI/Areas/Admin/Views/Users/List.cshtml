@@ -1,23 +1,30 @@
 ﻿@using X.PagedList.Mvc.Core
 @using X.PagedList;
 @using X.PagedList.Mvc.Bootstrap4.Core
-@using Microsoft.AspNetCore.Mvc.Localization
 @using WebUI.Resources
 @inject LocalizationService resources
 @model IEnumerable<WebUI.Areas.Admin.Models.UserListVM>
 
 @{
-    ViewData["Title"] = "User List";
+    ViewData["Title"] = "UserList";
     ViewData["PageCode"] = "AdminUsersList";
 }
 
 <div id="ModalDialog"></div>
 
-<h1>@resources["UserList"]</h1>
-<div>
-    @resources["FilteredByRole"]
-</div>
-<div>
+<h4>@resources["UserList"]</h4>
+@if (TempData["SM"] != null)
+{
+
+    <div class="alert alert-success">
+        @TempData["SM"]
+    </div>
+}
+<div style="margin-bottom: 10px;">
+    <div>
+        @resources["FilteredByRole"]
+    </div>
+
     <select id="SelectRole" name="SelectRole" class="custom-select">
         <option value="@((int)RoleType.Undefined)">@resources["All"]</option>
         @foreach (var item in ViewBag.AvailableRoles)
@@ -32,18 +39,12 @@
             }
         }
     </select>
-</div>
-<hr />
-@if (TempData["SM"] != null)
-{
-
-    <div class="alert alert-success">
-        @TempData["SM"]
+    <div class="float-right">
+        @Html.ActionLink(resources["CreateUser"], "CreateUser", "Users", new { roleId = ViewBag.SelectedRole }, htmlAttributes: new { @class = "btn btn-outline-primary" })
     </div>
-}
-<p>
-    @Html.ActionLink(resources["CreateUser"], "CreateUser", "Users", new { roleId = ViewBag.SelectedRole }, htmlAttributes: new { @class = "btn btn-outline-primary" })
-</p>
+</div>
+
+
 @if (!Model.Any())
 {
     <h2 class="text-center">@resources["UserListIsEmpty"]</h2>

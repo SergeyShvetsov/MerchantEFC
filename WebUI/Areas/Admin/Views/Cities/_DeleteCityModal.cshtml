@@ -1,0 +1,26 @@
+﻿@model WebUI.Areas.Admin.Models.CityDeleteVM
+@using WebUI.Resources
+@inject LocalizationService resources
+
+<div class="modal fade" id="deleteCity">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCityLabel">@resources["DeleteCity"]</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="DeleteCity">
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                </form>
+                <p>@(string.Format(resources["DeleteCityConfirm"],Model.CityName))</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">@resources["Cancel"]</button>
+                <button type="button" data-save="modal" class="btn btn-outline-danger">@resources["Delete"]</button>
+            </div>
+        </div>
+    </div>
+</div>

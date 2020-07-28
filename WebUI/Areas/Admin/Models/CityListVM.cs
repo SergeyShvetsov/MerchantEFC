@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,13 +20,18 @@ namespace WebUI.Areas.Admin.Models
             Name_uz_l = city.Name_uz_l;
         }
         public int Id { get; set; }
-
+        
+        [DisplayName("CityCode")]
+        [Required(ErrorMessage = "CityCodeRequired")]
         public string Code { get; set; }
-        [DisplayName("UserName")]
+        [DisplayName("Русский")]
+        [Required(ErrorMessage = "CityNameRequired")]
         public string Name_ru { get; set; }
-        [DisplayName("FirstName")]
+        [DisplayName("Ўзбекча")]
+        [Required(ErrorMessage = "CityNameRequired")]
         public string Name_uz_c { get; set; }
-        [DisplayName("LastName")]
+        [DisplayName("O‘zbek")]
+        [Required(ErrorMessage = "CityNameRequired")]
         public string Name_uz_l { get; set; }
 
     }

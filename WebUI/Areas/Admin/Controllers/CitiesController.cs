@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
+using Data.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -30,18 +32,11 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx = context;
             _resources = localizer.GetLocalResources();
         }
-        public IActionResult SetLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-            return LocalRedirect(returnUrl);
-        }
-        // GET: City
+
         public ActionResult List(int? page)
         {
+            ViewBag.TabItem = "Cities";
+
             // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_Users_List_UsersPerPage;
@@ -55,77 +50,94 @@ namespace WebUI.Areas.Admin.Controllers
 
             // Устанавливаем постраничную навигацию
             var onePageOfCities = listOfCitiesVM.ToPagedList(pageNumber, pageSize: pageSize);
+
             // Возвращаем в преставление
             return View(onePageOfCities);
         }
 
-        // GET: City/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public ActionResult CreateCity()
         {
-            return View();
+            ViewBag.TabItem = "Cities";
+            return View("CreateCity", new CityListVM());
         }
 
-        // GET: City/Create
-        public ActionResult Create()
+        [HttpPost]
+        public ActionResult CreateCity(CityListVM model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var city = new City()
+            {
+                Code = model.Code,
+                Name_ru = model.Name_ru,
+                Name_uz_c = model.Name_uz_c,
+                Name_uz_l = model.Name_uz_l
+            };
+            _cntx.Cities.Insert(city);
+            _cntx.Save();
+
+            TempData["SM"] = _resources["NewCityAdded"].Value;
+            return RedirectToAction("List");
         }
 
-        // POST: City/Create
+        [HttpGet]
+        public IActionResult DeleteCity(int id)
+        {
+            var city = _cntx.Cities.GetById(id);
+            var model = new CityDeleteVM
+            {
+                Id = id,
+                CityName = city.Name
+            };
+
+            return PartialView("_DeleteCityModal", model);
+        }
+        [HttpPost]
+        public IActionResult DeleteCity(CityDeleteVM model)
+        {
+            var city = _cntx.Cities.GetById(model.Id);
+            // Удаляем связи с ролями
+            // Удаляем пользователя из БД
+            _cntx.Cities.Delete(city);
+            _cntx.Save();
+
+            TempData["SM"] = _resources["CityWasDeleted"].Value;
+            return RedirectToAction("List");
+        }
+
+        [HttpGet]
+        public ActionResult EditCity(int id)
+        {
+            ViewBag.TabItem = "Cities";
+            var city = _cntx.Cities.GetById(id);
+            var model = new CityListVM(city);
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult EditCity(CityListVM model)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            catch
+            var city = new City()
             {
-                return View();
-            }
-        }
+                Id = model.Id,
+                Code = model.Code,
+                Name_ru = model.Name_ru,
+                Name_uz_c = model.Name_uz_c,
+                Name_uz_l = model.Name_uz_l
+            };
+            _cntx.Cities.Update(city);
+            _cntx.Save();
 
-        // GET: City/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: City/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: City/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: City/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            TempData["SM"] = _resources["CityEdited"].Value;
+            return RedirectToAction("List");
         }
     }
 }

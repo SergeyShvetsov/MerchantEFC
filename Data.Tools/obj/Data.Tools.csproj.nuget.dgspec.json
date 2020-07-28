@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj": {}
+    "C:\\Work\\Data.Tools\\Data.Tools.csproj": {}
   },
   "projects": {
-    "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj": {
+    "C:\\Work\\Data.Model\\Data.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
+        "projectUniqueName": "C:\\Work\\Data.Model\\Data.Model.csproj",
         "projectName": "Data.Model",
-        "projectPath": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
-        "packagesPath": "C:\\Users\\Hal.10\\.nuget\\packages\\",
-        "outputPath": "D:\\Work\\MerchantEFC\\Data.Model\\obj\\",
+        "projectPath": "C:\\Work\\Data.Model\\Data.Model.csproj",
+        "packagesPath": "C:\\Users\\AcerNotebook\\.nuget\\packages\\",
+        "outputPath": "C:\\Work\\Data.Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Hal.10\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\AcerNotebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -66,36 +66,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.2, 3.1.2]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj": {
+    "C:\\Work\\Data.Tools\\Data.Tools.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj",
+        "projectUniqueName": "C:\\Work\\Data.Tools\\Data.Tools.csproj",
         "projectName": "Data.Tools",
-        "projectPath": "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj",
-        "packagesPath": "C:\\Users\\Hal.10\\.nuget\\packages\\",
-        "outputPath": "D:\\Work\\MerchantEFC\\Data.Tools\\obj\\",
+        "projectPath": "C:\\Work\\Data.Tools\\Data.Tools.csproj",
+        "packagesPath": "C:\\Users\\AcerNotebook\\.nuget\\packages\\",
+        "outputPath": "C:\\Work\\Data.Tools\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Hal.10\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\AcerNotebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -109,8 +103,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj": {
-                "projectPath": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj"
+              "C:\\Work\\Data.Model\\Data.Model.csproj": {
+                "projectPath": "C:\\Work\\Data.Model\\Data.Model.csproj"
               }
             }
           }
@@ -143,18 +137,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.2, 3.1.2]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

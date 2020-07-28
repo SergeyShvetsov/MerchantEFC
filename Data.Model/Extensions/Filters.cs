@@ -10,7 +10,7 @@ namespace Data.Model.Extensions
 
     public static partial class FiltrationEntensions
     {
-        public static IQueryable<T> ApplyArchivedFilter<T>(this IQueryable<T> source, bool includeArchived = false)
+        public static IEnumerable<T> ApplyArchivedFilter<T>(this IEnumerable<T> source, bool includeArchived = false)
         {
             if (!includeArchived /*&& typeof(T) is IArchivableEntity*/)
             {

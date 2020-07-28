@@ -34,3 +34,15 @@ C:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csproj.CoreCom
 C:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csproj.CopyComplete
 C:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.dll
 C:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.pdb
+C:\Work\Data.Tools\bin\Debug\netcoreapp3.1\Data.Tools.deps.json
+C:\Work\Data.Tools\bin\Debug\netcoreapp3.1\Data.Tools.dll
+C:\Work\Data.Tools\bin\Debug\netcoreapp3.1\Data.Tools.pdb
+C:\Work\Data.Tools\bin\Debug\netcoreapp3.1\Data.Model.dll
+C:\Work\Data.Tools\bin\Debug\netcoreapp3.1\Data.Model.pdb
+C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csprojAssemblyReference.cache
+C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.AssemblyInfoInputs.cache
+C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.AssemblyInfo.cs
+C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csproj.CoreCompileInputs.cache
+C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csproj.CopyComplete
+C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.dll
+C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.pdb

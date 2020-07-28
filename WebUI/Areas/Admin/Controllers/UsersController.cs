@@ -20,7 +20,7 @@ using X.PagedList;
 namespace WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles ="Admin,SuperUser")]
+    [Authorize(Roles = "Admin,SuperUser")]
     public class UsersController : Controller
     {
         //private ApplicationContext _cntx;
@@ -35,19 +35,12 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx = context;
             _resources = localizer.GetLocalResources();
         }
-        public IActionResult SetLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-            return LocalRedirect(returnUrl);
-        }
         // GET: UsersController
         public ActionResult List(int? page, int roleId)
         {
-                       // Устанавливаем номер страницы
+             ViewBag.TabItem = "Users"; 
+            
+            // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_Users_List_UsersPerPage;
 
@@ -71,9 +64,9 @@ namespace WebUI.Areas.Admin.Controllers
 
             // Устанавливаем постраничную навигацию
             var onePageOfUsers = listOfUsersVM.ToPagedList(pageNumber, pageSize: pageSize);
+
             // Возвращаем в преставление
-            //var view = View(onePageOfUsers);
-            //view.
+
             return View(onePageOfUsers);
         }
 
@@ -106,6 +99,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUser(Guid? roleId, int? storeId)
         {
+            ViewBag.TabItem = "Users";
             ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
             ViewBag.AvailableStores = GetAvailableStores();
             ViewBag.AvailableStatuses = AvailableStatuses();
@@ -115,6 +109,7 @@ namespace WebUI.Areas.Admin.Controllers
                 Password = Data.Tools.Pasword.Generate(_config.PasswordLenght),
                 UserStatus = Status.Active
             };
+
             return View("CreateUser", model);
         }
 
@@ -122,6 +117,7 @@ namespace WebUI.Areas.Admin.Controllers
         //[ActionName("create-account")]
         public IActionResult CreateUser(UserEditVM model, IFormCollection collection)
         {
+            ViewBag.TabItem = "Users";
             var rolesIdsCol = collection["UserRoles"].Select(s => new Guid(s));
 
             //Проверяем модель на валидность
@@ -173,10 +169,6 @@ namespace WebUI.Areas.Admin.Controllers
             }
 
             _cntx.Users.Insert(userDTO);
-            _cntx.Save();
-
-            // Добавить роли пользователю
-            //_cntx.Context.AddRolesToUser(userDTO, rolesIdsCol);
 
             // Сохранить данные
             _cntx.Save();
@@ -190,6 +182,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult EditUser(Guid id)
         {
+            ViewBag.TabItem = "Users";
             ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
             ViewBag.AvailableStores = GetAvailableStores();
             ViewBag.AvailableStatuses = AvailableStatuses();
@@ -200,6 +193,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult EditUser(UserEditVM model, IFormCollection collection)
         {
+            ViewBag.TabItem = "Users";
             var rolesIdsCol = collection["UserRoles"].Select(s => new Guid(s));
 
             //Проверяем модель на валидность

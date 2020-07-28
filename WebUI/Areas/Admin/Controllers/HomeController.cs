@@ -1,36 +1,29 @@
 ﻿using Data.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.IO;
 using System.Linq;
+using WebUI.Extensions;
 
 namespace WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,SuperUser")]
     public class HomeController : Controller
     {
         private ApplicationContext _db;
         private IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private ISession _session => _httpContextAccessor.HttpContext.Session;
+        private IStringLocalizer _resources;
 
-        public HomeController(ApplicationContext cntx, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
+        public HomeController(ApplicationContext cntx, IWebHostEnvironment env, IStringLocalizerFactory localizer)
         {
             _db = cntx;
             _env = env;
-            _httpContextAccessor = httpContextAccessor;
-        }
-        public IActionResult SetLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-            return LocalRedirect(returnUrl);
+            _resources = localizer.GetLocalResources();
         }
         public IActionResult Index()
         {
@@ -43,6 +36,8 @@ namespace WebUI.Areas.Admin.Controllers
             //var imagesDir = Path.Combine(_env.WebRootPath, "Images");
 
             //Emailer.SendMail(from: currentUser.EmailAddress, recipients: "user1@any.fake,user2@any.fake", subject: "Test", htmlText: "Test Message");
+            ViewBag.Title = _resources["Administration"];
+            ViewBag.TabItem = "Home";
             return View();
         }
     }

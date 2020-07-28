@@ -5072,25 +5072,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Hal.10\\.nuget\\packages\\": {},
+    "C:\\Users\\AcerNotebook\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
+      "projectUniqueName": "C:\\Work\\Data.Model\\Data.Model.csproj",
       "projectName": "Data.Model",
-      "projectPath": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj",
-      "packagesPath": "C:\\Users\\Hal.10\\.nuget\\packages\\",
-      "outputPath": "D:\\Work\\MerchantEFC\\Data.Model\\obj\\",
+      "projectPath": "C:\\Work\\Data.Model\\Data.Model.csproj",
+      "packagesPath": "C:\\Users\\AcerNotebook\\.nuget\\packages\\",
+      "outputPath": "C:\\Work\\Data.Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Hal.10\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\AcerNotebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -5138,18 +5138,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[3.1.2, 3.1.2]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

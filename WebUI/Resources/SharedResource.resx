@@ -141,6 +141,9 @@
   <data name="All" xml:space="preserve">
     <value>Все</value>
   </data>
+  <data name="Append" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>Merchant EFC</value>
   </data>
@@ -345,6 +348,30 @@
   <data name="cat14" xml:space="preserve">
     <value>Сантехника</value>
   </data>
+  <data name="Cities" xml:space="preserve">
+    <value>Города</value>
+  </data>
+  <data name="CityCode" xml:space="preserve">
+    <value>Код города</value>
+  </data>
+  <data name="CityCodeRequired" xml:space="preserve">
+    <value>Требуется код города</value>
+  </data>
+  <data name="CityEdited" xml:space="preserve">
+    <value>Город отредактирован</value>
+  </data>
+  <data name="CityList" xml:space="preserve">
+    <value>Список городов</value>
+  </data>
+  <data name="CityListIsEmpty" xml:space="preserve">
+    <value>Города отсутствуют</value>
+  </data>
+  <data name="CityNameRequired" xml:space="preserve">
+    <value>Требуется название города</value>
+  </data>
+  <data name="CityWasDeleted" xml:space="preserve">
+    <value>Город был удален</value>
+  </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Подтвердите пароль</value>
   </data>
@@ -357,11 +384,17 @@
   <data name="CreateAccount" xml:space="preserve">
     <value>Создать учетную запись</value>
   </data>
+  <data name="CreateCity" xml:space="preserve">
+    <value>Добавить город</value>
+  </data>
   <data name="CreateUser" xml:space="preserve">
     <value>Создать пользователя</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
+  </data>
+  <data name="DeleteCityConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить город {0}?</value>
   </data>
   <data name="DeleteUser" xml:space="preserve">
     <value>Удаление пользователя.</value>
@@ -371,6 +404,9 @@
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Редактировать</value>
+  </data>
+  <data name="EditCity" xml:space="preserve">
+    <value>Редактировать город</value>
   </data>
   <data name="EditProfile" xml:space="preserve">
     <value>Изменить пользователя</value>
@@ -388,7 +424,7 @@
     <value>Неверный формат адреса</value>
   </data>
   <data name="FilteredByRole" xml:space="preserve">
-    <value>Фильтровать по роле :</value>
+    <value>Фильтровать по роли :</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Имя</value>
@@ -429,6 +465,9 @@
   <data name="Manager" xml:space="preserve">
     <value>Менеджер</value>
   </data>
+  <data name="NewCityAdded" xml:space="preserve">
+    <value>Добавлен новый город</value>
+  </data>
   <data name="NewUserAdded" xml:space="preserve">
     <value>Добавлен новый пользователь.</value>
   </data>
@@ -444,6 +483,9 @@
   <data name="Pending" xml:space="preserve">
     <value>Ожидает</value>
   </data>
+  <data name="Products" xml:space="preserve">
+    <value>Продукты</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
   </data>
@@ -455,6 +497,9 @@
   </data>
   <data name="SiteName" xml:space="preserve">
     <value>Green Leaf</value>
+  </data>
+  <data name="Stores" xml:space="preserve">
+    <value>Магазины</value>
   </data>
   <data name="Superuser" xml:space="preserve">
     <value>Управляющий</value>
@@ -476,6 +521,9 @@
   </data>
   <data name="UserProfile" xml:space="preserve">
     <value>Профиль пользователя</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Пользователи</value>
   </data>
   <data name="UserStatus" xml:space="preserve">
     <value>Статус пользователя</value>
