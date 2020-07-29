@@ -15,24 +15,17 @@ namespace Data.Model.Models
     public class AppUser : IArchivableEntity
     {
         [Key]
-        public Guid AppUserId { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
 
-        //public int StoreId { get; set; }
-        //[ForeignKey("StoreId")]
-        public Store AssignedStore { get; set; }
-
-        //public int ManagedStoreID { get; set; }// навигационное свойство
-        //[ForeignKey("ManagedStoreID")] // Должно сооеветствовать навигационнму свойству
-        //[NotMapped]
-        //public _Store ManagedStore { get; set; }
+        public int? StoreId { get; set; }
+        public Store Store { get; set; }
 
         public RoleType UserRole { get; set; } = RoleType.User;
-
         public Status UserStatus { get; set; } = Status.Active;
 
         public bool IsArchived { get; set; }

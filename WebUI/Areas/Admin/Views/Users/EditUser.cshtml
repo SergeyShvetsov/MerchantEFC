@@ -1,4 +1,5 @@
 ﻿@using WebUI.Areas.Admin.Models
+@using Data.Model.Models;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using WebUI.Resources
 @inject LocalizationService resources
@@ -40,12 +41,12 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            @if (ViewBag.AvailableStores != null || ViewBag.AvailableStoresStores.Any())
+            @if (ViewBag.AvailableStores != null || ViewBag.AvailableStores.Any())
             {
                 <div class="form-group">
-                    <label asp-for="AssignedStoreId" class="control-label"></label>
-                    <select asp-for="AssignedStoreId" class="form-control custom-select">
-                        @if (Model.AssignedStoreId == null)
+                    <label asp-for="StoreId" class="control-label"></label>
+                    <select asp-for="StoreId" class="form-control custom-select">
+                        @if (Model.StoreId == null)
                         {
                             <option value="0">None</option>
                         }
@@ -53,15 +54,15 @@
                         {
                             <option selected="selected" value="0">None</option>
                         }
-                        @foreach (var item in ViewBag.AvailableStores as List<StoreVM>)
+                        @foreach (var item in ViewBag.AvailableStores as List<Store>)
                         {
-                            if (Model.AssignedStoreId != null && item.StoreId == Model.AssignedStoreId)
+                            if (Model.StoreId != null && item.Id == Model.StoreId)
                             {
-                                <option selected="selected" value="@item.StoreId">@item.StoreName</option>
+                                <option selected="selected" value="@item.Id">@item.StoreName</option>
                             }
                             else
                             {
-                                <option value="@item.StoreId">@item.StoreName</option>
+                                <option value="@item.Id">@item.StoreName</option>
                             }
                         }
                     </select>

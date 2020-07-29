@@ -144,7 +144,7 @@ namespace WebUI.Controllers
                 hasError = true;
                 ModelState.AddModelError("", _resources["InvalidLoginOrPassword"]);
                 user.AttemptsCount++;
-                if (user.AttemptsCount > _config.Admin_Users_List_UsersPerPage)
+                if (user.AttemptsCount > _config.Admin_RowsPerPage)
                 {
                     user.UserStatus = Status.Blocked;
                     user.AttemptsCount = 0;
@@ -177,9 +177,10 @@ namespace WebUI.Controllers
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.UserRole.ToString())
             };
 
-            if (user.AssignedStore != null)
+            if (user.Store != null)
             {
-                _session.Set<int?>("StoreFilter", user.AssignedStore.Id);
+                _session.Set<int?>("AssignedStore", user.Store.Id);
+                _session.Set<int?>("AssignedCity", user.Store?.City.Id);
             }
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

@@ -14,13 +14,13 @@ namespace WebUI.Areas.Admin.Models
         public UserEditVM() { }
         public UserEditVM(AppUser usr)
         {
-            UserId = usr.AppUserId;
+            UserId = usr.Id;
             UserName = usr.UserName;
             FirstName = usr.FirstName;
             LastName = usr.LastName;
             Email = usr.EmailAddress;
             Password = usr.Password;
-            AssignedStoreId = usr.AssignedStore?.Id;
+            StoreId = usr.Store?.Id;
             UserRole = usr.UserRole;
             UserStatus = usr.UserStatus;
         }
@@ -46,7 +46,7 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("AssignedRoles")]
         public RoleType UserRole { get; set; }
         [DisplayName("AssignedStore")]
-        public int? AssignedStoreId { get; set; }
+        public int? StoreId { get; set; }
         [DisplayName("UserStatus")]
         public Status UserStatus { get; set; } = Status.Active;
     }

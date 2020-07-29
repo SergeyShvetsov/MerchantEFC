@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    [Table("ProductCommentss")]
+    [Table("ProductComments")]
     public class ProductComment
     {
         [Key]

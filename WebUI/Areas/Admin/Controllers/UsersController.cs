@@ -27,13 +27,21 @@ namespace WebUI.Areas.Admin.Controllers
         private readonly AppConfig _config;
         private readonly IEntityContext _cntx;
         private readonly IStringLocalizer _resources;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
+        
+        private  IEnumerable<RoleType> _availableRoles => _cntx.GetAvailableRoles(User);
+        private  IEnumerable<Status> _availableStatuses => _cntx.GetAvailableStatuses(User);
+        private readonly IEnumerable<Store> _availableStores;
 
-        public UsersController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer)
+        public UsersController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
         {
             // _cntx = cntx;
             _config = config.Value;
             _cntx = context;
             _resources = localizer.GetLocalResources();
+            _httpContextAccessor = httpContextAccessor;
+            _availableStores = _cntx.GetAvailableStores(_session);
         }
         // GET: UsersController
         public ActionResult List(int? page, int roleId)
@@ -42,18 +50,20 @@ namespace WebUI.Areas.Admin.Controllers
             
             // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
-            int pageSize = _config.Admin_Users_List_UsersPerPage;
+            int pageSize = _config.Admin_RowsPerPage;
 
             // Заполняем список ролей данными
-            ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-            //// Заполняем список stores данными
-            //ViewBag.Stores = new SelectList(_cntx.Stores.GetAll().OrderBy(o => o.StoreName).ToList(), dataValueField: "Id", dataTextField: "StoreName");
-
-            // Устанавливаем выбранную роль
+            ViewBag.AvailableRoles = _availableRoles;
             ViewBag.SelectedRole = roleId;
 
             // Инициализируем List и заполняем данными
-            var listOfUsers = _cntx.Users.GetAllByRole((RoleType)roleId).ApplyArchivedFilter();
+            var listOfUsers = _cntx.Users.GetAllByRole((RoleType)roleId)
+                .ApplyArchivedFilter();
+            
+            if (!User.IsInRole("Admin"))
+            {
+                listOfUsers = listOfUsers.ApplyAvailableFilter(_availableStores);
+            }
 
             var listOfUsersVM = listOfUsers
                 .Select(s => new UserListVM(s))
@@ -100,9 +110,9 @@ namespace WebUI.Areas.Admin.Controllers
         public IActionResult CreateUser(Guid? roleId, int? storeId)
         {
             ViewBag.TabItem = "Users";
-            ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-            ViewBag.AvailableStores = GetAvailableStores();
-            ViewBag.AvailableStatuses = AvailableStatuses();
+            ViewBag.AvailableRoles = _availableRoles;
+            ViewBag.AvailableStores = _availableStores;
+            ViewBag.AvailableStatuses = _availableStatuses;
 
             var model = new UserEditVM()
             {
@@ -123,17 +133,17 @@ namespace WebUI.Areas.Admin.Controllers
             //Проверяем модель на валидность
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-                ViewBag.AvailableStores = GetAvailableStores();
-                ViewBag.AvailableStatuses = AvailableStatuses();
+                ViewBag.AvailableRoles = _availableRoles;
+                ViewBag.AvailableStores = _availableStores;
+                ViewBag.AvailableStatuses = _availableStatuses;
                 return View(model);
             }
 
             if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-                ViewBag.AvailableStores = GetAvailableStores();
-                ViewBag.AvailableStatuses = AvailableStatuses();
+                ViewBag.AvailableRoles = _availableRoles;
+                ViewBag.AvailableStores = _availableStores;
+                ViewBag.AvailableStatuses = _availableStatuses;
                 ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
                 return View(model);
             }
@@ -141,9 +151,9 @@ namespace WebUI.Areas.Admin.Controllers
             // Проверяем имя на уникальность
             if (!_cntx.Users.IsUniqName(model.UserName))
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-                ViewBag.AvailableStores = GetAvailableStores();
-                ViewBag.AvailableStatuses = AvailableStatuses();
+                ViewBag.AvailableRoles = _availableRoles;
+                ViewBag.AvailableStores = _availableStores;
+                ViewBag.AvailableStatuses = _availableStatuses;
                 ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                 model.UserName = string.Empty;
                 return View(model);
@@ -159,13 +169,13 @@ namespace WebUI.Areas.Admin.Controllers
                 Password = model.Password,
                 UserRole = model.UserRole
             };
-            if (model.AssignedStoreId != null)
+            if (model.StoreId != null)
             {
-                userDTO.AssignedStore = _cntx.Stores.GetById((int)model.AssignedStoreId);
+                userDTO.Store = _cntx.Stores.GetById((int)model.StoreId);
             }
             else
             {
-                userDTO.AssignedStore = null;
+                userDTO.Store = null;
             }
 
             _cntx.Users.Insert(userDTO);
@@ -183,9 +193,9 @@ namespace WebUI.Areas.Admin.Controllers
         public IActionResult EditUser(Guid id)
         {
             ViewBag.TabItem = "Users";
-            ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-            ViewBag.AvailableStores = GetAvailableStores();
-            ViewBag.AvailableStatuses = AvailableStatuses();
+            ViewBag.AvailableRoles = _availableRoles;
+            ViewBag.AvailableStores = _availableStores;
+            ViewBag.AvailableStatuses = _availableStatuses;
             var user = _cntx.Users.GetById(id);
 
             return View("EditUser", new UserEditVM(user));
@@ -199,17 +209,17 @@ namespace WebUI.Areas.Admin.Controllers
             //Проверяем модель на валидность
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-                ViewBag.AvailableStores = GetAvailableStores();
-                ViewBag.AvailableStatuses = AvailableStatuses();
+                ViewBag.AvailableRoles = _availableRoles;
+                ViewBag.AvailableStores = _availableStores;
+                ViewBag.AvailableStatuses = _availableStatuses;
                 return View(model);
             }
 
             if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
             {
-                ViewBag.AvailableRoles = GetAvailableRoles(User.IsInRole("SuperUser"));
-                ViewBag.AvailableStores = GetAvailableStores();
-                ViewBag.AvailableStatuses = AvailableStatuses();
+                ViewBag.AvailableRoles = _availableRoles;
+                ViewBag.AvailableStores = _availableStores;
+                ViewBag.AvailableStatuses = _availableStatuses;
                 ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
                 return View(model);
             }
@@ -224,13 +234,24 @@ namespace WebUI.Areas.Admin.Controllers
             userDTO.Password = model.Password;
             userDTO.UserRole = model.UserRole;
 
-            if (model.AssignedStoreId != null)
+            // Проверяем имя на уникальность
+            if (!_cntx.Users.IsUniqName(model.UserName))
             {
-                userDTO.AssignedStore = _cntx.Stores.GetById((int)model.AssignedStoreId);
+                ViewBag.AvailableRoles = _availableRoles;
+                ViewBag.AvailableStores = _availableStores;
+                ViewBag.AvailableStatuses = _availableStatuses;
+                ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
+                model.UserName = userDTO.UserName;
+                return View(model);
+            }
+
+            if (model.StoreId != null)
+            {
+                userDTO.Store = _cntx.Stores.GetById((int)model.StoreId);
             }
             else
             {
-                userDTO.AssignedStore = null;
+                userDTO.Store = null;
             }
 
             // Добавить роли пользователю
@@ -246,25 +267,6 @@ namespace WebUI.Areas.Admin.Controllers
             TempData["SM"] = _resources["UserWasEdited"].Value;
             return RedirectToAction("List");
         }
-        private List<RoleType> GetAvailableRoles(bool isRestricted)
-        {
-            var res = Enum.GetValues(typeof(RoleType)).Cast<RoleType>().Where(x => x != RoleType.Undefined).Select(v => v);
-            if (isRestricted)
-            {
-                res = res.Where(w => w == RoleType.Superuser || w == RoleType.Manager);
-            }
-            return res.ToList();
-        }
-        private List<StoreVM> GetAvailableStores()
-        {
-            return _cntx.Stores.GetAll().OrderBy(x => x.StoreName).Select(s => new StoreVM { StoreId = s.Id, StoreCode = s.StoreCode, StoreName = s.StoreName }).ToList();
-        }
-        private List<Status> AvailableStatuses()
-        {
-            return Enum.GetValues(typeof(Status)).Cast<Status>().Select(v => v).ToList();
-        }
-
-
     }
 }
 

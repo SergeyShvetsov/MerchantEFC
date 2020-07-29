@@ -14,8 +14,11 @@ namespace Data.Model.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public Product Product { get; set; }
+        [Column(TypeName = "image")]
         public byte[] LargeImage { get; set; }
+        [Column(TypeName = "image")]
         public byte[] SmallImage { get; set; }
+        [Column(TypeName = "image")]
         public byte[] Thumbs { get; set; }
 
         public bool IsArchived { get; set; }

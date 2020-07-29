@@ -1,5 +1,5 @@
 {
   "AdministrationEmail": "admin@fake.com",
   "PasswordLenght": 8,
-  "Admin_Users_List_UsersPerPage": 3
+  "Admin_RowsPerPage": 3
 }

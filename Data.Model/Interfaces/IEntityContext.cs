@@ -1,4 +1,8 @@
 ﻿using Data.Model.Entities;
+using Data.Model.Models;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Data.Model.Interfaces
 {
@@ -17,5 +21,12 @@ namespace Data.Model.Interfaces
         ProductOptions ProductOptions { get; }
 
         void Save();
+
+        IEnumerable<City> GetAvailableCities(ISession session);
+        IEnumerable<Store> GetAvailableStores(ISession session);
+        IEnumerable<RoleType> GetAllRoles();
+        IEnumerable<RoleType> GetAvailableRoles(ClaimsPrincipal user);
+        IEnumerable<Status> GetAllStatuses();
+        IEnumerable<Status> GetAvailableStatuses(ClaimsPrincipal user);
     }
 }

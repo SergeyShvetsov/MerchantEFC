@@ -12,7 +12,7 @@ namespace WebUI.Areas.Admin.Models
         public UserListVM() { }
         public UserListVM(AppUser usr)
         {
-            UserId = usr.AppUserId;
+            UserId = usr.Id;
             UserName = usr.UserName;
             FirstName = usr.FirstName;
             LastName = usr.LastName;

@@ -1,5 +1,6 @@
 ﻿using Data.Model.Interfaces;
 using Data.Model.Models;
+using Data.Tools.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,10 @@ namespace Data.Model.Entities
         public void Update(City ent)
         {
             _context.Cities.Update(ent);
+        }
+        public bool IsUniqCode(string code)
+        {
+            return !_context.Cities.Any(a => a.Code.Equals(code));
         }
     }
 }

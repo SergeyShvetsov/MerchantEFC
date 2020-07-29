@@ -44,7 +44,7 @@ namespace Data.Tools.Extensions
             return img.Scale(new Size(width, height));
         }
 
-            public static Size ScaledImageSize(this Image  img, Size newSize) 
+        public static Size ScaledImageSize(this Image img, Size newSize)
         {
 
             var ratioX = (double)newSize.Width / img.Width;

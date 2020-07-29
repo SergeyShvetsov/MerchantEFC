@@ -1,0 +1,93 @@
+﻿@model IEnumerable<WebUI.Areas.Admin.Models.StoreListVM>
+@using X.PagedList.Mvc.Core
+@using X.PagedList;
+@using X.PagedList.Mvc.Bootstrap4.Core
+@using WebUI.Resources
+@inject LocalizationService resources
+
+@{
+    ViewData["Title"] = "StoreList";
+}
+
+<div id="ModalDialog"></div>
+
+@if (TempData["SM"] != null)
+{
+
+    <div class="alert alert-success">
+        @TempData["SM"]
+    </div>
+}
+
+<div class="row">
+    <div class="col">
+        <h4>@resources["StoreList"]</h4>
+    </div>
+    <div class="col" style="text-align: right;">
+        @Html.ActionLink(resources["CreateStore"], "CreateStore", "Stores", null, htmlAttributes: new { @class = "btn btn-outline-primary" })
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">@resources["StoreListIsEmpty"]</h2>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StoreCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StoreName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CityId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsBlocked)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StoreCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StoreName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CityName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsBlocked)
+                    </td>
+                    <td>
+                        @Html.ActionLink(resources["Edit"], "EditStore", "Stores", new { id = item.StoreId }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
+                                data-target="#deleteStore" data-url="@Url.Action($"DeleteStore/{item.StoreId}")">
+                            @resources["Delete"]
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", null), Bootstrap4PagedListRenderOptions.Default)
+}
+@section Scripts
+{
+    <script src="~/js/ModalDialog.js"></script>
+}

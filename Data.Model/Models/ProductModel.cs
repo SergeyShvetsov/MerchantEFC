@@ -20,8 +20,9 @@ namespace Data.Model.Models
         public double Price { get; set; }
         public double PriceUSD { get; set; }
         public int Quantity { get; set; }
-
+        [Column(TypeName = "image")]
         public byte[] Image { get; set; }
+        [Column(TypeName = "image")]
         public byte[] Thumbs { get; set; }
 
         public bool IsAvailable { get; set; }

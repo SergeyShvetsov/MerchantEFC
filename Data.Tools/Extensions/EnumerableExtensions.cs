@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WebUI.Extensions
+namespace Data.Tools.Extensions
 {
     public static class EnumerableExtensions
     {

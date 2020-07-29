@@ -1,5 +1,7 @@
 ﻿using Data.Model.Interfaces;
 using Data.Model.Models;
+using Data.Tools.Extensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,11 @@ namespace Data.Model.Entities
             _context = context;
         }
 
-        public IQueryable<Store> GetAll() => _context.Stores.Select(x => x);
+        public IQueryable<Store> GetAll() => _context.Stores.Include(s => s.City).Select(x => x);
 
         public Store GetById(Guid id) => throw new NotImplementedException();
 
-        public Store GetById(int id) => _context.Stores.FirstOrDefault(x => x.Id == id);
+        public Store GetById(int id) => _context.Stores.Include(s => s.City).FirstOrDefault(x => x.Id == id);
 
         public void Insert(Store store)
         {
@@ -37,8 +39,12 @@ namespace Data.Model.Entities
         }
         public void AssignToUser(Store store,AppUser user)
         {
-            user.AssignedStore = store;
+            user.Store = store;
             _context.AppUsers.Update(user);
+        }
+        public bool IsUniqCode(string code)
+        {
+            return !_context.Stores.Any(a => a.StoreCode.Equals(code));
         }
     }
 }

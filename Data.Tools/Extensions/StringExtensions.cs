@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebUI.Extensions
+namespace Data.Tools.Extensions
 {
     public static class StringExtensions
     {
@@ -14,5 +14,7 @@ namespace WebUI.Extensions
                 "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
                 _ => input.First().ToString().ToUpper() + input.Substring(1)
             };
+
+        public static string NormalizeCode(this string code) => code.Trim().ToLower();
     }
 }

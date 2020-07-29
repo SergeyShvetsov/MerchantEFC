@@ -351,6 +351,9 @@
   <data name="Cities" xml:space="preserve">
     <value>Города</value>
   </data>
+  <data name="City" xml:space="preserve">
+    <value>Город</value>
+  </data>
   <data name="CityCode" xml:space="preserve">
     <value>Код города</value>
   </data>
@@ -369,8 +372,14 @@
   <data name="CityNameRequired" xml:space="preserve">
     <value>Требуется название города</value>
   </data>
+  <data name="CityRequired" xml:space="preserve">
+    <value>Требуется выбрать город</value>
+  </data>
   <data name="CityWasDeleted" xml:space="preserve">
     <value>Город был удален</value>
+  </data>
+  <data name="CodeIsTaken" xml:space="preserve">
+    <value>Этот код уже занят.</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Подтвердите пароль</value>
@@ -387,17 +396,29 @@
   <data name="CreateCity" xml:space="preserve">
     <value>Добавить город</value>
   </data>
+  <data name="CreateStore" xml:space="preserve">
+    <value>Добавить магазин</value>
+  </data>
   <data name="CreateUser" xml:space="preserve">
     <value>Создать пользователя</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="DeleteCity" xml:space="preserve">
+    <value>Удалить город.</value>
+  </data>
   <data name="DeleteCityConfirm" xml:space="preserve">
     <value>Вы действительно хотите удалить город {0}?</value>
   </data>
+  <data name="DeleteStore" xml:space="preserve">
+    <value>Удалить магазин.</value>
+  </data>
+  <data name="DeleteStoreConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить магазин {0}?</value>
+  </data>
   <data name="DeleteUser" xml:space="preserve">
-    <value>Удаление пользователя.</value>
+    <value>Удалить пользователя.</value>
   </data>
   <data name="DeleteUserConfirm" xml:space="preserve">
     <value>Вы действительно хотите удалить пользователя {0}?</value>
@@ -411,6 +432,9 @@
   <data name="EditProfile" xml:space="preserve">
     <value>Изменить пользователя</value>
   </data>
+  <data name="EditStore" xml:space="preserve">
+    <value>Редактировать магазин.</value>
+  </data>
   <data name="EditUser" xml:space="preserve">
     <value>Редактировать пользователя</value>
   </data>
@@ -422,6 +446,12 @@
   </data>
   <data name="EmailWrongFormat" xml:space="preserve">
     <value>Неверный формат адреса</value>
+  </data>
+  <data name="ExchangeValue" xml:space="preserve">
+    <value>Обменный курс</value>
+  </data>
+  <data name="FieldMustBeNumeric" xml:space="preserve">
+    <value>Значение {0}  должно быть числовым.</value>
   </data>
   <data name="FilteredByRole" xml:space="preserve">
     <value>Фильтровать по роли :</value>
@@ -443,6 +473,12 @@
   </data>
   <data name="InvalidPasswordLeght" xml:space="preserve">
     <value>Пароль должен содержать не менее {0} символов!</value>
+  </data>
+  <data name="IsActive" xml:space="preserve">
+    <value>Активен</value>
+  </data>
+  <data name="IsBlocked" xml:space="preserve">
+    <value>Заблокирован</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Фамилия</value>
@@ -467,6 +503,9 @@
   </data>
   <data name="NewCityAdded" xml:space="preserve">
     <value>Добавлен новый город</value>
+  </data>
+  <data name="NewStoreAdded" xml:space="preserve">
+    <value>Магазин добавлен.</value>
   </data>
   <data name="NewUserAdded" xml:space="preserve">
     <value>Добавлен новый пользователь.</value>
@@ -498,8 +537,29 @@
   <data name="SiteName" xml:space="preserve">
     <value>Green Leaf</value>
   </data>
+  <data name="StoreCode" xml:space="preserve">
+    <value>Код магазина</value>
+  </data>
+  <data name="StoreCodeRequired" xml:space="preserve">
+    <value>Требуется код магазина</value>
+  </data>
+  <data name="StoreEdited" xml:space="preserve">
+    <value>Магазин отредактирован.</value>
+  </data>
+  <data name="StoreListIsEmpty" xml:space="preserve">
+    <value>Магазины отсутствуют.</value>
+  </data>
+  <data name="StoreName" xml:space="preserve">
+    <value>Магазин</value>
+  </data>
+  <data name="StoreNameRequired" xml:space="preserve">
+    <value>Требуется название магазина</value>
+  </data>
   <data name="Stores" xml:space="preserve">
     <value>Магазины</value>
+  </data>
+  <data name="StoreWasDeleted" xml:space="preserve">
+    <value>Магазин был удален.</value>
   </data>
   <data name="Superuser" xml:space="preserve">
     <value>Управляющий</value>

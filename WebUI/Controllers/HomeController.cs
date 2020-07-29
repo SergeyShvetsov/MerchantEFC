@@ -54,18 +54,8 @@ namespace WebUI.Controllers
                     Password = "admin",
                     UserRole = RoleType.Admin
                 };
-                var store = new Store { StoreCode = "test", StoreName = "Test Store" };
-                var store1 = new Store { StoreCode = "test1", StoreName = "Test Store 1" };
-                var store2 = new Store { StoreCode = "test2", StoreName = "Test Store 2" };
 
                 _cntx.Users.Insert(admin);
-                _cntx.Stores.Insert(store);
-                _cntx.Stores.Insert(store1);
-                _cntx.Stores.Insert(store2);
-                _cntx.Save();
-
-                _cntx.Users.AssignToStore(admin, store);
-
                 _cntx.Save();
             }
 

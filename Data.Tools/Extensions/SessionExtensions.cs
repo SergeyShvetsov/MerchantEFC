@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace WebUI.Extensions
+namespace Data.Tools.Extensions
 {
     public static class SessionExtensions
     {

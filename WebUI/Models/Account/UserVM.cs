@@ -14,7 +14,7 @@ namespace WebUI.Models.Account
         public UserVM() { }
         public UserVM(AppUser row)
         {
-            Id = row.AppUserId;
+            Id = row.Id;
             FirstName = row.FirstName;
             LastName = row.LastName;
             EmailAddress = row.EmailAddress;

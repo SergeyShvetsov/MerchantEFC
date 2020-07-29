@@ -7,9 +7,9 @@ namespace Data.Model
     public class ApplicationContext : DbContext
     {
 
-        public DbSet<AppUser> AppUsers { get; set; }
-        public DbSet<Store> Stores { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductComment> ProductComments { get; set; }

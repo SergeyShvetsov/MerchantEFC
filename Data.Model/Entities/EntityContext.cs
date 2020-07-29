@@ -1,8 +1,13 @@
 ﻿using Data.Model.Entities;
+using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
+using Data.Tools.Extensions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace Data.Model.Entities
@@ -34,6 +39,52 @@ namespace Data.Model.Entities
         public void Save()
         {
             Context.SaveChanges();
+        }
+
+        public IEnumerable<City> GetAvailableCities(ISession session)
+        {
+            var res = this.Cities.GetAll();
+            var assignedCity = session.Get<int?>("AssignedCity");
+            if (assignedCity != null)
+            {
+                res = res.Where(x => x.Id == assignedCity);
+            }
+            return res.ToList();
+        }
+
+        public IEnumerable<Store> GetAvailableStores(ISession session)
+        {
+            {
+                var res = this.Stores.GetAll();
+                var assignedStore = session.Get<int?>("AssignedStore");
+                if (assignedStore != null)
+                {
+                    res = res.Where(x => x.Id == assignedStore);
+                }
+                return res.ToList();
+            }
+        }
+
+        public IEnumerable<RoleType> GetAllRoles() => Enum.GetValues(typeof(RoleType)).Cast<RoleType>().Where(x => x != RoleType.Undefined).Select(v => v).ToList();
+        public IEnumerable<RoleType> GetAvailableRoles(ClaimsPrincipal user)
+        {
+            var res = GetAllRoles();
+            
+            if (user.IsInRole("Admin")) return res;
+            else if (user.IsInRole("Superuser")) return res.Where(w => w == RoleType.Superuser || w == RoleType.Manager);
+            else if(user.IsInRole("Manager")) return res.Where(w => w == RoleType.Manager);
+
+            return new List<RoleType>();
+        }
+
+        public IEnumerable<Status> GetAllStatuses() => Enum.GetValues(typeof(Status)).Cast<Status>().Select(v => v).ToList();
+        public IEnumerable<Status> GetAvailableStatuses(ClaimsPrincipal user)
+        {
+            var res = GetAllStatuses();
+            if (user.IsInRole("Admin")) return res;
+            else if (user.IsInRole("Superuser") || user.IsInRole("Manager")) return res.Where(w => w != Status.Blocked);
+
+            return new List<Status>();
         }
     }
 }

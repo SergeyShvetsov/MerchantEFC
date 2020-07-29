@@ -17,7 +17,9 @@ namespace Data.Model.Models
         public string Description { get; set; }
         public Product Product { get; set; }
 
+        [Column(TypeName = "image")]
         public byte[] Image { get; set; }
+        [Column(TypeName = "image")]
         public byte[] Thumbs { get; set; }
 
         public bool IsAvailable { get; set; }
