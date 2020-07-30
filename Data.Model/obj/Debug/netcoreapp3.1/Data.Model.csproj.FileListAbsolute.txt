@@ -40,3 +40,9 @@ C:\Work\Data.Model\bin\Debug\netcoreapp3.1\Data.Model.runtimeconfig.json
 C:\Work\Data.Model\bin\Debug\netcoreapp3.1\Data.Model.runtimeconfig.dev.json
 C:\Work\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.csproj.CoreCompileInputs.cache
 C:\Work\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.genruntimeconfig.cache
+D:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Model.runtimeconfig.json
+D:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Model.runtimeconfig.dev.json
+D:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Tools.dll
+D:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Tools.pdb
+D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.csproj.CopyComplete
+D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.genruntimeconfig.cache

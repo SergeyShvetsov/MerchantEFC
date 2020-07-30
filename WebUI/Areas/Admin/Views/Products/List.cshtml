@@ -1,0 +1,87 @@
+﻿@model IEnumerable<WebUI.Areas.Admin.Models.ProductListVM>
+@using X.PagedList.Mvc.Core
+@using X.PagedList;
+@using X.PagedList.Mvc.Bootstrap4.Core
+@using WebUI.Resources
+@inject LocalizationService resources
+
+@{
+    ViewData["Title"] = "ProductList";
+}
+
+<div id="ModalDialog"></div>
+@if (TempData["SM"] != null)
+{
+
+    <div class="alert alert-success">
+        @TempData["SM"]
+    </div>
+}
+
+<div class="row">
+    <div class="col">
+        <h4>@resources["ProductList"]</h4>
+    </div>
+    <div class="col" style="text-align: right;">
+        @Html.ActionLink(resources["CreateProduct"], "CreateProduct", "Products", null, htmlAttributes: new { @class = "btn btn-outline-primary" })
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">@resources["ProductListIsEmpty"]</h2>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @resources["Product"]
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    @if (item.Image == null)
+                                    {
+                                        <img src="~/Images/no_image.png" class="card-img" />
+                                    }
+                                    else
+                                    {
+                                        <img src="data:image;base64,@System.Convert.ToBase64String(item.Image)" class="card-img">
+                                    }
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.Name</h5>
+                                        <p class="card-text">@item.Price</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        @Html.ActionLink(resources["Edit"], "EditProduct", "Products", new { id = item.ProductId }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
+                                data-target="#deleteProduct" data-url="@Url.Action($"DeleteProduct/{item.ProductId}")">
+                            @resources["Delete"]
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", null), Bootstrap4PagedListRenderOptions.Default)
+}
+@section Scripts
+{
+    <script src="~/js/ModalDialog.js"></script>
+}

@@ -10791,25 +10791,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\AcerNotebook\\.nuget\\packages\\": {},
+    "C:\\Users\\Hal2020\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Work\\WebUI\\WebUI.csproj",
+      "projectUniqueName": "D:\\Work\\MerchantEFC\\WebUI\\WebUI.csproj",
       "projectName": "WebUI",
-      "projectPath": "C:\\Work\\WebUI\\WebUI.csproj",
-      "packagesPath": "C:\\Users\\AcerNotebook\\.nuget\\packages\\",
-      "outputPath": "C:\\Work\\WebUI\\obj\\",
+      "projectPath": "D:\\Work\\MerchantEFC\\WebUI\\WebUI.csproj",
+      "packagesPath": "C:\\Users\\Hal2020\\.nuget\\packages\\",
+      "outputPath": "D:\\Work\\MerchantEFC\\WebUI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\AcerNotebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Hal2020\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -10823,11 +10823,11 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Work\\Data.Model\\Data.Model.csproj": {
-              "projectPath": "C:\\Work\\Data.Model\\Data.Model.csproj"
+            "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj": {
+              "projectPath": "D:\\Work\\MerchantEFC\\Data.Model\\Data.Model.csproj"
             },
-            "C:\\Work\\Data.Tools\\Data.Tools.csproj": {
-              "projectPath": "C:\\Work\\Data.Tools\\Data.Tools.csproj"
+            "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj": {
+              "projectPath": "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj"
             }
           }
         }

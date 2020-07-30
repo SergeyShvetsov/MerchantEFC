@@ -16,5 +16,6 @@ namespace Data.Tools.Extensions
             };
 
         public static string NormalizeCode(this string code) => code.Trim().ToLower();
+        public static string NormalizePrice(this string price) => price.Trim().Replace(',','.');
     }
 }

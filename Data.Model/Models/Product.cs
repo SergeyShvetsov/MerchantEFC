@@ -13,6 +13,8 @@ namespace Data.Model.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        public int StoreId { get; set; }
         public Store Store { get; set; }
 
         public string Name { get; set; }
@@ -20,7 +22,15 @@ namespace Data.Model.Models
         public string Shipping { get; set; }
         public virtual List<ProductCategory> Categories { get; set; }
 
-        public virtual List<ProductImage> Images { get; set; }
+        [Column(TypeName = "image")]
+        public byte[] LargeImage { get; set; }
+        [Column(TypeName = "image")]
+        public byte[] SmallImage { get; set; }
+        [Column(TypeName = "image")]
+        public byte[] Thumbs { get; set; }
+
+        public virtual List<ProductImage> Gallery { get; set; }
+
         public string ModelName { get; set; }
         public virtual List<ProductModel> Models { get; set; }
         public string OptionName { get; set; }

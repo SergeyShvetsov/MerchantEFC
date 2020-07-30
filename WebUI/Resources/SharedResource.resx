@@ -364,10 +364,10 @@
     <value>Город отредактирован</value>
   </data>
   <data name="CityList" xml:space="preserve">
-    <value>Список городов</value>
+    <value>Список городов.</value>
   </data>
   <data name="CityListIsEmpty" xml:space="preserve">
-    <value>Города отсутствуют</value>
+    <value>Города отсутствуют.</value>
   </data>
   <data name="CityNameRequired" xml:space="preserve">
     <value>Требуется название города</value>
@@ -395,6 +395,9 @@
   </data>
   <data name="CreateCity" xml:space="preserve">
     <value>Добавить город</value>
+  </data>
+  <data name="CreateProduct" xml:space="preserve">
+    <value>Создать товар</value>
   </data>
   <data name="CreateStore" xml:space="preserve">
     <value>Добавить магазин</value>
@@ -522,8 +525,17 @@
   <data name="Pending" xml:space="preserve">
     <value>Ожидает</value>
   </data>
+  <data name="Product" xml:space="preserve">
+    <value>Товар</value>
+  </data>
+  <data name="ProductList" xml:space="preserve">
+    <value>Список товаров.</value>
+  </data>
+  <data name="ProductListIsEmpty" xml:space="preserve">
+    <value>Товары отсутствуют.</value>
+  </data>
   <data name="Products" xml:space="preserve">
-    <value>Продукты</value>
+    <value>Товары</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
@@ -545,6 +557,9 @@
   </data>
   <data name="StoreEdited" xml:space="preserve">
     <value>Магазин отредактирован.</value>
+  </data>
+  <data name="StoreList" xml:space="preserve">
+    <value>Список магазинов.</value>
   </data>
   <data name="StoreListIsEmpty" xml:space="preserve">
     <value>Магазины отсутствуют.</value>

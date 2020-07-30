@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -32,7 +33,6 @@ namespace WebUI.Areas.Admin.Controllers
 
         public StoresController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
         {
-            // _cntx = cntx;
             _config = config.Value;
             _cntx = context;
             _resources = localizer.GetLocalResources();
@@ -159,7 +159,8 @@ namespace WebUI.Areas.Admin.Controllers
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
                 return View(model);
             }
-            if (!Regex.IsMatch(model.ExchangeValue, @"^[0-9]+\.?[0-9]*$"))
+            model.ExchangeValue = model.ExchangeValue.NormalizePrice();
+            if (!Regex.IsMatch(model.ExchangeValue, @"^[0-9]*\.?[0-9]"))
             {
                 ViewBag.AvailableCities = _availableCities;
                 ModelState.AddModelError("", string.Format(_resources["FieldMustBeNumeric"], _resources["ExchangeValue"]));
@@ -168,7 +169,8 @@ namespace WebUI.Areas.Admin.Controllers
 
             store.StoreCode = code;
             store.StoreName = model.StoreName;
-            store.ExchangeValue = Convert.ToDouble(model.ExchangeValue);
+            store.EmailAddress = model.Email;
+            store.ExchangeValue = Convert.ToDouble(model.ExchangeValue,CultureInfo.InvariantCulture);
             store.IsActive = model.IsActive;
             store.IsBlocked = model.IsBlocked;
             store.CityId = model.CityId;

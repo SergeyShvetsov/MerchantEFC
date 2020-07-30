@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Work\\Data.Tools\\Data.Tools.csproj": {}
+    "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj": {}
   },
   "projects": {
-    "C:\\Work\\Data.Tools\\Data.Tools.csproj": {
+    "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Work\\Data.Tools\\Data.Tools.csproj",
+        "projectUniqueName": "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj",
         "projectName": "Data.Tools",
-        "projectPath": "C:\\Work\\Data.Tools\\Data.Tools.csproj",
-        "packagesPath": "C:\\Users\\AcerNotebook\\.nuget\\packages\\",
-        "outputPath": "C:\\Work\\Data.Tools\\obj\\",
+        "projectPath": "D:\\Work\\MerchantEFC\\Data.Tools\\Data.Tools.csproj",
+        "packagesPath": "C:\\Users\\Hal2020\\.nuget\\packages\\",
+        "outputPath": "D:\\Work\\MerchantEFC\\Data.Tools\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\AcerNotebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Hal2020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],

@@ -594,7 +594,6 @@ D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.csproj.GenerateResource.
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\uz-Cyrl\WebUI.resources.dll
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\uz-Latn\WebUI.resources.dll
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Cities\List.cshtml.g.cs
-D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Shared\_SelectLanguagePartial.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Users\EditUser.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Users\_DeleteUserModal.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Home\Category.cshtml.g.cs
@@ -803,3 +802,12 @@ C:\Work\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\List.cshtml
 C:\Work\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\CreateStore.cshtml.g.cs
 C:\Work\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\_DeleteStoreModal.cshtml.g.cs
 C:\Work\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\EditStore.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Cities\CreateCity.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Cities\EditCity.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Cities\_CreateCityModal.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Cities\_DeleteCityModal.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\CreateStore.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\EditStore.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\List.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Stores\_DeleteStoreModal.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Products\List.cshtml.g.cs

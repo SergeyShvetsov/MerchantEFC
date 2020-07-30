@@ -20,7 +20,7 @@ namespace WebUI.Areas.Admin.Models
             ExchangeValue = store.ExchangeValue.ToString();
             CityName = store.City.Name;
             CityId = store.CityId;
-
+            Email = store.EmailAddress;
             IsActive = store.IsActive;
             IsBlocked = store.IsBlocked;
         }
@@ -31,6 +31,9 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("StoreName")]
         [Required(ErrorMessage = "StoreNameRequired")]
         public string StoreName { get; set; }
+        [DisplayName("Email")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "EmailWrongFormat")]
+        public string Email { get; set; }
         [DisplayName("ExchangeValue")]
         public string ExchangeValue { get; set; }
 
