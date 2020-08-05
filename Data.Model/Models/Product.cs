@@ -18,9 +18,10 @@ namespace Data.Model.Models
         public Store Store { get; set; }
 
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string Brand { get; set; }
+        public string Categories { get; set; }
         public string Shipping { get; set; }
-        public virtual List<ProductCategory> Categories { get; set; }
+        public string Description { get; set; }
 
         [Column(TypeName = "image")]
         public byte[] LargeImage { get; set; }
@@ -31,12 +32,14 @@ namespace Data.Model.Models
 
         public virtual List<ProductImage> Gallery { get; set; }
 
-        public string ModelName { get; set; }
+        public string ModelSectionName { get; set; } 
         public virtual List<ProductModel> Models { get; set; }
-        public string OptionName { get; set; }
+        public string OptionSectionName { get; set; }
         public virtual List<ProductOption> Options { get; set; }
         public virtual List<ProductComment> Comments { get; set; }
 
+        public bool IsActive { get; set; }
+        public bool IsBlocked { get; set; }
         public bool IsArchived { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

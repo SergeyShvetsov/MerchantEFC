@@ -1,0 +1,174 @@
+﻿@model WebUI.Areas.Admin.Models.ProductCreateVM
+@using Data.Model.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@using WebUI.Resources
+@inject LocalizationService resources
+@{
+    ViewData["Title"] = "CreateProduct";
+}
+
+
+<h4>@resources["CreateProduct"]</h4>
+<hr />
+<form asp-action="CreateProduct" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-5">
+            <input type="hidden" asp-for="ProductImageChanged" class="form-control" />
+            @if (Model.LargeImage != null)
+            {
+                <img id="productimage" style="width: 100%; border:solid 1px lightgray; display:normal;" src="data:image;base64,@System.Convert.ToBase64String(Model.LargeImage)" />
+                <img id="noproductimage" style="display: none;" />
+            }
+            else
+            {
+                <img id="productimage" style="display: none;" />
+                <img id="noproductimage" style="width: 100%; border:solid 1px lightgray; display:normal;" src="~/Images/no_image.png" />
+            }
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file" name="file" onchange="onImageSelected(event)">
+                    <label class="custom-file-label" for="file">Выберите файл</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SelectedStore" class="control-label"></label><br />
+                <select asp-for="SelectedStore" class="choose-store form-control">
+                    @foreach (var itm in Model.StoreList)
+                    {
+                        if (Model.SelectedStore == itm.id)
+                        {
+                            <option value="@itm.id" selected="selected">@itm.text</option>
+                        }
+                        else
+                        {
+                            <option value="@itm.id">@itm.text</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="SelectedStore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <textarea rows="3" asp-for="Name" class="form-control"></textarea>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Brand" class="control-label"></label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Shipping" class="control-label"></label>
+                <textarea rows="3" asp-for="Shipping" class="form-control"></textarea>
+                <span asp-validation-for="Shipping" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Categories" class="control-label"></label>
+                <input asp-for="Categories" class="form-control" />
+                <span asp-validation-for="Categories" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="form-group form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsBlocked" /> @Html.DisplayNameFor(model => model.IsBlocked)
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="col">
+            <label asp-for="ModelSectionName" class="control-label"></label>
+            <input asp-for="ModelSectionName" class="form-control" />
+            <span asp-validation-for="ModelSectionName" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="OptionSectionName" class="control-label"></label>
+            <input asp-for="OptionSectionName" class="form-control" />
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="col">
+            <label asp-for="ProductModel.ModelName" class="control-label"></label>
+            <input asp-for="ProductModel.ModelName" class="form-control" />
+            <span asp-validation-for="ProductModel.ModelName" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="ProductModel.ModelDescription" class="control-label"></label>
+            <input asp-for="ProductModel.ModelDescription" class="form-control" />
+            <span asp-validation-for="ProductModel.ModelDescription" class="text-danger"></span>
+        </div>
+        <span class="col">&nbsp;</span>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            <label asp-for="ProductModel.Price" class="control-label"></label>
+            <input asp-for="ProductModel.Price" class="form-control" />
+        </div>
+        <div class="col">
+            <label asp-for="ProductModel.PriceUSD" class="control-label"></label>
+            <input asp-for="ProductModel.PriceUSD" class="form-control" />
+        </div>
+        <div class="col">
+            <label asp-for="ProductModel.Quantity" class="control-label"></label>
+            <input asp-for="ProductModel.Quantity" class="form-control" />
+        </div>
+    </div>
+
+    <hr />
+    <div class="form-row">
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea rows="3" asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="@resources["Create"]" class="btn btn-outline-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <script>
+        CKEDITOR.replace("Description");
+        $(document).ready(function () {
+            $(".choose-store").select2({
+                ajax: {
+                    delay: 500,
+                    url: '/Admin/Products/GetStoreList',
+                    width: 'resolve',
+                    data: function (params) {
+                        return {
+                            search: params.term// search term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    },
+                    minimumInputLength: 1,
+                    width: 'resolve'
+                },
+                placeholder: '@resources["SelectStore"]'
+            });
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

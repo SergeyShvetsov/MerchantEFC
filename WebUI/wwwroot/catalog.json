@@ -345,91 +345,91 @@
   {
     "code": "02",
     "name": "Товары для дома",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "03",
     "name": "Красота и здоровье",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "04",
     "name": "Детские товары",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "05",
     "name": "Одежда и аксессуары",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "06",
     "name": "Бытовая техника",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "07",
     "name": "Канцтовары",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "08",
     "name": "Мебель",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "09",
     "name": "Зоотовары",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "10",
     "name": "Рестораны, кафе",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "11",
     "name": "Отдых, хобби",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "12",
     "name": "Автотовары",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "13",
     "name": "Спорттовары",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   },
   {
     "code": "14",
     "name": "Сантехника",
-    "isActive": true,
+    "isActive": false,
     "sortOrder": 1,
     "subCategories": null
   }

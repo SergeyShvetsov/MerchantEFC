@@ -123,7 +123,7 @@ namespace WebUI.Areas.Admin.Controllers
             return PartialView("_DeleteStoreModal", model);
         }
         [HttpPost]
-        public IActionResult DeleteStore(CityDeleteVM model)
+        public IActionResult DeleteStore(StoreDeleteVM model)
         {
             var store = _cntx.Stores.GetById(model.Id);
             _cntx.Stores.Delete(store);

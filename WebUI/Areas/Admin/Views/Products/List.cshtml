@@ -10,6 +10,7 @@
 }
 
 <div id="ModalDialog"></div>
+
 @if (TempData["SM"] != null)
 {
 
@@ -34,14 +35,6 @@
 else
 {
     <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @resources["Product"]
-                </th>
-                <th></th>
-            </tr>
-        </thead>
         <tbody>
             @foreach (var item in Model)
             {

@@ -1,0 +1,27 @@
+﻿@model WebUI.Areas.Admin.Models.ProductDeleteVM
+@using WebUI.Resources
+@inject LocalizationService resources
+
+<div class="modal fade" id="deleteProduct">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductLabel">@resources["DeleteProduct"]</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="DeleteProduct">
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                </form>
+                <p>@resources["DeleteProductConfirm"]</p>
+                <p class="font-weight-bold">@Model.ProductName</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">@resources["Cancel"]</button> 
+                <button type="button" data-save="modal" class="btn btn-outline-danger">@resources["Delete"]</button>
+            </div>
+        </div>
+    </div>
+</div>

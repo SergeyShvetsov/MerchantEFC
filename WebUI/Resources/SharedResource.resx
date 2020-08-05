@@ -162,6 +162,9 @@
   <data name="Blocked" xml:space="preserve">
     <value>Заблокирован</value>
   </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Производитель</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отменить</value>
   </data>
@@ -414,6 +417,12 @@
   <data name="DeleteCityConfirm" xml:space="preserve">
     <value>Вы действительно хотите удалить город {0}?</value>
   </data>
+  <data name="DeleteProduct" xml:space="preserve">
+    <value>Удалить продукт.</value>
+  </data>
+  <data name="DeleteProductConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить подукт?</value>
+  </data>
   <data name="DeleteStore" xml:space="preserve">
     <value>Удалить магазин.</value>
   </data>
@@ -425,6 +434,9 @@
   </data>
   <data name="DeleteUserConfirm" xml:space="preserve">
     <value>Вы действительно хотите удалить пользователя {0}?</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание товара</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Редактировать</value>
@@ -504,14 +516,35 @@
   <data name="Manager" xml:space="preserve">
     <value>Менеджер</value>
   </data>
+  <data name="ModelDescription" xml:space="preserve">
+    <value>Описание модели</value>
+  </data>
+  <data name="ModelDescriptionRequired" xml:space="preserve">
+    <value>Требуется описание модели</value>
+  </data>
+  <data name="ModelName" xml:space="preserve">
+    <value>Наимнование модели</value>
+  </data>
+  <data name="ModelNameRequired" xml:space="preserve">
+    <value>Требуется наименование модели</value>
+  </data>
+  <data name="ModelSectionName" xml:space="preserve">
+    <value>Наименование секции моделей</value>
+  </data>
   <data name="NewCityAdded" xml:space="preserve">
     <value>Добавлен новый город</value>
+  </data>
+  <data name="NewProductAdded" xml:space="preserve">
+    <value>Добавлен новый продукт.</value>
   </data>
   <data name="NewStoreAdded" xml:space="preserve">
     <value>Магазин добавлен.</value>
   </data>
   <data name="NewUserAdded" xml:space="preserve">
     <value>Добавлен новый пользователь.</value>
+  </data>
+  <data name="OptionSectionName" xml:space="preserve">
+    <value>Наименование секции опций</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
@@ -525,8 +558,20 @@
   <data name="Pending" xml:space="preserve">
     <value>Ожидает</value>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+  <data name="PriceUSD" xml:space="preserve">
+    <value>Цена в у.е.</value>
+  </data>
   <data name="Product" xml:space="preserve">
     <value>Товар</value>
+  </data>
+  <data name="ProductCategories" xml:space="preserve">
+    <value>Категории товара</value>
+  </data>
+  <data name="ProductCategoriesRequired" xml:space="preserve">
+    <value>Требуется категория товара</value>
   </data>
   <data name="ProductList" xml:space="preserve">
     <value>Список товаров.</value>
@@ -534,8 +579,17 @@
   <data name="ProductListIsEmpty" xml:space="preserve">
     <value>Товары отсутствуют.</value>
   </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Наименование товара</value>
+  </data>
+  <data name="ProductNameRequired" xml:space="preserve">
+    <value>Требуется наименование товара.</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Товары</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Количество</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
@@ -545,6 +599,12 @@
   </data>
   <data name="Selected" xml:space="preserve">
     <value>Выбрано</value>
+  </data>
+  <data name="SelectStore" xml:space="preserve">
+    <value>Укажите магазин</value>
+  </data>
+  <data name="Shipping" xml:space="preserve">
+    <value>Условия доставки</value>
   </data>
   <data name="SiteName" xml:space="preserve">
     <value>Green Leaf</value>

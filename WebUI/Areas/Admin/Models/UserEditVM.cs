@@ -27,17 +27,17 @@ namespace WebUI.Areas.Admin.Models
        
         public Guid UserId { get; set; }
 
-        [Required(ErrorMessage = "UserNameRequired")]
         [DisplayName("UserName")]
+        [Required(ErrorMessage = "UserNameRequired")]
         public string UserName { get; set; }
-        [Required(ErrorMessage = "FirstNameRequired")]
         [DisplayName("FirstName")]
+        [Required(ErrorMessage = "FirstNameRequired")]
         public string FirstName { get; set; }
-        [Required(ErrorMessage = "LastNameRequired")]
         [DisplayName("LastName")]
+        [Required(ErrorMessage = "LastNameRequired")]
         public string LastName { get; set; }
-        [Required(ErrorMessage = "EmailRequired")]
         [DisplayName("Email")]
+        [Required(ErrorMessage = "EmailRequired")]
         [DataType(DataType.EmailAddress, ErrorMessage = "EmailWrongFormat")]
         public string Email { get; set; }
         [Required(ErrorMessage = "PasswordRequired")]

@@ -18,11 +18,12 @@ namespace Data.Model.Models
         public Product Product { get; set; }
 
         [Column(TypeName = "image")]
-        public byte[] Image { get; set; }
+        public byte[] LargeImage { get; set; }
         [Column(TypeName = "image")]
         public byte[] Thumbs { get; set; }
 
         public bool IsAvailable { get; set; }
+        public bool IsBlocked { get; set; }
         public bool IsArchived { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

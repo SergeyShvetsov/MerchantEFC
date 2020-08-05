@@ -1,5 +1,5 @@
 ﻿$(function () {
-    /* Select product from specified category */
+    /* Select users by role */
     $("#SelectRole").on("change", function () {
         var url = $(this).val();
 
