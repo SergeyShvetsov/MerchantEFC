@@ -16,6 +16,8 @@ namespace Data.Model.Entities
         }
 
         public IQueryable<ProductImage> GetAll() => _context.ProductImages.Select(x => x);
+        public IQueryable<ProductImage> GetByAllByProduct(int productId) => _context.ProductImages.Where(x => x.ProductId == productId).Select(s => s);
+
         public ProductImage GetById(Guid id) => throw new NotImplementedException();
         public ProductImage GetById(int id) => _context.ProductImages.FirstOrDefault(x => x.Id == id);
 
@@ -25,8 +27,9 @@ namespace Data.Model.Entities
         }
         public void Delete(ProductImage ent)
         {
-            ent.IsArchived = true;
-            _context.ProductImages.Update(ent);
+            //ent.IsArchived = true;
+            //_context.ProductImages.Update(ent);
+            _context.ProductImages.Remove(ent);
         }
         public void Update(ProductImage ent)
         {

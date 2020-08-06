@@ -33,7 +33,7 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("Description")]
         public string Description { get; set; }
         [DisplayName("IsActive")]
-        public bool IsActive { get; set; }
+        public bool IsAvailable { get; set; }
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
 

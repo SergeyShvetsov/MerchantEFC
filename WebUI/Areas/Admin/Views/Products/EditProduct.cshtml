@@ -1,0 +1,255 @@
+﻿@model WebUI.Areas.Admin.Models.ProductEditVM
+@using Data.Model.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@using WebUI.Resources
+@inject LocalizationService resources
+
+@{
+    ViewData["Title"] = "EditProduct";
+}
+
+<h4>@resources["EditProduct"]</h4>
+<hr />
+<form asp-action="EditProduct" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProductId" class="form-control" />
+    <input type="hidden" asp-for="ProductImageChanged" class="form-control" />
+    <div class="row">
+        <div class="col-5">
+            <div class="row">
+                @if (Model.LargeImage != null)
+                {
+                    <img id="productimage" style="width: 100%; border:solid 1px lightgray; display:normal;" src="data:image;base64,@System.Convert.ToBase64String(Model.LargeImage)" />
+                    <img id="noproductimage" style="display: none;" />
+                }
+                else
+                {
+                    <img id="productimage" style="display: none;" />
+                    <img id="noproductimage" style="width: 100%; border:solid 1px lightgray; display:normal;" src="~/Images/no_image.png" />
+                }
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="file" name="file" onchange="onImageSelected(event)">
+                        <label class="custom-file-label" for="file">Выберите файл</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SelectedStore" class="control-label"></label><br />
+                <select asp-for="SelectedStore" class="choose-store form-control">
+                    @foreach (var itm in Model.StoreList)
+                    {
+                        if (Model.SelectedStore == itm.id)
+                        {
+                            <option value="@itm.id" selected="selected">@itm.text</option>
+                        }
+                        else
+                        {
+                            <option value="@itm.id">@itm.text</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="SelectedStore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <textarea rows="3" asp-for="Name" class="form-control"></textarea>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Brand" class="control-label"></label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Shipping" class="control-label"></label>
+                <textarea rows="3" asp-for="Shipping" class="form-control"></textarea>
+                <span asp-validation-for="Shipping" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Categories" class="control-label"></label>
+                <input asp-for="Categories" class="form-control" />
+                <span asp-validation-for="Categories" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                </label>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="form-group form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsBlocked" /> @Html.DisplayNameFor(model => model.IsBlocked)
+                    </label>
+                </div>
+            }
+            else
+            {
+                <div class="form-group form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsBlocked" disabled /> @Html.DisplayNameFor(model => model.IsBlocked)
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="form-inline">
+        <label asp-for="ModelSectionName" class="form-label mb-2"></label>
+        <div class="input-group-prepend">
+            <input asp-for="ModelSectionName" class="form-control" />
+        </div>
+    </div>
+    <hr />
+    @*@foreach (var mod in Model.ProductModels)
+        {
+            <input type="hidden" asp-for="mod.Id" class="form-control" />
+            <div class="form-row">
+                <div class="col">
+                    <label asp-for="mod.ModelName" class="control-label"></label>
+                    <input asp-for="mod.ModelName" class="form-control" />
+                    <span asp-validation-for="mod.ModelName" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="mod.ModelDescription" class="control-label"></label>
+                    <input asp-for="mod.ModelDescription" class="form-control" />
+                    <span asp-validation-for="mod.ModelDescription" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="mod.ModelEstimatedTime" class="control-label"></label>
+                    <input asp-for="mod.ModelEstimatedTime" class="form-control" />
+                    <span asp-validation-for="mod.ModelEstimatedTime" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <label asp-for="mod.Price" class="control-label"></label>
+                    <input asp-for="mod.Price" class="form-control" />
+                </div>
+                <div class="col">
+                    <label asp-for="mod.PriceUSD" class="control-label"></label>
+                    <input asp-for="mod.PriceUSD" class="form-control" />
+                </div>
+                <div class="col">
+                    <label asp-for="mod.Quantity" class="control-label"></label>
+                    <input asp-for="mod.Quantity" class="form-control" />
+                </div>
+            </div>
+        }*@
+
+    <hr />
+    <div class="form-row">
+        <div class="input-group">
+            <label asp-for="OptionSectionName" class="input-group-prepend"></label>
+            <input asp-for="OptionSectionName" class="form-control" />
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea rows="3" asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="@resources["Save"]" class="btn btn-outline-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+<hr />
+<h4>@resources["Gallery"]</h4>
+@if (!Model.Gallery.Any())
+{
+    <h3>There are no gallery images for this product.</h3>
+}
+<div class="row">
+    @foreach (var image in Model.Gallery)
+    {
+        <div class="col">
+            <div class="galleryStyle">
+                <div style="width:50px; height:50px;">
+                    <img src="data:image;base64,@System.Convert.ToBase64String(image.Thumbs)" />
+                </div>
+                <div style="text-align:center;">
+                    @Html.ActionLink(linkText: "Delete", actionName: "DeleteImage", controllerName: "Products", null, new { @class = "deleteimage btn btn-danger", data_name = image.Id, style = "margin:10px;" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<form action="/admin/Products/SaveGalleryImages/@Model.ProductId" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+    <div class="fallback">
+        <input type="file" name="file" multiple="" />
+        <input type="submit" value="Upload" />
+    </div>
+</form>
+
+<link href="~/lib/dropzone/4.3.0/content/Scripts/dropzone/basic.css" rel="stylesheet" />
+<link href="~/lib/dropzone/4.3.0/content/Scripts/dropzone/dropzone.css" rel="stylesheet" />
+
+@section Scripts {
+    <script src="~/lib/dropzone/4.3.0/content/Scripts/dropzone/dropzone.js"></script>
+    <script>
+        CKEDITOR.replace("Description");
+        $(document).ready(function () {
+            $(".choose-store").select2({
+                ajax: {
+                    delay: 500,
+                    url: '/Admin/Products/GetStoreList',
+                    width: 'resolve',
+                    data: function (params) {
+                        return {
+                            search: params.term// search term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    },
+                    minimumInputLength: 1,
+                    width: 'resolve'
+                },
+                placeholder: '@resources["SelectStore"]'
+            });
+        });
+               /* Dropzone js*/
+        Dropzone.options.dropzoneForm = {
+            acceptedFiles: "image/*",
+            init: function () {
+                this.on("complete",
+                    function (file) {
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            location.reload();
+                        }
+                    });
+                this.on("sending",
+                    function (file, xhr, formData) {
+                        formData.append("id", "@Model.ProductId");
+                    });
+            }
+        };
+
+        /* Delete gallery image */
+        $("a.deleteimage").click(function (e) {
+            e.preventDefault();
+            if (!confirm("Confirm deletion")) return false;
+
+            var $this = $(this);
+            var url = "/admin/Products/DeleteImage";
+            var imgId = $this.data("name");
+
+            $.post(url, { id: imgId }, function (data) { $this.parent().parent().parent().fadeOut("slow"); });
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

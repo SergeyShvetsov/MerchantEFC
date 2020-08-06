@@ -16,6 +16,7 @@ namespace Data.Model.Entities
         }
 
         public IQueryable<ProductModel> GetAll() => _context.ProductModels.Select(x => x);
+        public IQueryable<ProductModel> GetAllByProduct(int productId) => _context.ProductModels.Where(x=> x.ProductId == productId).Select(s => s);
 
         public ProductModel GetById(Guid id) => throw new NotImplementedException();
 

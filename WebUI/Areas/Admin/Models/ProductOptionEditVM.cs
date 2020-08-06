@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Model.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +10,17 @@ namespace WebUI.Areas.Admin.Models
 {
     public class ProductOptionEditVM
     {
+        public ProductOptionEditVM() { }
+        public ProductOptionEditVM(ProductOption model)
+        {
+            Id = model.Id;
+            OptionName = model.Name;
+            OptionDescription = model.Description;
+            IsAvailable = model.IsAvailable;
+            IsBlocked = model.IsBlocked;
+            LargeImage = model.LargeImage;
+            Thumbs = model.Thumbs;
+        }
         public int Id { get; set; }
         //public int ProductId { get; set; }
 
@@ -19,7 +31,7 @@ namespace WebUI.Areas.Admin.Models
         [Required(ErrorMessage = "OptionDescriptionRequired")]
         public string OptionDescription { get; set; }
         [DisplayName("IsActive")]
-        public bool IsActive { get; set; } 
+        public bool IsAvailable { get; set; } 
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
 

@@ -13,9 +13,11 @@ namespace Data.Model.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
-        public Product Product { get; set; }
 
         [Column(TypeName = "image")]
         public byte[] LargeImage { get; set; }

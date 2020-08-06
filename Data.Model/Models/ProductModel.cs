@@ -15,7 +15,9 @@ namespace Data.Model.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string EstimatedTime { get; set; }
 
+        public int ProductId { get; set; }
         public Product Product { get; set; }
         public double? Price { get; set; }
         public double? PriceUSD { get; set; }
@@ -24,7 +26,7 @@ namespace Data.Model.Models
         public byte[] LargeImage { get; set; }
         [Column(TypeName = "image")]
         public byte[] Thumbs { get; set; }
-
+         
         public bool IsAvailable { get; set; }
         public bool IsBlocked { get; set; }
         public bool IsArchived { get; set; }

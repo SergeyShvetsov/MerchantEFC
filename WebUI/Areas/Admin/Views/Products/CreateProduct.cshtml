@@ -1,6 +1,4 @@
 ﻿@model WebUI.Areas.Admin.Models.ProductCreateVM
-@using Data.Model.Models
-@using Microsoft.AspNetCore.Mvc.Localization
 @using WebUI.Resources
 @inject LocalizationService resources
 @{
@@ -72,7 +70,7 @@
             </div>
             <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
                 </label>
             </div>
             @if (User.IsInRole("Admin"))
@@ -80,6 +78,14 @@
                 <div class="form-group form-check form-check-inline">
                     <label class="form-check-label">
                         <input class="form-check-input" asp-for="IsBlocked" /> @Html.DisplayNameFor(model => model.IsBlocked)
+                    </label>
+                </div>
+            }
+            else
+            {
+                <div class="form-group form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsBlocked" disabled /> @Html.DisplayNameFor(model => model.IsBlocked)
                     </label>
                 </div>
             }
@@ -109,7 +115,11 @@
             <input asp-for="ProductModel.ModelDescription" class="form-control" />
             <span asp-validation-for="ProductModel.ModelDescription" class="text-danger"></span>
         </div>
-        <span class="col">&nbsp;</span>
+        <div class="col">
+            <label asp-for="ProductModel.ModelEstimatedTime" class="control-label"></label>
+            <input asp-for="ProductModel.ModelEstimatedTime" class="form-control" />
+            <span asp-validation-for="ProductModel.ModelEstimatedTime" class="text-danger"></span>
+        </div>
     </div>
     <div class="form-row">
         <div class="col">

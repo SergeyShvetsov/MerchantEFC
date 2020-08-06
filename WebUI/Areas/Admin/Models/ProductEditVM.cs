@@ -1,4 +1,5 @@
-﻿using Data.Model.Models;
+﻿using Data.Model.Entities;
+using Data.Model.Models;
 using Data.Tools;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -12,35 +13,50 @@ namespace WebUI.Areas.Admin.Models
 {
     public class ProductEditVM
     {
-        public ProductEditVM() {}
+        public ProductEditVM() { }
+        public ProductEditVM(Product product) 
+        {
+            ProductId = product.Id;
+            Name = product.Name;
+            Brand = product.Brand;
+            Shipping = product.Shipping;
+            Categories = product.Categories;
+            Description = product.Description;
+            IsAvailable = product.IsActive;
+            IsBlocked = product.IsBlocked;
+            LargeImage = product.LargeImage;
+            ModelSectionName = product.ModelSectionName;
+            OptionSectionName = product.OptionSectionName;
+        }
 
         [DisplayName("StoreName")]
         [Required(ErrorMessage = "ProductNameRequired")]
         public int SelectedStore { get; set; }
         //public List<SelectListItem> StoreList { get; set; }
-        public IEnumerable<Select2ListItem> StoreList { get; set; 
-        }
+        public IEnumerable<Select2ListItem> StoreList { get; set; }
+
+        public int ProductId { get; set; }
         [DisplayName("ProductName")]
-        [Required(ErrorMessage = "ProductNameRequired")] 
+        [Required(ErrorMessage = "ProductNameRequired")]
         public string Name { get; set; }
         [DisplayName("Brand")]
         public string Brand { get; set; }
         [DisplayName("Shipping")]
         public string Shipping { get; set; }
         [DisplayName("ProductCategories")]
-        [Required(ErrorMessage = "ProductCategoriesRequired")] 
+        [Required(ErrorMessage = "ProductCategoriesRequired")]
         public string Categories { get; set; }
         [DisplayName("Description")]
         public string Description { get; set; }
         [DisplayName("IsActive")]
-        public bool IsActive { get; set; }
+        public bool IsAvailable { get; set; }
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
 
         public bool ProductImageChanged { get; set; }
         public byte[] LargeImage { get; set; }
 
-        public virtual List<byte[]> Gallery { get; set; }
+        public virtual List<ProductImage> Gallery { get; set; }
 
         [DisplayName("ModelSectionName")]
         public string ModelSectionName { get; set; }
@@ -49,7 +65,7 @@ namespace WebUI.Areas.Admin.Models
 
         public List<ProductModelEditVM> ProductModels { get; set; }
 
-        public List<ProductOptionEditVM> ProductOPtions { get; set; }
+        public List<ProductOptionEditVM> ProductOptions { get; set; }
 
 
     }

@@ -100,8 +100,6 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult CreateProduct(ProductCreateVM model, IFormFile file)
         {
-            model.StoreList = model.StoreList = GetStoreSelect2List("");
-
             var pcats = _catalog.GetProductCategories().Select(s => s.Code);
             var cats = model.Categories.Split(';').Where(x => pcats.Contains(x.Trim())).Select(s => s.Trim()).ToList();
 
@@ -136,7 +134,7 @@ namespace WebUI.Areas.Admin.Controllers
                 Description = model.Description,
                 ModelSectionName = model.ModelSectionName,
                 OptionSectionName = model.OptionSectionName,
-                IsActive = model.IsActive,
+                IsActive = model.IsAvailable,
                 IsBlocked = model.IsBlocked
             };
 
@@ -144,6 +142,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 if (!file.IsImage()) // Проверить расширение
                 {
+                    model.StoreList = model.StoreList = GetStoreSelect2List("");
                     ModelState.AddModelError("", "The product image was not uploaded - wrong image format!");
                     return View("CreateProduct", model);
                 }
@@ -185,6 +184,7 @@ namespace WebUI.Areas.Admin.Controllers
                 Name = model.ProductModel.ModelName,
                 Description = model.ProductModel.ModelDescription,
                 Product = product,
+                EstimatedTime = model.ProductModel.ModelEstimatedTime,
                 Price = model.ProductModel.Price,
                 PriceUSD = model.ProductModel.PriceUSD,
                 Quantity = model.ProductModel.Quantity,
@@ -226,21 +226,101 @@ namespace WebUI.Areas.Admin.Controllers
         {
             ViewBag.TabItem = "Products";
             var product = _cntx.Products.GetById(id);
-            //var model = new ProductEditVM(product); 
+            var model = new ProductEditVM(product);
+            model.StoreList = GetStoreSelect2List("");
 
-            //model.StoreList = GetStoreSelect2List("");
+            model.ProductModels = _cntx.ProductModels.GetAllByProduct(product.Id)
+                .ApplyArchivedFilter()
+                .Select(s => new ProductModelEditVM(s))
+                .ToList();
+            model.ProductOptions = _cntx.ProductOptions.GetByAllByProduct(product.Id)
+                .ApplyArchivedFilter()
+                .Select(s => new ProductOptionEditVM(s))
+                .ToList();
+            model.Gallery = _cntx.ProductImages.GetByAllByProduct(product.Id)
+                .ApplyArchivedFilter()
+                .ToList();
 
-            //return View(model);
-            return View();
+            return View("EditProduct", model);
         }
         [HttpPost]
-        public ActionResult EditProduct(StoreEditVM model)
+        public ActionResult EditProduct(ProductEditVM model, IFormFile file)
         {
-            TempData["SM"] = _resources["NewProductAdded"].Value;
+            var pcats = _catalog.GetProductCategories().Select(s => s.Code);
+            var cats = model.Categories.Split(';').Where(x => pcats.Contains(x.Trim())).Select(s => s.Trim()).ToList();
+
+            if (!ModelState.IsValid)
+            {
+                model.StoreList = GetStoreSelect2List("");
+                return View("EditProduct", model);
+            }
+
+            if (!cats.Any())
+            {
+                model.StoreList = model.StoreList = GetStoreSelect2List("");
+                ModelState.AddModelError("", "Не выбраны активные категории.");
+                return View("EditProduct", model);
+            }
+            model.Categories = cats.ToJoinedStringOrEmpty(";");
+
+            var product = _cntx.Products.GetById(model.ProductId);
+            product.StoreId = model.SelectedStore;
+            product.Name = model.Name;
+            product.Brand = model.Brand;
+            product.Categories = model.Categories;
+            product.Shipping = model.Shipping;
+            product.Description = model.Description;
+            product.ModelSectionName = model.ModelSectionName;
+            product.OptionSectionName = model.OptionSectionName;
+            product.IsActive = model.IsAvailable;
+            product.IsBlocked = model.IsBlocked;
+
+            if (file != null && file.Length > 0)
+            {
+                if (!file.IsImage()) // Проверить расширение
+                {
+                    model.StoreList = model.StoreList = GetStoreSelect2List("");
+                    ModelState.AddModelError("", "The product image was not uploaded - wrong image format!");
+                    return View("EditProduct", model);
+                }
+                var img = Image.Load(file.OpenReadStream());
+
+                var size = img.ScaledImageSize(new Size(450, 450));
+                var limg = img.Clone(i => i.Resize(size));
+                size = img.ScaledImageSize(new Size(150, 150));
+                var mimg = img.Clone(i => i.Resize(size));
+                size = img.ScaledImageSize(new Size(50, 50));
+                var simg = img.Clone(i => i.Resize(size));
+
+                IImageEncoder imageEncoder = new PngEncoder()
+                {
+                    CompressionLevel = PngCompressionLevel.DefaultCompression
+                };
+
+                using (var ms = new MemoryStream())
+                {
+                    limg.Save(ms, imageEncoder);
+                    product.LargeImage = ms.ToArray();
+                }
+                using (var ms1 = new MemoryStream())
+                {
+                    mimg.Save(ms1, imageEncoder);
+                    product.SmallImage = ms1.ToArray();
+                }
+                using (var ms2 = new MemoryStream())
+                {
+                    simg.Save(ms2, imageEncoder);
+                    product.Thumbs = ms2.ToArray();
+                }
+            }
+            _cntx.Products.Update(product);
+            _cntx.Save();
+
+            TempData["SM"] = _resources["ProductEdited"].Value;
             return RedirectToAction("List");
         }
 
-            public IActionResult UploadImage(ProductCreateVM model, IFormFile file)
+        public IActionResult UploadImage(ProductCreateVM model, IFormFile file)
         {
             if (file != null && file.Length > 0)
             {
@@ -259,6 +339,60 @@ namespace WebUI.Areas.Admin.Controllers
                 }
             }
             return View("CreateProduct", model);
+        }
+
+        public void SaveGalleryImages(int id)
+        {
+            // Перебрать все полученные файлы
+            foreach (var file in Request.Form.Files)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    if (!file.IsImage()) continue;
+                    var model = new ProductImage()
+                    {
+                        ProductId = id
+                    };
+                    var img = Image.Load(file.OpenReadStream());
+
+                    var size = img.ScaledImageSize(new Size(450, 450));
+                    var limg = img.Clone(i => i.Resize(size));
+                    size = img.ScaledImageSize(new Size(150, 150));
+                    var mimg = img.Clone(i => i.Resize(size));
+                    size = img.ScaledImageSize(new Size(50, 50));
+                    var simg = img.Clone(i => i.Resize(size));
+
+                    IImageEncoder imageEncoder = new PngEncoder()
+                    {
+                        CompressionLevel = PngCompressionLevel.DefaultCompression
+                    };
+
+                    using (var ms = new MemoryStream())
+                    {
+                        limg.Save(ms, imageEncoder);
+                        model.LargeImage = ms.ToArray();
+                    }
+                    using (var ms1 = new MemoryStream())
+                    {
+                        mimg.Save(ms1, imageEncoder);
+                        model.SmallImage = ms1.ToArray();
+                    }
+                    using (var ms2 = new MemoryStream())
+                    {
+                        simg.Save(ms2, imageEncoder);
+                        model.Thumbs = ms2.ToArray();
+                    }
+                    _cntx.ProductImages.Insert(model);
+                    _cntx.Save();
+                }
+            }
+        }
+        [HttpPost]
+        public void DeleteImage(string id)
+        {
+            var image = _cntx.ProductImages.GetById(Convert.ToInt32(id));
+            _cntx.ProductImages.Delete(image);
+            _cntx.Save();
         }
     }
 }
