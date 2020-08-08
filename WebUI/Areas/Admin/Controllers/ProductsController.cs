@@ -394,5 +394,110 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx.ProductImages.Delete(image);
             _cntx.Save();
         }
+        
+        [HttpGet]
+        public IActionResult EditProductModel(int id)
+        {
+            var productModel = _cntx.ProductModels.GetById(id);
+            var model = new ProductModelEditVM(productModel);
+
+            return PartialView("_EditProductModelModal", model);
+        }
+        [HttpPost]
+        public IActionResult EditProductModel(ProductModelEditVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_EditProductModelModal", model);
+            }
+            if (model.Price == null && model.PriceUSD == null)
+            {
+                ModelState.AddModelError("", "Должна быть указана цена.");
+                return PartialView("_EditProductModelModal", model);
+            }
+
+            var productModel = _cntx.ProductModels.GetById(model.Id);
+            productModel.Name = model.ModelName;
+            productModel.Description = model.ModelDescription;
+            productModel.EstimatedTime = model.ModelEstimatedTime;
+            productModel.Price = model.Price;
+            productModel.PriceUSD = model.PriceUSD;
+            productModel.Quantity = model.Quantity;
+            productModel.IsAvailable = model.IsAvailable;
+            productModel.IsBlocked = model.IsBlocked;
+
+            _cntx.ProductModels.Update(productModel);
+            _cntx.Save();
+
+            TempData["SM_model"] = _resources["ProductModelWasEdited"].Value;
+            return RedirectToAction("EditProduct", new { id = productModel.ProductId });
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProductModel(int id)
+        {
+            var productModel = _cntx.ProductModels.GetById(id);
+            var model = new ProductModelDeleteVM
+            {
+                Id = id,
+                ProductId = productModel.ProductId,
+                ModelName = productModel.Name
+            };
+
+            return PartialView("_DeleteProductModelModal", model);
+        }
+        [HttpPost]
+        public IActionResult DeleteProductModel(ProductModelDeleteVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_DeleteProductModelModal", model);
+            }
+
+            var productModel = _cntx.ProductModels.GetById(model.Id);
+            _cntx.ProductModels.Delete(productModel);
+            _cntx.Save();
+
+            TempData["SM_model"] = _resources["ProductModelWasDeleted"].Value;
+            return RedirectToAction("EditProduct", new { id = model.ProductId });
+        }
+
+        [HttpGet]
+        public IActionResult CreateProductModel(int id)
+        {
+            var model = new ProductModelEditVM() { ProductId = id};
+            return PartialView("_CreateProductModelModal", model);
+        }
+        [HttpPost]
+        public IActionResult CreateProductModel(ProductModelEditVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_CreateProductModelModal", model);
+            }
+            if(model.Price==null && model.PriceUSD == null)
+            {
+                ModelState.AddModelError("", "Должна быть указана цена.");
+                return PartialView("_CreateProductModelModal", model);
+            }
+            var productModel = new ProductModel
+            {
+                ProductId = model.ProductId,
+                Name = model.ModelName,
+                Description = model.ModelDescription,
+                EstimatedTime = model.ModelEstimatedTime,
+                Price = model.Price,
+                PriceUSD = model.PriceUSD,
+                Quantity = model.Quantity,
+                IsAvailable = model.IsAvailable,
+                IsBlocked = model.IsBlocked
+            };
+
+            _cntx.ProductModels.Insert(productModel);
+            _cntx.Save();
+
+            TempData["SM_model"] = _resources["ProductModelWasAdded"].Value;
+            return RedirectToAction("EditProduct", new { id = productModel.ProductId });
+        }
     }
 }

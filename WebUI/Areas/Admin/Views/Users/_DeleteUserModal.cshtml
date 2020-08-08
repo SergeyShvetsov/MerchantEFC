@@ -15,6 +15,7 @@
                 <form action="DeleteUser">
                     <input type="hidden" asp-for="UserId" class="form-control" />
                     <input type="hidden" asp-for="RoleId" class="form-control" />
+                    <input name="IsValid" type="hidden" value="True" />
                 </form>
                 <p>@(string.Format(resources["DeleteUserConfirm"],Model.UserName))</p>
             </div>

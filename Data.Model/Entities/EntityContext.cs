@@ -43,7 +43,7 @@ namespace Data.Model.Entities
 
         public IEnumerable<City> GetAvailableCities(ISession session)
         {
-            var res = this.Cities.GetAll();
+            var res = this.Cities.GetAll().ApplyArchivedFilter();
             var assignedCity = session.Get<int?>("AssignedCity");
             if (assignedCity != null)
             {
@@ -55,7 +55,7 @@ namespace Data.Model.Entities
         public IEnumerable<Store> GetAvailableStores(ISession session)
         {
             {
-                var res = this.Stores.GetAll();
+                var res = this.Stores.GetAll().ApplyArchivedFilter();
                 var assignedStore = session.Get<int?>("AssignedStore");
                 if (assignedStore != null)
                 {

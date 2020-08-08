@@ -1,13 +1,13 @@
-﻿@model WebUI.Areas.Admin.Models.ProductDeleteVM
+﻿@model WebUI.Areas.Admin.Models.ProductModelDeleteVM
 @using WebUI.Resources
 @inject LocalizationService resources
 
-<div class="modal fade" id="deleteProduct">
+<div class="modal fade" id="deleteProductModel">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="DeleteProduct">
+            <form asp-action="DeleteProductModel">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteProductLabel">@resources["DeleteProduct"]</h5>
+                    <h5 class="modal-title" id="deleteProductModelLabel">@resources["DeleteProductModel"]</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
@@ -16,10 +16,9 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input id="IsValid" name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
                     <input type="hidden" asp-for="Id" class="form-control" />
-                    <input name="IsValid" type="hidden" value="True" />
-
+                    <input type="hidden" asp-for="ProductId" class="form-control" />
                     <p>@resources["DeleteProductConfirm"]</p>
-                    <p class="font-weight-bold">@Model.ProductName</p>
+                    <p class="font-weight-bold">@Model.ModelName</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">@resources["Cancel"]</button>

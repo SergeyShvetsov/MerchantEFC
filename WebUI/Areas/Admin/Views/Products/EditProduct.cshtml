@@ -10,6 +10,9 @@
 
 <h4>@resources["EditProduct"]</h4>
 <hr />
+
+<div id="ModalDialog"></div>
+
 <form asp-action="EditProduct" enctype="multipart/form-data">
     <input type="hidden" asp-for="ProductId" class="form-control" />
     <input type="hidden" asp-for="ProductImageChanged" class="form-control" />
@@ -97,49 +100,54 @@
         </div>
     </div>
     <hr />
-    <div class="form-inline">
-        <label asp-for="ModelSectionName" class="form-label mb-2"></label>
-        <div class="input-group-prepend">
-            <input asp-for="ModelSectionName" class="form-control" />
+    <div class="row">
+        <div class="col form-inline">
+            <label asp-for="ModelSectionName" class="form-label mb-2"></label>
+            <div class="input-group-prepend">
+                <input asp-for="ModelSectionName" class="form-control" />
+            </div>
+        </div>
+
+        @if (TempData["SM_model"] != null)
+        {
+            <div class="col alert alert-success">
+                @TempData["SM_model"]
+            </div>
+        }
+        <div class="col" style="text-align: right;">
+            <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                    data-target="#createProductModel" data-url="@Url.Action($"CreateProductModel/{Model.ProductId}")">
+                @resources["CreateProductModel"]
+            </button>
         </div>
     </div>
-    <hr />
-    @*@foreach (var mod in Model.ProductModels)
-        {
-            <input type="hidden" asp-for="mod.Id" class="form-control" />
-            <div class="form-row">
-                <div class="col">
-                    <label asp-for="mod.ModelName" class="control-label"></label>
-                    <input asp-for="mod.ModelName" class="form-control" />
-                    <span asp-validation-for="mod.ModelName" class="text-danger"></span>
-                </div>
-                <div class="col">
-                    <label asp-for="mod.ModelDescription" class="control-label"></label>
-                    <input asp-for="mod.ModelDescription" class="form-control" />
-                    <span asp-validation-for="mod.ModelDescription" class="text-danger"></span>
-                </div>
-                <div class="col">
-                    <label asp-for="mod.ModelEstimatedTime" class="control-label"></label>
-                    <input asp-for="mod.ModelEstimatedTime" class="form-control" />
-                    <span asp-validation-for="mod.ModelEstimatedTime" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="col">
-                    <label asp-for="mod.Price" class="control-label"></label>
-                    <input asp-for="mod.Price" class="form-control" />
-                </div>
-                <div class="col">
-                    <label asp-for="mod.PriceUSD" class="control-label"></label>
-                    <input asp-for="mod.PriceUSD" class="form-control" />
-                </div>
-                <div class="col">
-                    <label asp-for="mod.Quantity" class="control-label"></label>
-                    <input asp-for="mod.Quantity" class="form-control" />
-                </div>
-            </div>
-        }*@
-
+    <table class="table">
+        <tbody>
+            @foreach (var mod in Model.ProductModels)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" value="@mod.Id" />
+                        <div class="form-row">
+                            <div class="col">
+                                <label class="control-label">@mod.ModelName</label>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                                data-target="#editProductModel" data-url="@Url.Action($"EditProductModel/{mod.Id}")">
+                            @resources["Edit"]
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
+                                data-target="#deleteProductModel" data-url="@Url.Action($"DeleteProductModel/{mod.Id}")">
+                            @resources["Delete"]
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
     <hr />
     <div class="form-row">
         <div class="input-group">
@@ -198,6 +206,7 @@
 
 @section Scripts {
     <script src="~/lib/dropzone/4.3.0/content/Scripts/dropzone/dropzone.js"></script>
+    <script src="~/js/ModalDialog.js"></script>
     <script>
         CKEDITOR.replace("Description");
         $(document).ready(function () {

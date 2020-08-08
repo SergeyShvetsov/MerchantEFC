@@ -14,6 +14,7 @@ namespace WebUI.Areas.Admin.Models
         public ProductModelEditVM(ProductModel model)
         {
             Id = model.Id;
+            ProductId = model.ProductId;
             ModelName = model.Name;
             ModelDescription = model.Description;
             ModelEstimatedTime = model.EstimatedTime;
@@ -27,7 +28,7 @@ namespace WebUI.Areas.Admin.Models
         }
 
         public int Id { get; set; }
-        //public int ProductId { get; set; }
+        public int ProductId { get; set; }
 
         [DisplayName("ModelName")]
         [Required(ErrorMessage = "ModelNameRequired")]

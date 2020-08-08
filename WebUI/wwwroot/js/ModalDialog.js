@@ -10,13 +10,20 @@
     })
 
     ModalDialogElement.on('click', '[data-save="modal"]', function (event) {
-        //event.preventDefault();
+        event.preventDefault();
         var form = $(this).parents('.modal').find('form');
         var actionUrl = form.attr('action');
         var sendData = form.serialize();
         $.post(actionUrl, sendData).done(function (data) {
-            ModalDialogElement.find('.modal').modal('hide');
-            window.location.reload();
+            var newBody = $('.modal-body', data);
+            ModalDialogElement.find('.modal-body').replaceWith(newBody);
+
+            var isNotValid = newBody.find('[name="IsValid"]').val() == 'False';
+
+            if (!isNotValid) {
+                ModalDialogElement.find('.modal').modal('hide');
+                window.location.reload();
+            }
         })
     })
 })

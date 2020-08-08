@@ -242,7 +242,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[3.1.3, )"
+              "version": "[3.1.4, )"
             },
             "Microsoft.jQuery.Unobtrusive.Validation": {
               "target": "Package",
