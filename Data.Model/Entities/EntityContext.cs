@@ -26,8 +26,6 @@ namespace Data.Model.Entities
 
         public Products Products => new Products(Context);
 
-        public ProductCategories ProductCategories => new ProductCategories(Context);
-
         public ProductComments ProductComments => new ProductComments(Context);
 
         public ProductImages ProductImages => new ProductImages(Context);
@@ -35,6 +33,7 @@ namespace Data.Model.Entities
         public ProductModels ProductModels => new ProductModels(Context);
 
         public ProductOptions ProductOptions => new ProductOptions(Context);
+        public ProductPages ProductPages => new ProductPages(Context);
 
         public void Save()
         {
@@ -49,30 +48,28 @@ namespace Data.Model.Entities
             {
                 res = res.Where(x => x.Id == assignedCity);
             }
-            return res.ToList();
+            return res.ToList() ?? new List<City>();
         }
 
         public IEnumerable<Store> GetAvailableStores(ISession session)
         {
+            var res = this.Stores.GetAll().ApplyArchivedFilter();
+            var assignedStore = session.Get<int?>("AssignedStore");
+            if (assignedStore != null)
             {
-                var res = this.Stores.GetAll().ApplyArchivedFilter();
-                var assignedStore = session.Get<int?>("AssignedStore");
-                if (assignedStore != null)
-                {
-                    res = res.Where(x => x.Id == assignedStore);
-                }
-                return res.ToList();
+                res = res.Where(x => x.Id == assignedStore);
             }
+            return res.ToList() ?? new List<Store>();
         }
 
         public IEnumerable<RoleType> GetAllRoles() => Enum.GetValues(typeof(RoleType)).Cast<RoleType>().Where(x => x != RoleType.Undefined).Select(v => v).ToList();
         public IEnumerable<RoleType> GetAvailableRoles(ClaimsPrincipal user)
         {
             var res = GetAllRoles();
-            
+
             if (user.IsInRole("Admin")) return res;
             else if (user.IsInRole("Superuser")) return res.Where(w => w == RoleType.Superuser || w == RoleType.Manager);
-            else if(user.IsInRole("Manager")) return res.Where(w => w == RoleType.Manager);
+            else if (user.IsInRole("Manager")) return res.Where(w => w == RoleType.Manager);
 
             return new List<RoleType>();
         }

@@ -9,7 +9,6 @@
     ViewData["Title"] = "CityList";
 }
 
-<div id="ModalDialog"></div>
 @if (TempData["SM"] != null)
 {
 
@@ -23,7 +22,10 @@
         <h4>@resources["CityList"]</h4>
     </div>
     <div class="col" style="text-align: right;">
-        @Html.ActionLink(resources["CreateCity"], "CreateCity", "Cities", null, htmlAttributes: new { @class = "btn btn-outline-primary" })
+        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                data-target="#createCity" data-url="@Url.Action($"CreateCity")">
+            @resources["CreateCity"]
+        </button>
     </div>
 </div>
 
@@ -69,7 +71,10 @@ else
                         @Html.DisplayFor(modelItem => item.Name_uz_l)
                     </td>
                     <td>
-                        @Html.ActionLink(resources["Edit"], "EditCity", "Cities", new { id = item.Id }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+                        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                                data-target="#editCity" data-url="@Url.Action($"EditCity/{item.Id}")">
+                            @resources["Edit"]
+                        </button>
                         <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
                                 data-target="#deleteCity" data-url="@Url.Action($"DeleteCity/{item.Id}")">
                             @resources["Delete"]
@@ -80,8 +85,4 @@ else
         </tbody>
     </table>
     @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", null), Bootstrap4PagedListRenderOptions.Default)
-}
-@section Scripts
-{
-    <script src="~/js/ModalDialog.js"></script>
 }

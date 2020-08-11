@@ -14,11 +14,11 @@ namespace Data.Model.Interfaces
         Stores Stores { get; }
         Cities Cities { get; }
         Products Products { get; }
-        ProductCategories ProductCategories { get; }
         ProductComments ProductComments { get; }
         ProductImages ProductImages { get; }
         ProductModels ProductModels { get; }
         ProductOptions ProductOptions { get; }
+        ProductPages ProductPages { get; }
 
         void Save();
 

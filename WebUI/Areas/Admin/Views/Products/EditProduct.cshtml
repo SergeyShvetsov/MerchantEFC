@@ -11,8 +11,6 @@
 <h4>@resources["EditProduct"]</h4>
 <hr />
 
-<div id="ModalDialog"></div>
-
 <form asp-action="EditProduct" enctype="multipart/form-data">
     <input type="hidden" asp-for="ProductId" class="form-control" />
     <input type="hidden" asp-for="ProductImageChanged" class="form-control" />
@@ -57,6 +55,11 @@
                 <span asp-validation-for="SelectedStore" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <textarea rows="3" asp-for="Name" class="form-control"></textarea>
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -78,7 +81,7 @@
             </div>
             <div class="form-group form-check form-check-inline">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                 </label>
             </div>
             @if (User.IsInRole("Admin"))
@@ -99,10 +102,9 @@
             }
         </div>
     </div>
-    <hr />
-    <div class="row">
+    <div class="row section-header">
         <div class="col form-inline">
-            <label asp-for="ModelSectionName" class="form-label mb-2"></label>
+            <label asp-for="ModelSectionName" class="form-label mb-2"></label>&nbsp;
             <div class="input-group-prepend">
                 <input asp-for="ModelSectionName" class="form-control" />
             </div>
@@ -121,50 +123,148 @@
             </button>
         </div>
     </div>
-    <table class="table">
-        <tbody>
-            @foreach (var mod in Model.ProductModels)
-            {
-                <tr>
-                    <td>
-                        <input type="hidden" value="@mod.Id" />
-                        <div class="form-row">
-                            <div class="col">
-                                <label class="control-label">@mod.ModelName</label>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
-                                data-target="#editProductModel" data-url="@Url.Action($"EditProductModel/{mod.Id}")">
-                            @resources["Edit"]
-                        </button>
-                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
-                                data-target="#deleteProductModel" data-url="@Url.Action($"DeleteProductModel/{mod.Id}")">
-                            @resources["Delete"]
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <hr />
-    <div class="form-row">
-        <div class="input-group">
-            <label asp-for="OptionSectionName" class="input-group-prepend"></label>
-            <input asp-for="OptionSectionName" class="form-control" />
+    @if (Model.ProductModels == null || !Model.ProductModels.Any())
+    {
+        <h2 class="text-center">@resources["ListIsEmpty"]</h2>
+    }
+    else
+    {
+        <div class="row">
+            <table class="table">
+                <tbody>
+                    @foreach (var mod in Model.ProductModels)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" value="@mod.Id" />
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label class="control-label">@mod.Name</label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                                        data-target="#editProductModel" data-url="@Url.Action($"EditProductModel/{mod.Id}")">
+                                    @resources["Edit"]
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
+                                        data-target="#deleteProductModel" data-url="@Url.Action($"DeleteProductModel/{mod.Id}")">
+                                    @resources["Delete"]
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-    </div>
-    <hr />
-    <div class="form-row">
-        <div class="col">
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea rows="3" asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+    }
+    <div class="row section-header">
+        <div class="col form-inline">
+            <label asp-for="OptionSectionName" class="form-label mb-2"></label>&nbsp;
+            <div class="input-group-prepend">
+                <input asp-for="OptionSectionName" class="form-control" />
             </div>
         </div>
+
+        @if (TempData["SM_option"] != null)
+        {
+            <div class="col alert alert-success">
+                @TempData["SM_option"]
+            </div>
+        }
+        <div class="col" style="text-align: right;">
+            <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                    data-target="#createProductOption" data-url="@Url.Action($"CreateProductOption/{Model.ProductId}")">
+                @resources["CreateProductOption"]
+            </button>
+        </div>
     </div>
+    @if (Model.ProductOptions == null || !Model.ProductOptions.Any())
+    {
+        <h2 class="text-center">@resources["ListIsEmpty"]</h2>
+    }
+    else
+    {
+        <div class="row">
+            <table class="table">
+                <tbody>
+                    @foreach (var op in Model.ProductOptions)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" value="@op.Id" />
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label class="control-label">@op.Name</label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                                        data-target="#editProductOption" data-url="@Url.Action($"EditProductOption/{op.Id}")">
+                                    @resources["Edit"]
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
+                                        data-target="#deleteProductOption" data-url="@Url.Action($"DeleteProductOption/{op.Id}")">
+                                    @resources["Delete"]
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <div class="row section-header">
+        <div class="col form-inline">
+            <label class="form-label mb-2">@resources["Pages"]</label>
+        </div>
+
+        @if (TempData["SM_page"] != null)
+        {
+            <div class="col alert alert-success">
+                @TempData["SM_page"]
+            </div>
+        }
+        <div class="col" style="text-align: right;">
+            @Html.ActionLink(resources["CreateProductPage"], "CreateProductPage", "Products", new { id = Model.ProductId }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+        </div>
+    </div>
+    @if (Model.ProductPages == null || !Model.ProductPages.Any())
+    {
+        <h2 class="text-center">@resources["ListIsEmpty"]</h2>
+    }
+    else
+    {
+        <div class="row">
+            <table class="table">
+                <tbody>
+                    @foreach (var pg in Model.ProductPages)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" value="@pg.Id" />
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label class="control-label">@pg.Name</label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @Html.ActionLink(resources["Edit"], "EditProductPage", "Products", new { id = pg.Id }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+                                <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
+                                        data-target="#deleteProductPage" data-url="@Url.Action($"DeleteProductPage/{pg.Id}")">
+                                    @resources["Delete"]
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <hr />
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -177,7 +277,7 @@
 <h4>@resources["Gallery"]</h4>
 @if (!Model.Gallery.Any())
 {
-    <h3>There are no gallery images for this product.</h3>
+    <h3>@resources["NoGalleryImages"]</h3>
 }
 <div class="row">
     @foreach (var image in Model.Gallery)
@@ -206,9 +306,7 @@
 
 @section Scripts {
     <script src="~/lib/dropzone/4.3.0/content/Scripts/dropzone/dropzone.js"></script>
-    <script src="~/js/ModalDialog.js"></script>
     <script>
-        CKEDITOR.replace("Description");
         $(document).ready(function () {
             $(".choose-store").select2({
                 ajax: {

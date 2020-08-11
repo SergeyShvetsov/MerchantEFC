@@ -14,28 +14,20 @@ namespace WebUI.Areas.Admin.Models
         public ProductOptionEditVM(ProductOption model)
         {
             Id = model.Id;
-            OptionName = model.Name;
-            OptionDescription = model.Description;
-            IsAvailable = model.IsAvailable;
+            ProductId = model.ProductId;
+            Name = model.Name;
+            IsActive = model.IsActive;
             IsBlocked = model.IsBlocked;
-            LargeImage = model.LargeImage;
-            Thumbs = model.Thumbs;
         }
         public int Id { get; set; }
-        //public int ProductId { get; set; }
+        public int ProductId { get; set; }
 
         [DisplayName("OptionName")]
         [Required(ErrorMessage = "OptionNameRequired")]
-        public string OptionName { get; set; }
-        [DisplayName("OptionDescription")]
-        [Required(ErrorMessage = "OptionDescriptionRequired")]
-        public string OptionDescription { get; set; }
+        public string Name { get; set; }
         [DisplayName("IsActive")]
-        public bool IsAvailable { get; set; } 
+        public bool IsActive { get; set; } 
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
-
-        public byte[] LargeImage { get; set; }
-        public byte[] Thumbs { get; set; }
     }
 }

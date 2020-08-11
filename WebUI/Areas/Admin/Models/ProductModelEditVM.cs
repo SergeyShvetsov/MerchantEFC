@@ -15,16 +15,15 @@ namespace WebUI.Areas.Admin.Models
         {
             Id = model.Id;
             ProductId = model.ProductId;
-            ModelName = model.Name;
-            ModelDescription = model.Description;
-            ModelEstimatedTime = model.EstimatedTime;
+            Name = model.Name;
+            Description = model.Description;
+            ShippingTime = model.ShippingTime;
             Price = model.Price;
             PriceUSD = model.PriceUSD;
+            SalesPrice = model.SalesPrice;
             Quantity = model.Quantity;
-            IsAvailable = model.IsAvailable;
+            IsActive = model.IsActive;
             IsBlocked = model.IsBlocked;
-            LargeImage = model.LargeImage;
-            Thumbs = model.Thumbs;
         }
 
         public int Id { get; set; }
@@ -32,26 +31,25 @@ namespace WebUI.Areas.Admin.Models
 
         [DisplayName("ModelName")]
         [Required(ErrorMessage = "ModelNameRequired")]
-        public string ModelName { get; set; }
+        public string Name { get; set; }
         [DisplayName("ModelDescription")]
         [Required(ErrorMessage = "ModelDescriptionRequired")]
-        public string ModelDescription { get; set; }
-        [DisplayName("ModelEstimatedTime")]
-        [Required(ErrorMessage = "ModelEstimatedTimeRequired")]
-        public string ModelEstimatedTime { get; set; }
+        public string Description { get; set; }
+        [DisplayName("ModelShippingTime")]
+        [Required(ErrorMessage = "ModelShippingTimeRequired")]
+        public string ShippingTime { get; set; }
 
         [DisplayName("Price")]
         public double? Price { get; set; }
         [DisplayName("PriceUSD")]
         public double? PriceUSD { get; set; }
+        [DisplayName("SalesPrice")]
+        public double? SalesPrice { get; set; }
         [DisplayName("Quantity")]
         public int? Quantity { get; set; }
         [DisplayName("IsActive")]
-        public bool IsAvailable { get; set; }
+        public bool IsActive { get; set; }
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
-
-        public byte[] LargeImage { get; set; }
-        public byte[] Thumbs { get; set; }
     }
 }

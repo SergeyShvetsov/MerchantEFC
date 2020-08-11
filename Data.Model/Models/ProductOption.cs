@@ -17,16 +17,12 @@ namespace Data.Model.Models
         public Product Product { get; set; }
 
         public string Name { get; set; }
-        public string Description { get; set; }
 
-        [Column(TypeName = "image")]
-        public byte[] LargeImage { get; set; }
-        [Column(TypeName = "image")]
-        public byte[] Thumbs { get; set; }
-
-        public bool IsAvailable { get; set; }
+        public bool IsActive { get; set; }
         public bool IsBlocked { get; set; }
         public bool IsArchived { get; set; }
+        public bool IsAvailable => IsActive && !IsBlocked && !IsArchived;
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

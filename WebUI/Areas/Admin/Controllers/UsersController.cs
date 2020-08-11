@@ -29,9 +29,9 @@ namespace WebUI.Areas.Admin.Controllers
         private readonly IStringLocalizer _resources;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
-        
-        private  IEnumerable<RoleType> _availableRoles => _cntx.GetAvailableRoles(User);
-        private  IEnumerable<Status> _availableStatuses => _cntx.GetAvailableStatuses(User);
+
+        private IEnumerable<RoleType> _availableRoles => _cntx.GetAvailableRoles(User);
+        private IEnumerable<Status> _availableStatuses => _cntx.GetAvailableStatuses(User);
         private readonly IEnumerable<Store> _availableStores;
 
         public UsersController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
@@ -46,8 +46,8 @@ namespace WebUI.Areas.Admin.Controllers
         // GET: UsersController
         public ActionResult List(int? page, int roleId)
         {
-             ViewBag.TabItem = "Users"; 
-            
+            ViewBag.TabItem = "Users";
+
             // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_RowsPerPage;
@@ -59,7 +59,7 @@ namespace WebUI.Areas.Admin.Controllers
             // Инициализируем List и заполняем данными
             var listOfUsers = _cntx.Users.GetAllByRole((RoleType)roleId)
                 .ApplyArchivedFilter();
-            
+
             if (!User.IsInRole("Admin"))
             {
                 listOfUsers = listOfUsers.ApplyAvailableFilter(_availableStores);

@@ -13,7 +13,6 @@ D:\Work\SiteTemplate\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csproj.CoreCo
 D:\Work\MerchantEFC\Data.Tools\bin\Debug\netcoreapp3.1\Data.Tools.deps.json
 D:\Work\MerchantEFC\Data.Tools\bin\Debug\netcoreapp3.1\Data.Tools.dll
 D:\Work\MerchantEFC\Data.Tools\bin\Debug\netcoreapp3.1\Data.Tools.pdb
-D:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csprojAssemblyReference.cache
 D:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.AssemblyInfoInputs.cache
 D:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.AssemblyInfo.cs
 D:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csproj.CoreCompileInputs.cache
@@ -40,3 +39,4 @@ C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.AssemblyInfo.cs
 C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.dll
 C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.pdb
 C:\Work\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csproj.CoreCompileInputs.cache
+D:\Work\MerchantEFC\Data.Tools\obj\Debug\netcoreapp3.1\Data.Tools.csprojAssemblyReference.cache

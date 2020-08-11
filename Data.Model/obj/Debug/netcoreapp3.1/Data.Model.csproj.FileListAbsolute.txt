@@ -13,7 +13,6 @@ D:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Model.pdb
 D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.csprojAssemblyReference.cache
 D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.AssemblyInfoInputs.cache
 D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.AssemblyInfo.cs
-D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.csproj.CoreCompileInputs.cache
 D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.dll
 D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.pdb
 C:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Model.deps.json
@@ -46,3 +45,4 @@ D:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Tools.dll
 D:\Work\MerchantEFC\Data.Model\bin\Debug\netcoreapp3.1\Data.Tools.pdb
 D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.csproj.CopyComplete
 D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.genruntimeconfig.cache
+D:\Work\MerchantEFC\Data.Model\obj\Debug\netcoreapp3.1\Data.Model.csproj.CoreCompileInputs.cache

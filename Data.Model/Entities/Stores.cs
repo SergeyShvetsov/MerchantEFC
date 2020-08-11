@@ -44,7 +44,7 @@ namespace Data.Model.Entities
         }
         public bool IsUniqCode(string code)
         {
-            return !_context.Stores.Any(a => a.StoreCode.Equals(code));
+            return !_context.Stores.Any(a => a.Code.Equals(code));
         }
     }
 }

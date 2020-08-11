@@ -47,6 +47,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "AdminLTE": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",
               "version": "[3.1.5, )"

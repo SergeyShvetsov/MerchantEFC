@@ -20,15 +20,24 @@ namespace Data.Model.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
+        public string Phone { get; set; }
         public string Password { get; set; }
+
+        public int? CityId { get; set; }
+        public City City { get; set; }
 
         public int? StoreId { get; set; }
         public Store Store { get; set; }
 
+
         public RoleType UserRole { get; set; } = RoleType.User;
         public Status UserStatus { get; set; } = Status.Active;
 
+        public bool IsActive { get; set; }
+        public bool IsBlocked { get; set; }
         public bool IsArchived { get; set; }
+        public bool IsAvailable => IsActive && !IsBlocked && !IsArchived;
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime LastVisit { get; set; }
         public int AttemptsCount { get; set; }

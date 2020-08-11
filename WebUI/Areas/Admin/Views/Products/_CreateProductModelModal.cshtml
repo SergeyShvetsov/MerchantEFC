@@ -7,7 +7,7 @@
         <div class="modal-content">
             <form asp-action="CreateProductModel" class="reload">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteProductModelLabel">@resources["CreateProductModel"]</h5>
+                    <h5 class="modal-title" id="createProductModelLabel">@resources["CreateProductModel"]</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
@@ -17,21 +17,20 @@
                     <input asp-for="ProductId" type="hidden" />
                     <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
                     <div class="form-group">
-                        <label asp-for="ModelName" class="control-label"></label>
-                        <input asp-for="ModelName" class="form-control" />
-                        <span asp-validation-for="ModelName" class="text-danger"></span>
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="ModelDescription" class="control-label"></label>
-                        <input asp-for="ModelDescription" class="form-control" />
-                        <span asp-validation-for="ModelDescription" class="text-danger"></span>
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="ModelEstimatedTime" class="control-label"></label>
-                        <input asp-for="ModelEstimatedTime" class="form-control" />
-                        <span asp-validation-for="ModelEstimatedTime" class="text-danger"></span>
+                        <label asp-for="ShippingTime" class="control-label"></label>
+                        <input asp-for="ShippingTime" class="form-control" />
+                        <span asp-validation-for="ShippingTime" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Price" class="control-label"></label>
@@ -44,13 +43,18 @@
                         <span asp-validation-for="PriceUSD" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="SalesPrice" class="control-label"></label>
+                        <input asp-for="SalesPrice" class="form-control" />
+                        <span asp-validation-for="SalesPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <label asp-for="Quantity" class="control-label"></label>
                         <input asp-for="Quantity" class="form-control" />
                         <span asp-validation-for="Quantity" class="text-danger"></span>
                     </div>
                     <div class="form-group form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                            <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                         </label>
                     </div>
                     <div class="form-group form-check">
@@ -59,10 +63,10 @@
                         </label>
                     </div>
                 </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">@resources["Cancel"]</button>
-                        <button type="button" data-save="modal" class="btn btn-outline-danger">@resources["Create"]</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">@resources["Cancel"]</button>
+                    <button type="button" data-save="modal" class="btn btn-outline-danger">@resources["Create"]</button>
+                </div>
             </form>
         </div>
     </div>

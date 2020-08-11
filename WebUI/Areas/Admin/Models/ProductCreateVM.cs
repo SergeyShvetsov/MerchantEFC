@@ -20,8 +20,11 @@ namespace WebUI.Areas.Admin.Models
         //public List<SelectListItem> StoreList { get; set; }
         public IEnumerable<Select2ListItem> StoreList { get; set; 
         }
+        [DisplayName("ProductCode")]
+        [Required(ErrorMessage = "ProductCodeRequired")] 
+        public string Code { get; set; }
         [DisplayName("ProductName")]
-        [Required(ErrorMessage = "ProductNameRequired")] 
+        [Required(ErrorMessage = "ProductNameRequired")]
         public string Name { get; set; }
         [DisplayName("Brand")]
         public string Brand { get; set; }
@@ -33,7 +36,7 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("Description")]
         public string Description { get; set; }
         [DisplayName("IsActive")]
-        public bool IsAvailable { get; set; }
+        public bool IsActive { get; set; }
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
 

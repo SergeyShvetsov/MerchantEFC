@@ -18,11 +18,12 @@ namespace WebUI.Areas.Admin.Models
         {
             ProductId = product.Id;
             Name = product.Name;
+            Code = product.Code;
             Brand = product.Brand;
             Shipping = product.Shipping;
             Categories = product.Categories;
             Description = product.Description;
-            IsAvailable = product.IsActive;
+            IsActive = product.IsActive;
             IsBlocked = product.IsBlocked;
             LargeImage = product.LargeImage;
             ModelSectionName = product.ModelSectionName;
@@ -36,6 +37,10 @@ namespace WebUI.Areas.Admin.Models
         public IEnumerable<Select2ListItem> StoreList { get; set; }
 
         public int ProductId { get; set; }
+
+        [DisplayName("ProductCode")]
+        [Required(ErrorMessage = "ProductCodeRequired")]
+        public string Code { get; set; }
         [DisplayName("ProductName")]
         [Required(ErrorMessage = "ProductNameRequired")]
         public string Name { get; set; }
@@ -49,7 +54,7 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("Description")]
         public string Description { get; set; }
         [DisplayName("IsActive")]
-        public bool IsAvailable { get; set; }
+        public bool IsActive { get; set; }
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
 
@@ -67,6 +72,6 @@ namespace WebUI.Areas.Admin.Models
 
         public List<ProductOptionEditVM> ProductOptions { get; set; }
 
-
+        public List<ProductPageEditVM> ProductPages { get; set; }
     }
 }

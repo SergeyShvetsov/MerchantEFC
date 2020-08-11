@@ -70,7 +70,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             ViewBag.TabItem = "Stores";
             ViewBag.AvailableCities = _availableCities;
-            return View("CreateStore", new StoreEditVM() { ExchangeValue = "0" });
+            return PartialView("_CreateStoreModal", new StoreEditVM());
         }
         [HttpPost]
         public ActionResult CreateStore(StoreEditVM model)
@@ -78,27 +78,24 @@ namespace WebUI.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.AvailableCities = _availableCities;
-                return View(model);
+                return PartialView("_CreateStoreModal", model);
             }
-            var code = model.StoreCode.NormalizeCode();
+            var code = model.Code.NormalizeCode();
             if (!_cntx.Stores.IsUniqCode(code))
             {
-                model.StoreCode = code;
+                model.Code = code;
                 ViewBag.AvailableCities = _availableCities;
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
-                return View(model);
+                return PartialView("_CreateStoreModal", model);
             }
-            if (!Regex.IsMatch(model.ExchangeValue, @"^[0-9]+\.?[0-9]*$"))
-            {
-                ViewBag.AvailableCities = _availableCities;
-                ModelState.AddModelError("", string.Format(_resources["FieldMustBeNumeric"], _resources["ExchangeValue"]));
-                return View(model);
-            }
+
             var store = new Store()
             {
-                StoreCode = code,
-                StoreName = model.StoreName,
-                ExchangeValue = Convert.ToDouble(model.ExchangeValue),
+                Code = code,
+                Name = model.Name,
+                EmailAddress = model.Email,
+                Phone = model.Phone,
+                TIN = model.TIN,
                 IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked,
                 CityId = model.CityId
@@ -117,7 +114,7 @@ namespace WebUI.Areas.Admin.Controllers
             var model = new StoreDeleteVM
             {
                 Id = id,
-                StoreName = store.StoreName
+                StoreName = store.Name
             };
 
             return PartialView("_DeleteStoreModal", model);
@@ -140,7 +137,7 @@ namespace WebUI.Areas.Admin.Controllers
             ViewBag.AvailableCities = _availableCities;
             var store = _cntx.Stores.GetById(id);
             var model = new StoreEditVM(store);
-            return View(model);
+            return PartialView("_EditStoreModal", model);
         }
         [HttpPost]
         public ActionResult EditStore(StoreEditVM model)
@@ -148,29 +145,23 @@ namespace WebUI.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.AvailableCities = _availableCities;
-                return View(model);
+                return PartialView("_EditStoreModal", model);
             }
             var store = _cntx.Stores.GetById(model.Id);
-            var code = model.StoreCode.NormalizeCode();
-            if (store.StoreCode != code && !_cntx.Stores.IsUniqCode(code))
+            var code = model.Code.NormalizeCode();
+            if (store.Code != code && !_cntx.Stores.IsUniqCode(code))
             {
-                model.StoreCode = code;
+                model.Code = code;
                 ViewBag.AvailableCities = _availableCities;
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
-                return View(model);
-            }
-            model.ExchangeValue = model.ExchangeValue.NormalizePrice();
-            if (!Regex.IsMatch(model.ExchangeValue, @"^[0-9]*\.?[0-9]"))
-            {
-                ViewBag.AvailableCities = _availableCities;
-                ModelState.AddModelError("", string.Format(_resources["FieldMustBeNumeric"], _resources["ExchangeValue"]));
-                return View(model);
+                return PartialView("_EditStoreModal", model);
             }
 
-            store.StoreCode = code;
-            store.StoreName = model.StoreName;
+            store.Code = code;
+            store.Name = model.Name;
             store.EmailAddress = model.Email;
-            store.ExchangeValue = Convert.ToDouble(model.ExchangeValue,CultureInfo.InvariantCulture);
+            store.Phone = model.Phone;
+            store.TIN = model.TIN;
             store.IsActive = model.IsActive;
             store.IsBlocked = model.IsBlocked;
             store.CityId = model.CityId;
@@ -178,7 +169,7 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx.Stores.Update(store);
             _cntx.Save();
 
-            TempData["SM"] = _resources["CityEdited"].Value;
+            TempData["SM"] = _resources["StoreEdited"].Value;
             return RedirectToAction("List");
         }
 

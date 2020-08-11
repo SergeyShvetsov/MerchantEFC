@@ -10,8 +10,6 @@
     ViewData["PageCode"] = "AdminUsersList";
 }
 
-<div id="ModalDialog"></div>
-
 <h4>@resources["UserList"]</h4>
 @if (TempData["SM"] != null)
 {
@@ -108,5 +106,4 @@ else
 @section Scripts
 {
     <script src="~/js/UsersListView.js"></script>
-    <script src="~/js/ModalDialog.js"></script>
 }

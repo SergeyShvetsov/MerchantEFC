@@ -19,7 +19,6 @@
             ModalDialogElement.find('.modal-body').replaceWith(newBody);
 
             var isNotValid = newBody.find('[name="IsValid"]').val() == 'False';
-
             if (!isNotValid) {
                 ModalDialogElement.find('.modal').modal('hide');
                 window.location.reload();

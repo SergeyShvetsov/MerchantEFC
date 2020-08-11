@@ -1,0 +1,44 @@
+﻿@model WebUI.Areas.Admin.Models.ProductPageEditVM
+@using Data.Model.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@using WebUI.Resources
+@inject LocalizationService resources
+
+@{
+    ViewData["Title"] = "CreateProductPage";
+}
+
+<h4>@resources["CreateProductPage"]</h4>
+<hr />
+
+<form asp-action="CreateProductPage" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProductId" class="form-control" />
+    
+    <div class="row form-group">
+        <label asp-for="Name" class="control-label"></label>&nbsp;
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            <div class="form-group">
+                <textarea rows="3" asp-for="PageBody" class="form-control"></textarea>
+                <span asp-validation-for="PageBody" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <a asp-action="EditProduct" asp-route-id="@Model.ProductId" class="btn btn-outline-secondary">@resources["Cancel"]</a>
+                <input type="submit" value="@resources["Create"]" class="btn btn-outline-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <script>
+        CKEDITOR.replace("PageBody");
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

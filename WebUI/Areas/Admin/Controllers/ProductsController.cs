@@ -75,7 +75,7 @@ namespace WebUI.Areas.Admin.Controllers
                 .Select(s => new Select2ListItem
                 {
                     id = s.Id,
-                    text = s.StoreName + " (" + s.City.Code + ")"
+                    text = s.Name + " (" + s.City.Code + ")"
                 });
 
             if (!(string.IsNullOrEmpty(search) || string.IsNullOrWhiteSpace(search)))
@@ -127,14 +127,14 @@ namespace WebUI.Areas.Admin.Controllers
             var product = new Product()
             {
                 StoreId = model.SelectedStore,
-                Name = model.Name,
+                Code = model.Code,
                 Brand = model.Brand,
                 Categories = model.Categories,
                 Shipping = model.Shipping,
                 Description = model.Description,
                 ModelSectionName = model.ModelSectionName,
                 OptionSectionName = model.OptionSectionName,
-                IsActive = model.IsAvailable,
+                IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked
             };
 
@@ -181,14 +181,14 @@ namespace WebUI.Areas.Admin.Controllers
 
             var mod = new ProductModel()
             {
-                Name = model.ProductModel.ModelName,
-                Description = model.ProductModel.ModelDescription,
+                Name = model.ProductModel.Name,
+                Description = model.ProductModel.Description,
                 Product = product,
-                EstimatedTime = model.ProductModel.ModelEstimatedTime,
+                ShippingTime = model.ProductModel.ShippingTime,
                 Price = model.ProductModel.Price,
                 PriceUSD = model.ProductModel.PriceUSD,
                 Quantity = model.ProductModel.Quantity,
-                IsAvailable = true
+                IsActive = true
             };
             _cntx.ProductModels.Insert(mod);
             _cntx.Save();
@@ -237,6 +237,10 @@ namespace WebUI.Areas.Admin.Controllers
                 .ApplyArchivedFilter()
                 .Select(s => new ProductOptionEditVM(s))
                 .ToList();
+            model.ProductPages = _cntx.ProductPages.GetByAllByProduct(product.Id)
+                .ApplyArchivedFilter()
+                .Select(s => new ProductPageEditVM(s))
+                .ToList();
             model.Gallery = _cntx.ProductImages.GetByAllByProduct(product.Id)
                 .ApplyArchivedFilter()
                 .ToList();
@@ -265,6 +269,7 @@ namespace WebUI.Areas.Admin.Controllers
 
             var product = _cntx.Products.GetById(model.ProductId);
             product.StoreId = model.SelectedStore;
+            product.Code = model.Code;
             product.Name = model.Name;
             product.Brand = model.Brand;
             product.Categories = model.Categories;
@@ -272,7 +277,7 @@ namespace WebUI.Areas.Admin.Controllers
             product.Description = model.Description;
             product.ModelSectionName = model.ModelSectionName;
             product.OptionSectionName = model.OptionSectionName;
-            product.IsActive = model.IsAvailable;
+            product.IsActive = model.IsActive;
             product.IsBlocked = model.IsBlocked;
 
             if (file != null && file.Length > 0)
@@ -394,7 +399,8 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx.ProductImages.Delete(image);
             _cntx.Save();
         }
-        
+
+        #region Product Model
         [HttpGet]
         public IActionResult EditProductModel(int id)
         {
@@ -417,13 +423,13 @@ namespace WebUI.Areas.Admin.Controllers
             }
 
             var productModel = _cntx.ProductModels.GetById(model.Id);
-            productModel.Name = model.ModelName;
-            productModel.Description = model.ModelDescription;
-            productModel.EstimatedTime = model.ModelEstimatedTime;
+            productModel.Name = model.Name;
+            productModel.Description = model.Description;
+            productModel.ShippingTime = model.ShippingTime;
             productModel.Price = model.Price;
             productModel.PriceUSD = model.PriceUSD;
             productModel.Quantity = model.Quantity;
-            productModel.IsAvailable = model.IsAvailable;
+            productModel.IsActive = model.IsActive;
             productModel.IsBlocked = model.IsBlocked;
 
             _cntx.ProductModels.Update(productModel);
@@ -441,7 +447,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 Id = id,
                 ProductId = productModel.ProductId,
-                ModelName = productModel.Name
+                ModelName = productModel.Description
             };
 
             return PartialView("_DeleteProductModelModal", model);
@@ -465,7 +471,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateProductModel(int id)
         {
-            var model = new ProductModelEditVM() { ProductId = id};
+            var model = new ProductModelEditVM() { ProductId = id };
             return PartialView("_CreateProductModelModal", model);
         }
         [HttpPost]
@@ -475,7 +481,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return PartialView("_CreateProductModelModal", model);
             }
-            if(model.Price==null && model.PriceUSD == null)
+            if (model.Price == null && model.PriceUSD == null)
             {
                 ModelState.AddModelError("", "Должна быть указана цена.");
                 return PartialView("_CreateProductModelModal", model);
@@ -483,13 +489,13 @@ namespace WebUI.Areas.Admin.Controllers
             var productModel = new ProductModel
             {
                 ProductId = model.ProductId,
-                Name = model.ModelName,
-                Description = model.ModelDescription,
-                EstimatedTime = model.ModelEstimatedTime,
+                Name = model.Name,
+                Description = model.Description,
+                ShippingTime = model.ShippingTime,
                 Price = model.Price,
                 PriceUSD = model.PriceUSD,
                 Quantity = model.Quantity,
-                IsAvailable = model.IsAvailable,
+                IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked
             };
 
@@ -498,6 +504,178 @@ namespace WebUI.Areas.Admin.Controllers
 
             TempData["SM_model"] = _resources["ProductModelWasAdded"].Value;
             return RedirectToAction("EditProduct", new { id = productModel.ProductId });
+        }
+        #endregion
+        #region Product Option
+        [HttpGet]
+        public IActionResult EditProductOption(int id)
+        {
+            var productOption = _cntx.ProductOptions.GetById(id);
+            var model = new ProductOptionEditVM(productOption);
+
+            return PartialView("_EditProductOptionModal", model);
+        }
+        [HttpPost]
+        public IActionResult EditProductOption(ProductOptionEditVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_EditProductOptionModal", model);
+            }
+            var productOption = _cntx.ProductOptions.GetById(model.Id);
+            productOption.Name = model.Name;
+            productOption.IsActive = model.IsActive;
+            productOption.IsBlocked = model.IsBlocked;
+
+            _cntx.ProductOptions.Update(productOption);
+            _cntx.Save();
+
+            TempData["SM_option"] = _resources["ProductOptionWasEdited"].Value;
+            return RedirectToAction("EditProduct", new { id = productOption.ProductId });
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProductOption(int id)
+        {
+            var productOption = _cntx.ProductOptions.GetById(id);
+            var model = new ProductOptionDeleteVM
+            {
+                Id = id,
+                ProductId = productOption.ProductId,
+                OptionName = productOption.Name
+            };
+
+            return PartialView("_DeleteProductOptionModal", model);
+        }
+        [HttpPost]
+        public IActionResult DeleteProductOption(ProductOptionDeleteVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_DeleteProductOptionModal", model);
+            }
+
+            var productOption = _cntx.ProductOptions.GetById(model.Id);
+            _cntx.ProductOptions.Delete(productOption);
+            _cntx.Save();
+
+            TempData["SM_option"] = _resources["ProductOptionWasDeleted"].Value;
+            return RedirectToAction("EditProduct", new { id = model.ProductId });
+        }
+
+        [HttpGet]
+        public IActionResult CreateProductOption(int id)
+        {
+            var model = new ProductOptionEditVM() { ProductId = id };
+            return PartialView("_CreateProductOptionModal", model);
+        }
+        [HttpPost]
+        public IActionResult CreateProductOption(ProductOptionEditVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_CreateProductOptionModal", model);
+            }
+            var productOption = new ProductOption
+            {
+                ProductId = model.ProductId,
+                Name = model.Name,
+                IsActive = model.IsActive,
+                IsBlocked = model.IsBlocked
+            };
+
+            _cntx.ProductOptions.Insert(productOption);
+            _cntx.Save();
+
+            TempData["SM_option"] = _resources["ProductOptionWasAdded"].Value;
+            return RedirectToAction("EditProduct", new { id = productOption.ProductId });
+        }
+        #endregion
+
+        [HttpGet]
+        public IActionResult EditProductPage(int id)
+        {
+            var productPage = _cntx.ProductPages.GetById(id);
+            var model = new ProductPageEditVM(productPage);
+
+            return View("EditProductPage", model);
+        }
+        [HttpPost]
+        public IActionResult EditProductPage(ProductPageEditVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("EditProductPage", model);
+            }
+            var productPage = _cntx.ProductPages.GetById(model.Id);
+            productPage.Name = model.Name;
+            productPage.Body = model.PageBody;
+            productPage.IsActive = model.IsActive;
+            productPage.IsBlocked = model.IsBlocked;
+
+            _cntx.ProductPages.Update(productPage);
+            _cntx.Save();
+
+            TempData["SM_page"] = _resources["ProductPageWasEdited"].Value;
+            return RedirectToAction("EditProduct", new { id = productPage.ProductId });
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProductPage(int id)
+        {
+            var productPage = _cntx.ProductPages.GetById(id);
+            var model = new ProductPageDeleteVM
+            {
+                Id = id,
+                ProductId = productPage.ProductId,
+                PageName = productPage.Name
+            };
+
+            return PartialView("_DeleteProductPageModal", model);
+        }
+        [HttpPost]
+        public IActionResult DeleteProductPage(ProductPageDeleteVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_DeleteProductPageModal", model);
+            }
+
+            var productPage = _cntx.ProductPages.GetById(model.Id);
+            _cntx.ProductPages.Delete(productPage);
+            _cntx.Save();
+
+            TempData["SM_page"] = _resources["ProductPageWasDeleted"].Value;
+            return RedirectToAction("EditProduct", new { id = model.ProductId });
+        }
+
+        [HttpGet]
+        public IActionResult CreateProductPage(int id)
+        {
+            var model = new ProductPageEditVM() { ProductId = id };
+            return View("CreateProductPage", model);
+        }
+        [HttpPost]
+        public IActionResult CreateProductPage(ProductPageEditVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("CreateProductPage", model);
+            }
+            var productPage = new ProductPage
+            {
+                ProductId = model.ProductId,
+                Name = model.Name,
+                Body = model.PageBody,
+                IsActive = model.IsActive,
+                IsBlocked = model.IsBlocked
+            };
+
+            _cntx.ProductPages.Insert(productPage);
+            _cntx.Save();
+
+            TempData["SM_page"] = _resources["ProductPageWasAdded"].Value;
+            return RedirectToAction("EditProduct", new { id = productPage.ProductId });
         }
     }
 }

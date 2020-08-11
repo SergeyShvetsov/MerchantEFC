@@ -9,8 +9,6 @@
     ViewData["Title"] = "ProductList";
 }
 
-<div id="ModalDialog"></div>
-
 @if (TempData["SM"] != null)
 {
 
@@ -74,7 +72,4 @@ else
     </table>
     @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", null), Bootstrap4PagedListRenderOptions.Default)
 }
-@section Scripts
-{
-    <script src="~/js/ModalDialog.js"></script>
-}
+

@@ -15,27 +15,34 @@ namespace WebUI.Areas.Admin.Models
         public StoreEditVM(Store store)
         {
             Id = store.Id;
-            StoreCode = store.StoreCode;
-            StoreName = store.StoreName;
-            ExchangeValue = store.ExchangeValue.ToString();
+            Code = store.Code;
+            Name = store.Name;
+            Email = store.EmailAddress;
+            Phone = store.Phone;
+            TIN = store.TIN;
             CityName = store.City.Name;
             CityId = store.CityId;
-            Email = store.EmailAddress;
             IsActive = store.IsActive;
             IsBlocked = store.IsBlocked;
         }
         public int Id { get; set; }
         [DisplayName("StoreCode")]
         [Required(ErrorMessage = "StoreCodeRequired")]
-        public string StoreCode { get; set; }
+        public string Code { get; set; }
         [DisplayName("StoreName")]
         [Required(ErrorMessage = "StoreNameRequired")]
-        public string StoreName { get; set; }
+        public string Name { get; set; }
         [DisplayName("Email")]
         [DataType(DataType.EmailAddress, ErrorMessage = "EmailWrongFormat")]
+        [Required(ErrorMessage = "EmailRequired")]
         public string Email { get; set; }
-        [DisplayName("ExchangeValue")]
-        public string ExchangeValue { get; set; }
+        [DisplayName("Phone")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "PhoneWrongFormat")]
+        [Required(ErrorMessage = "PhoneRequired")]
+        public string Phone { get; set; }
+        [DisplayName("TaxIndividualNumber")]
+        [Required(ErrorMessage = "TaxIndividualNumberRequired")]
+        public string TIN { get; set; }
 
         [DisplayName("IsActive")]
         public bool IsActive { get; set; }

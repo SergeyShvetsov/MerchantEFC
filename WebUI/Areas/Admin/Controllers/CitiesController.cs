@@ -68,7 +68,7 @@ namespace WebUI.Areas.Admin.Controllers
         public ActionResult CreateCity()
         {
             ViewBag.TabItem = "Cities";
-            return View("CreateCity", new CityListVM());
+            return PartialView("_CreateCityModal", new CityListVM());
         }
 
         [HttpPost]
@@ -76,14 +76,14 @@ namespace WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return PartialView("_CreateCityModal", model);
             }
             var code = model.Code.NormalizeCode();
             if (!_cntx.Cities.IsUniqCode(code))
             {
                 model.Code = code;
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
-                return View(model);
+                return PartialView("_CreateCityModal", model);
             }
             var city = new City()
             {
@@ -128,16 +128,15 @@ namespace WebUI.Areas.Admin.Controllers
             ViewBag.TabItem = "Cities";
             var city = _cntx.Cities.GetById(id);
             var model = new CityListVM(city);
-            return View(model);
+            return PartialView("_EditCityModal",model);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult EditCity(CityListVM model)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return PartialView("_EditCityModal", model);
             }
             var city = _cntx.Cities.GetById(model.Id);
             var code = model.Code.NormalizeCode();
@@ -145,7 +144,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 model.Code = code;
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
-                return View(model);
+                return PartialView("_EditCityModal", model);
             }
 
             city.Code = code;

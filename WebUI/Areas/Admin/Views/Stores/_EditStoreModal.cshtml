@@ -1,0 +1,85 @@
+﻿@model WebUI.Areas.Admin.Models.StoreEditVM
+@using Data.Model.Models
+@using WebUI.Resources
+@inject LocalizationService resources
+
+<div class="modal fade" id="editStore">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCityLabel">@resources["EditStore"]</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="EditStore">
+                    <input asp-for="Id" type="hidden" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                    @if (ViewBag.AvailableCities != null || ViewBag.AvailableCities.Any())
+                    {
+                        <div class="form-group">
+                            <label asp-for="CityId" class="control-label"></label>
+                            <br />
+                            <select asp-for="CityId" class="form-control custom-select">
+                                @foreach (var item in ViewBag.AvailableCities as List<City>)
+                                {
+                                    if (item.Id == Model.CityId)
+                                    {
+                                        <option selected="selected" value="@item.Id">@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label asp-for="Code" class="control-label"></label>
+                        <input asp-for="Code" class="form-control" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Phone" class="control-label"></label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TIN" class="control-label"></label>
+                        <input asp-for="TIN" class="form-control" />
+                        <span asp-validation-for="TIN" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                        </label>
+                    </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="IsBlocked" /> @Html.DisplayNameFor(model => model.IsBlocked)
+                            </label>
+                        </div>
+                    }
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">@resources["Cancel"]</button>
+                <button type="button" data-save="modal" class="btn btn-outline-primary">@resources["Save"]</button>
+            </div>
+        </div>
+    </div>
+</div>

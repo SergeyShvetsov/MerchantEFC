@@ -402,6 +402,15 @@
   <data name="CreateProduct" xml:space="preserve">
     <value>Создать товар</value>
   </data>
+  <data name="CreateProductModel" xml:space="preserve">
+    <value>Добавить модель</value>
+  </data>
+  <data name="CreateProductOption" xml:space="preserve">
+    <value>Добавить опцию</value>
+  </data>
+  <data name="CreateProductPage" xml:space="preserve">
+    <value>Добавить страницу продукта</value>
+  </data>
   <data name="CreateStore" xml:space="preserve">
     <value>Добавить магазин</value>
   </data>
@@ -421,7 +430,25 @@
     <value>Удалить продукт.</value>
   </data>
   <data name="DeleteProductConfirm" xml:space="preserve">
-    <value>Вы действительно хотите удалить подукт?</value>
+    <value>Вы действительно хотите удалить продукт?</value>
+  </data>
+  <data name="DeleteProductModel" xml:space="preserve">
+    <value>Удаление модели</value>
+  </data>
+  <data name="DeleteProductModelConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить модель?</value>
+  </data>
+  <data name="DeleteProductOption" xml:space="preserve">
+    <value>Удаление опции продукта</value>
+  </data>
+  <data name="DeleteProductOptionConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить опцию?</value>
+  </data>
+  <data name="DeleteProductPage" xml:space="preserve">
+    <value>Удаление страницы продукта</value>
+  </data>
+  <data name="DeleteProductPageConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить страницу продукта?</value>
   </data>
   <data name="DeleteStore" xml:space="preserve">
     <value>Удалить магазин.</value>
@@ -443,6 +470,18 @@
   </data>
   <data name="EditCity" xml:space="preserve">
     <value>Редактировать город</value>
+  </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>Редактировать товар</value>
+  </data>
+  <data name="EditProductModel" xml:space="preserve">
+    <value>Редактировать модель</value>
+  </data>
+  <data name="EditProductOption" xml:space="preserve">
+    <value>Редактировать опцию</value>
+  </data>
+  <data name="EditProductPage" xml:space="preserve">
+    <value>Редактирование страницы продукта</value>
   </data>
   <data name="EditProfile" xml:space="preserve">
     <value>Изменить пользователя</value>
@@ -477,6 +516,9 @@
   <data name="FirstNameRequired" xml:space="preserve">
     <value>Требуется имя</value>
   </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Галерея изображений</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Домашняя</value>
   </data>
@@ -500,6 +542,9 @@
   </data>
   <data name="LastNameRequired" xml:space="preserve">
     <value>Требуется фамилия</value>
+  </data>
+  <data name="ListIsEmpty" xml:space="preserve">
+    <value>Список пуст.</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Войти</value>
@@ -531,6 +576,12 @@
   <data name="ModelSectionName" xml:space="preserve">
     <value>Наименование секции моделей</value>
   </data>
+  <data name="ModelShippingTime" xml:space="preserve">
+    <value>Срок доставки</value>
+  </data>
+  <data name="ModelShippingTimeRequired" xml:space="preserve">
+    <value>Требуется указать срок доставки.</value>
+  </data>
   <data name="NewCityAdded" xml:space="preserve">
     <value>Добавлен новый город</value>
   </data>
@@ -543,8 +594,29 @@
   <data name="NewUserAdded" xml:space="preserve">
     <value>Добавлен новый пользователь.</value>
   </data>
+  <data name="NoGalleryImages" xml:space="preserve">
+    <value>Галерея не содержит изображений.</value>
+  </data>
+  <data name="OptionName" xml:space="preserve">
+    <value>Название опции</value>
+  </data>
   <data name="OptionSectionName" xml:space="preserve">
     <value>Наименование секции опций</value>
+  </data>
+  <data name="PageBody" xml:space="preserve">
+    <value>Содержимое страницы</value>
+  </data>
+  <data name="PageBodyRequired" xml:space="preserve">
+    <value>Требуется содержимое страницы</value>
+  </data>
+  <data name="PageName" xml:space="preserve">
+    <value>Название страницы</value>
+  </data>
+  <data name="PageNameRequired" xml:space="preserve">
+    <value>Требуется название страницы</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Страницы продукта</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
@@ -557,6 +629,15 @@
   </data>
   <data name="Pending" xml:space="preserve">
     <value>Ожидает</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Номер телефона</value>
+  </data>
+  <data name="PhoneRequired" xml:space="preserve">
+    <value>Требуется номер телефона.</value>
+  </data>
+  <data name="PhoneWrongFormat" xml:space="preserve">
+    <value>Неверный формат номера телефона.</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Цена</value>
@@ -572,6 +653,12 @@
   </data>
   <data name="ProductCategoriesRequired" xml:space="preserve">
     <value>Требуется категория товара</value>
+  </data>
+  <data name="ProductCode" xml:space="preserve">
+    <value>Код товара</value>
+  </data>
+  <data name="ProductCodeRequired" xml:space="preserve">
+    <value>Требуется код товара.</value>
   </data>
   <data name="ProductList" xml:space="preserve">
     <value>Список товаров.</value>
@@ -590,6 +677,9 @@
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
+  </data>
+  <data name="SalesPrice" xml:space="preserve">
+    <value>Цена со скидкой</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
@@ -638,6 +728,12 @@
   </data>
   <data name="Superuser" xml:space="preserve">
     <value>Управляющий</value>
+  </data>
+  <data name="TaxIndividualNumber" xml:space="preserve">
+    <value>ИНН</value>
+  </data>
+  <data name="TaxIndividualNumberRequired" xml:space="preserve">
+    <value>Требуется ИНН.</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>Пользователь</value>

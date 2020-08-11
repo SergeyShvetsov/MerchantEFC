@@ -17,11 +17,15 @@ namespace Data.Model.Models
         public int StoreId { get; set; }
         public Store Store { get; set; }
 
+        public string Code { get; set; }
         public string Name { get; set; }
-        public string Brand { get; set; }
-        public string Categories { get; set; }
-        public string Shipping { get; set; }
         public string Description { get; set; }
+        public string Brand { get; set; }
+        
+        public string Categories { get; set; }
+        public IEnumerable<string> CategoryList => Categories.Split(';');
+
+        public string Shipping { get; set; }
 
         [Column(TypeName = "image")]
         public byte[] LargeImage { get; set; }
@@ -41,6 +45,9 @@ namespace Data.Model.Models
         public bool IsActive { get; set; }
         public bool IsBlocked { get; set; }
         public bool IsArchived { get; set; }
+        public bool IsAvailable => IsActive && !IsBlocked && !IsArchived;
+
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

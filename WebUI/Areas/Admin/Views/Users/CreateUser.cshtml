@@ -1,5 +1,5 @@
 ﻿@using WebUI.Areas.Admin.Models
-@using Microsoft.AspNetCore.Mvc.Localization
+@using Data.Model.Models
 @using WebUI.Resources
 @inject LocalizationService resources
 @model UserEditVM
@@ -53,15 +53,15 @@
                         {
                             <option selected="selected" value="0">None</option>
                         }
-                        @foreach (var item in ViewBag.AvailableStores as List<StoreListVM>)
+                        @foreach (var item in ViewBag.AvailableStores as List<Store>)
                         {
-                            if (Model.StoreId != null && item.StoreId == Model.StoreId)
+                            if (Model.StoreId != null && item.Id == Model.StoreId)
                             {
-                                <option selected="selected" value="@item.StoreId">@item.StoreName</option>
+                                <option selected="selected" value="@item.Id">@item.Name</option>
                             }
                             else
                             {
-                                <option value="@item.StoreId">@item.StoreName</option>
+                                <option value="@item.Id">@item.Name</option>
                             }
                         }
                     </select>
