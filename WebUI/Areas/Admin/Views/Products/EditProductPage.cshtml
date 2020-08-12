@@ -14,13 +14,29 @@
 <form asp-action="EditProductPage" method="post">
     <input type="hidden" asp-for="ProductId" class="form-control" />
     <input type="hidden" asp-for="Id" class="form-control" />
-
-    <div class="row form-group">
-        <label asp-for="Name" class="control-label"></label>&nbsp;
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="row">
+        <div class="col">
+            <label asp-for="Name" class="control-label"></label>
+        </div>
     </div>
-    <div class="form-row">
+    <div class="row form-group">
+        <div class="col">
+            <label asp-for="Name_ru" class="control-label"></label>&nbsp;
+            <input asp-for="Name_ru" class="form-control" />
+            <span asp-validation-for="Name_ru" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="Name_uz_c" class="control-label"></label>&nbsp;
+            <input asp-for="Name_uz_c" class="form-control" />
+            <span asp-validation-for="Name_uz_c" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="Name_uz_l" class="control-label"></label>&nbsp;
+            <input asp-for="Name_uz_l" class="form-control" />
+            <span asp-validation-for="Name_uz_l" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
         <div class="col">
             <div class="form-group">
                 <textarea rows="3" asp-for="PageBody" class="form-control"></textarea>

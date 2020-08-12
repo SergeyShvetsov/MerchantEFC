@@ -13,11 +13,27 @@
 
 <form asp-action="CreateProductPage" enctype="multipart/form-data">
     <input type="hidden" asp-for="ProductId" class="form-control" />
-
+    <div class="row">
+        <div class="col">
+            <label asp-for="Name" class="control-label"></label>
+        </div>
+    </div>
     <div class="row form-group">
-        <label asp-for="Name" class="control-label"></label>&nbsp;
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <div class="col">
+            <label asp-for="Name_ru" class="control-label"></label>&nbsp;
+            <input asp-for="Name_ru" class="form-control" />
+            <span asp-validation-for="Name_ru" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="Name_uz_c" class="control-label"></label>&nbsp;
+            <input asp-for="Name_uz_c" class="form-control" />
+            <span asp-validation-for="Name_uz_c" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="Name_uz_l" class="control-label"></label>&nbsp;
+            <input asp-for="Name_uz_l" class="form-control" />
+            <span asp-validation-for="Name_uz_l" class="text-danger"></span>
+        </div>
     </div>
     <div class="form-row">
         <div class="col">
