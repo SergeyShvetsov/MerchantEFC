@@ -13,7 +13,7 @@
 
 <form asp-action="CreateProductPage" enctype="multipart/form-data">
     <input type="hidden" asp-for="ProductId" class="form-control" />
-    
+
     <div class="row form-group">
         <label asp-for="Name" class="control-label"></label>&nbsp;
         <input asp-for="Name" class="form-control" />
@@ -38,7 +38,9 @@
 </form>
 @section Scripts {
     <script>
-        CKEDITOR.replace("PageBody");
+        $(document).ready(function () {
+            CKEDITOR.replace("PageBody");
+        });
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

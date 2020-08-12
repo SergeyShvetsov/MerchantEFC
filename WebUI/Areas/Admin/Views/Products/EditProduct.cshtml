@@ -103,24 +103,39 @@
         </div>
     </div>
     <div class="row section-header">
-        <div class="col form-inline">
-            <label asp-for="ModelSectionName" class="form-label mb-2"></label>&nbsp;
-            <div class="input-group-prepend">
-                <input asp-for="ModelSectionName" class="form-control" />
-            </div>
-        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <label class="control-label">@resources["ModelSectionName"]</label>
 
-        @if (TempData["SM_model"] != null)
-        {
-            <div class="col alert alert-success">
-                @TempData["SM_model"]
+                </div>
+                @if (TempData["SM_model"] != null)
+                {
+                    <div class="col alert alert-success">
+                        @TempData["SM_model"]
+                    </div>
+                }
+                <div class="col" style="text-align: right;">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                            data-target="#createProductModel" data-url="@Url.Action($"CreateProductModel/{Model.ProductId}")">
+                        @resources["CreateProductModel"]
+                    </button>
+                </div>
             </div>
-        }
-        <div class="col" style="text-align: right;">
-            <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
-                    data-target="#createProductModel" data-url="@Url.Action($"CreateProductModel/{Model.ProductId}")">
-                @resources["CreateProductModel"]
-            </button>
+            <div class="row">
+                <div class="col">
+                    <label asp-for="ModelSectionName_ru" class="control-label"></label>
+                    <input asp-for="ModelSectionName_ru" class="form-control" />
+                </div>
+                <div class="col">
+                    <label asp-for="ModelSectionName_uz_c" class="control-label"></label>
+                    <input asp-for="ModelSectionName_uz_c" class="form-control" />
+                </div>
+                <div class="col">
+                    <label asp-for="ModelSectionName_uz_l" class="control-label"></label>
+                    <input asp-for="ModelSectionName_uz_l" class="form-control" />
+                </div>
+            </div>
         </div>
     </div>
     @if (Model.ProductModels == null || !Model.ProductModels.Any())
@@ -160,24 +175,38 @@
         </div>
     }
     <div class="row section-header">
-        <div class="col form-inline">
-            <label asp-for="OptionSectionName" class="form-label mb-2"></label>&nbsp;
-            <div class="input-group-prepend">
-                <input asp-for="OptionSectionName" class="form-control" />
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <label class="control-label">@resources["OptionSectionName"]</label>
+                </div>
+                @if (TempData["SM_option"] != null)
+                {
+                    <div class="col alert alert-success">
+                        @TempData["SM_option"]
+                    </div>
+                }
+                <div class="col" style="text-align: right;">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                            data-target="#createProductOption" data-url="@Url.Action($"CreateProductOption/{Model.ProductId}")">
+                        @resources["CreateProductOption"]
+                    </button>
+                </div>
             </div>
-        </div>
-
-        @if (TempData["SM_option"] != null)
-        {
-            <div class="col alert alert-success">
-                @TempData["SM_option"]
+            <div class="row">
+                <div class="col">
+                    <label asp-for="OptionSectionName_ru" class="control-label"></label>
+                    <input asp-for="OptionSectionName_ru" class="form-control" />
+                </div>
+                <div class="col">
+                    <label asp-for="OptionSectionName_uz_c" class="control-label"></label>
+                    <input asp-for="OptionSectionName_uz_c" class="form-control" />
+                </div>
+                <div class="col">
+                    <label asp-for="OptionSectionName_uz_l" class="control-label"></label>
+                    <input asp-for="OptionSectionName_uz_l" class="form-control" />
+                </div>
             </div>
-        }
-        <div class="col" style="text-align: right;">
-            <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
-                    data-target="#createProductOption" data-url="@Url.Action($"CreateProductOption/{Model.ProductId}")">
-                @resources["CreateProductOption"]
-            </button>
         </div>
     </div>
     @if (Model.ProductOptions == null || !Model.ProductOptions.Any())
@@ -238,16 +267,20 @@
     else
     {
         <div class="row">
-            <table class="table">
+            <table class="table sorting" id="pages">
                 <tbody>
                     @foreach (var pg in Model.ProductPages)
                     {
-                        <tr>
+                        <tr id="id_@pg.Id">
                             <td>
-                                <input type="hidden" value="@pg.Id" />
-                                <div class="form-row">
-                                    <div class="col">
-                                        <label class="control-label">@pg.Name</label>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-0">
+                                            <div class="ui-icon ui-icon-arrowthick-2-n-s" style="font-size: 14px "></div>
+                                        </div>
+                                        <div class="col">
+                                            <label class="control-label">@pg.Name</label>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -357,6 +390,20 @@
 
             $.post(url, { id: imgId }, function (data) { $this.parent().parent().parent().fadeOut("slow"); });
         });
+
+        /* Sorting script */
+        $("table#pages tbody").sortable({
+            items: "tr:not(.home)",
+            placeholder: "ui-state-highlight",
+            update: function () {
+                var ids = $("table#pages tbody").sortable("serialize");
+                // console.log(ids)
+                var url = "/Admin/Products/ReorderPages";
+
+                $.post(url, { ids });
+            }
+        });
+
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

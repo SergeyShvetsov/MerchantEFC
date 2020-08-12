@@ -15,8 +15,8 @@ namespace WebUI.Areas.Admin.Models
         {
             Id = model.Id;
             ProductId = model.ProductId;
+            Code = model.Code;
             Name = model.Name;
-            Description = model.Description;
             ShippingTime = model.ShippingTime;
             Price = model.Price;
             PriceUSD = model.PriceUSD;
@@ -29,12 +29,12 @@ namespace WebUI.Areas.Admin.Models
         public int Id { get; set; }
         public int ProductId { get; set; }
 
+        [DisplayName("ModelCode")]
+        [Required(ErrorMessage = "ModelCodeRequired")]
+        public string Code { get; set; }
         [DisplayName("ModelName")]
         [Required(ErrorMessage = "ModelNameRequired")]
         public string Name { get; set; }
-        [DisplayName("ModelDescription")]
-        [Required(ErrorMessage = "ModelDescriptionRequired")]
-        public string Description { get; set; }
         [DisplayName("ModelShippingTime")]
         [Required(ErrorMessage = "ModelShippingTimeRequired")]
         public string ShippingTime { get; set; }

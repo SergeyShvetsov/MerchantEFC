@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,16 +44,46 @@ namespace WebUI.Areas.Admin.Models
         public bool ProductImageChanged { get; set; }
         public byte[] LargeImage { get; set; }
 
-        public virtual List<byte[]> Gallery { get; set; }
+        //public virtual List<byte[]> Gallery { get; set; }
 
+        [DisplayName("Русский")]
+        public string ModelSectionName_ru { get; set; }
+        [DisplayName("Ўзбекча")]
+        public string ModelSectionName_uz_c { get; set; }
+        [DisplayName("O‘zbek")]
+        public string ModelSectionName_uz_l { get; set; }
         [DisplayName("ModelSectionName")]
-        public string ModelSectionName { get; set; }
+        public string ModelSectionName => GetTranslatedModelSectionName();
 
         //========== First Model Required
         public ProductModelEditVM ProductModel { get; set; }
 
+        [DisplayName("Русский")]
+        public string OptionSectionName_ru { get; set; }
+        [DisplayName("Ўзбекча")]
+        public string OptionSectionName_uz_c { get; set; }
+        [DisplayName("O‘zbek")]
+        public string OptionSectionName_uz_l { get; set; }
         [DisplayName("OptionSectionName")]
-        public string OptionSectionName { get; set; }
-        
+        public string OptionSectionName => GetTranslatedOptionSectionName();
+
+        private string GetTranslatedModelSectionName()
+        {
+            switch (CultureInfo.CurrentCulture.Name)
+            {
+                case "uz-Cyrl": return ModelSectionName_uz_c;
+                case "uz-Latn": return ModelSectionName_uz_l;
+                default: return ModelSectionName_ru;
+            }
+        }
+        private string GetTranslatedOptionSectionName()
+        {
+            switch (CultureInfo.CurrentCulture.Name)
+            {
+                case "uz-Cyrl": return OptionSectionName_uz_c;
+                case "uz-Latn": return OptionSectionName_uz_l;
+                default: return OptionSectionName_ru;
+            }
+        }
     }
 }

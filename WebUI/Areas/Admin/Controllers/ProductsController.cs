@@ -75,7 +75,7 @@ namespace WebUI.Areas.Admin.Controllers
                 .Select(s => new Select2ListItem
                 {
                     id = s.Id,
-                    text = s.Name + " (" + s.City.Code + ")"
+                    text = s.Name + " (" + s.City.Name + ")"
                 });
 
             if (!(string.IsNullOrEmpty(search) || string.IsNullOrWhiteSpace(search)))
@@ -128,12 +128,16 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 StoreId = model.SelectedStore,
                 Code = model.Code,
+                Name = model.Name,
                 Brand = model.Brand,
                 Categories = model.Categories,
                 Shipping = model.Shipping,
-                Description = model.Description,
-                ModelSectionName = model.ModelSectionName,
-                OptionSectionName = model.OptionSectionName,
+                ModelSectionName_ru = model.ModelSectionName_ru,
+                ModelSectionName_uz_c = model.ModelSectionName_uz_c,
+                ModelSectionName_uz_l = model.ModelSectionName_uz_l,
+                OptionSectionName_ru = model.OptionSectionName_ru,
+                OptionSectionName_uz_c = model.OptionSectionName_uz_c,
+                OptionSectionName_uz_l = model.OptionSectionName_uz_l,
                 IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked
             };
@@ -182,7 +186,7 @@ namespace WebUI.Areas.Admin.Controllers
             var mod = new ProductModel()
             {
                 Name = model.ProductModel.Name,
-                Description = model.ProductModel.Description,
+                Code = model.ProductModel.Code,
                 Product = product,
                 ShippingTime = model.ProductModel.ShippingTime,
                 Price = model.ProductModel.Price,
@@ -237,9 +241,10 @@ namespace WebUI.Areas.Admin.Controllers
                 .ApplyArchivedFilter()
                 .Select(s => new ProductOptionEditVM(s))
                 .ToList();
-            model.ProductPages = _cntx.ProductPages.GetByAllByProduct(product.Id)
+            model.ProductPages = _cntx.ProductPages.GetAllByProduct(product.Id)
                 .ApplyArchivedFilter()
                 .Select(s => new ProductPageEditVM(s))
+                .OrderBy(o=>o.SortOrder)
                 .ToList();
             model.Gallery = _cntx.ProductImages.GetByAllByProduct(product.Id)
                 .ApplyArchivedFilter()
@@ -274,9 +279,12 @@ namespace WebUI.Areas.Admin.Controllers
             product.Brand = model.Brand;
             product.Categories = model.Categories;
             product.Shipping = model.Shipping;
-            product.Description = model.Description;
-            product.ModelSectionName = model.ModelSectionName;
-            product.OptionSectionName = model.OptionSectionName;
+            product.ModelSectionName_ru = model.ModelSectionName_ru;
+            product.ModelSectionName_uz_c = model.ModelSectionName_uz_c;
+            product.ModelSectionName_uz_l = model.ModelSectionName_uz_l;
+            product.OptionSectionName_ru = model.OptionSectionName_ru;
+            product.OptionSectionName_uz_c = model.OptionSectionName_uz_c;
+            product.OptionSectionName_uz_l = model.OptionSectionName_uz_l;
             product.IsActive = model.IsActive;
             product.IsBlocked = model.IsBlocked;
 
@@ -424,7 +432,7 @@ namespace WebUI.Areas.Admin.Controllers
 
             var productModel = _cntx.ProductModels.GetById(model.Id);
             productModel.Name = model.Name;
-            productModel.Description = model.Description;
+            productModel.Code = model.Code;
             productModel.ShippingTime = model.ShippingTime;
             productModel.Price = model.Price;
             productModel.PriceUSD = model.PriceUSD;
@@ -447,7 +455,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 Id = id,
                 ProductId = productModel.ProductId,
-                ModelName = productModel.Description
+                ModelName = productModel.Name
             };
 
             return PartialView("_DeleteProductModelModal", model);
@@ -490,7 +498,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 ProductId = model.ProductId,
                 Name = model.Name,
-                Description = model.Description,
+                Code = model.Code,
                 ShippingTime = model.ShippingTime,
                 Price = model.Price,
                 PriceUSD = model.PriceUSD,
@@ -608,7 +616,9 @@ namespace WebUI.Areas.Admin.Controllers
                 return View("EditProductPage", model);
             }
             var productPage = _cntx.ProductPages.GetById(model.Id);
-            productPage.Name = model.Name;
+            productPage.Name_ru = model.Name_ru;
+            productPage.Name_uz_c = model.Name_uz_c;
+            productPage.Name_uz_l = model.Name_uz_l;
             productPage.Body = model.PageBody;
             productPage.IsActive = model.IsActive;
             productPage.IsBlocked = model.IsBlocked;
@@ -662,13 +672,22 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return View("CreateProductPage", model);
             }
+            var pages = _cntx.ProductPages.GetAllByProduct(model.ProductId).ApplyArchivedFilter();
+            var max = 1;
+            if (pages.Any())
+            {
+                max = _cntx.ProductPages.GetAllByProduct(model.ProductId).Max(m => m.SortOrder) + 1;
+            }
             var productPage = new ProductPage
             {
                 ProductId = model.ProductId,
-                Name = model.Name,
+                Name_ru = model.Name_ru,
+                Name_uz_c = model.Name_uz_c,
+                Name_uz_l = model.Name_uz_l,
                 Body = model.PageBody,
                 IsActive = model.IsActive,
-                IsBlocked = model.IsBlocked
+                IsBlocked = model.IsBlocked,
+                SortOrder = max
             };
 
             _cntx.ProductPages.Insert(productPage);
@@ -676,6 +695,22 @@ namespace WebUI.Areas.Admin.Controllers
 
             TempData["SM_page"] = _resources["ProductPageWasAdded"].Value;
             return RedirectToAction("EditProduct", new { id = productPage.ProductId });
+        }
+
+        [HttpPost]
+        public void ReorderPages(string ids)
+        {
+            var idsArray = ids.Replace("id[]=", "").Split('&');
+            int count = 1;
+
+            ProductPage page;
+            foreach (var catId in idsArray)
+            {
+                var guid = Convert.ToInt32(catId);
+                page = _cntx.ProductPages.GetById(guid);
+                page.SortOrder = count++;
+                _cntx.Save();
+            }
         }
     }
 }

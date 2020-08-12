@@ -561,6 +561,9 @@
   <data name="Manager" xml:space="preserve">
     <value>Менеджер</value>
   </data>
+  <data name="ModelCode" xml:space="preserve">
+    <value>Код модели</value>
+  </data>
   <data name="ModelDescription" xml:space="preserve">
     <value>Описание модели</value>
   </data>
@@ -671,6 +674,9 @@
   </data>
   <data name="ProductNameRequired" xml:space="preserve">
     <value>Требуется наименование товара.</value>
+  </data>
+  <data name="ProductPageName" xml:space="preserve">
+    <value>Название страницы</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Товары</value>

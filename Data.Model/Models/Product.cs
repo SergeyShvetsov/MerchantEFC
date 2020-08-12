@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Text;
 
 namespace Data.Model.Models
@@ -36,10 +37,18 @@ namespace Data.Model.Models
 
         public virtual List<ProductImage> Gallery { get; set; }
 
-        public string ModelSectionName { get; set; } 
+        public string ModelSectionName_ru { get; set; }
+        public string ModelSectionName_uz_c { get; set; }
+        public string ModelSectionName_uz_l { get; set; }
+        public string ModelSectionName => GetTranslatedModelSectionName();
         public virtual List<ProductModel> Models { get; set; }
-        public string OptionSectionName { get; set; }
+        
+        public string OptionSectionName_ru { get; set; }
+        public string OptionSectionName_uz_c { get; set; }
+        public string OptionSectionName_uz_l { get; set; }
+        public string OptionSectionName => GetTranslatedOptionSectionName();
         public virtual List<ProductOption> Options { get; set; }
+        
         public virtual List<ProductComment> Comments { get; set; }
 
         public bool IsActive { get; set; }
@@ -49,5 +58,24 @@ namespace Data.Model.Models
 
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        private string GetTranslatedModelSectionName()
+        {
+            switch (CultureInfo.CurrentCulture.Name)
+            {
+                case "uz-Cyrl": return ModelSectionName_uz_c;
+                case "uz-Latn": return ModelSectionName_uz_l;
+                default: return ModelSectionName_ru;
+            }
+        }
+        private string GetTranslatedOptionSectionName()
+        {
+            switch (CultureInfo.CurrentCulture.Name)
+            {
+                case "uz-Cyrl": return OptionSectionName_uz_c;
+                case "uz-Latn": return OptionSectionName_uz_l;
+                default: return OptionSectionName_ru;
+            }
+        }
     }
 }
