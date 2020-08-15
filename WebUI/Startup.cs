@@ -115,7 +115,7 @@ namespace WebUI
             {
                 routes.MapRoute(name: "areas", template: "{area:exists}/{controller=Pages}/{action=Index}/{id?}");
                 routes.MapRoute(name: "account", template: "Account/{action?}/{id?}", defaults: new { controller = "Account", action = "Index" });
-                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(name: "default", template: "{controller=Shop}/{action=Index}/{id?}");
             });
 
             //app.UseRouting();

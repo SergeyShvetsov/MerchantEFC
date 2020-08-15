@@ -10,9 +10,16 @@
         {
             <div class="col-6 col-lg-4 col-xl-3 col-xxl-auto product-card mt-5 mb-2">
                 <a href="" style="text-decoration: none;">
-                    <img src="data:image;base64,@item.Base64Image">
+                    @if (item.Image == null)
+                    {
+                        <img src="~/Images/no_image.png" />
+                    }
+                    else
+                    {
+                        <img src="data:image;base64,@item.Base64Image">
+                    }
                     <p>@item.Name</p>
-                    <p >@item.PriceText</p>
+                    <p>@item.PriceText</p>
                 </a>
             </div>
         }

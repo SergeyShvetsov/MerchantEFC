@@ -21,12 +21,12 @@ namespace WebUI.Models
             }
             Image = product.SmallImage;
             MinPrice = product.Models?.Min(x => x.SalesPrice ?? x.Price ?? 0);
-            MinPrice = product.Models?.Min(x => x.SalesPrice ?? x.Price ?? 0);
+            MaxPrice = product.Models?.Max(x => x.SalesPrice ?? x.Price ?? 0);
         }
 
         public string Name { get; set; }
         public byte[] Image { get; set; }
-        public string Base64Image => Convert.ToBase64String(Image);
+        public string Base64Image => Image != null ? Convert.ToBase64String(Image) : "";
         public double? MinPrice { get; set; }
         public double? MaxPrice { get; set; }
         public string PriceText

@@ -17,6 +17,7 @@ namespace WebUI.Areas.Admin.Models
         public ProductEditVM(Product product) 
         {
             ProductId = product.Id;
+            SelectedStore = product.StoreId;
             Name = product.Name;
             Code = product.Code;
             Brand = product.Brand;

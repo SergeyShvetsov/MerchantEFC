@@ -375,7 +375,6 @@ D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\staticwebassets\WebUI.StaticWe
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.dll
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.pdb
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.genruntimeconfig.cache
-D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Home\Index.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Users\List.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Shared\_Layout.cshtml.g.cs
@@ -593,7 +592,6 @@ D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\uz-Latn\WebUI.resources.dll
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Cities\List.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Users\EditUser.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Users\_DeleteUserModal.cshtml.g.cs
-D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Home\Category.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_SelectLanguagePartial.cshtml.g.cs
 C:\Work\WebUI\bin\Debug\netcoreapp3.1\appconfig.Development.json
 C:\Work\WebUI\bin\Debug\netcoreapp3.1\appconfig.json
@@ -819,9 +817,11 @@ D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Produc
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Products\_DeleteProductPageModal.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Products\EditProductPage.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Products\CreateProductPage.cshtml.g.cs
-D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Home\Catalog.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Castle.Core.dll
 D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.csproj.CoreCompileInputs.cache
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.MvcApplicationPartsAssemblyInfo.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.MvcApplicationPartsAssemblyInfo.cache
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shop\Catalog.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shop\Category.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shop\Index.cshtml.g.cs

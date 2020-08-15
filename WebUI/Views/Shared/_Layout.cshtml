@@ -37,7 +37,7 @@
                                     @Html.ActionLink(Resource["Administration"], "Index", "Home", new { area = "Admin" }, new { @class = "btn btn-light" })
                                 }
                                 @Html.ActionLink(Resource["Logout"], "Logout", "Account", new { }, new { @class = "btn btn-light" })
-                                if (!User.IsInRole("Admin"))
+                                if (User.IsInRole("User"))
                                 {
                                     @await Component.InvokeAsync("UserNav", ViewBag.Title == "User Profile")
                                 }
@@ -68,7 +68,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     @foreach (var cat in Catalog.Categories.Where(x => x.IsActive).OrderBy(o => o.SortOrder))
                     {
-                        @Html.ActionLink(Resource["cat" + cat.Code], "Category", "Home", new { cat = cat.Code }, new { @class = "dropdown-item" })
+                        @Html.ActionLink(Resource["cat" + cat.Code], "Category", "Shop", new { cat = cat.Code }, new { @class = "dropdown-item" })
                     }
                 </div>
             </div>
@@ -84,7 +84,7 @@
     </div>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.Now.Year - @Resource["AppName"] - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - @Resource["AppName"] - <a asp-area="" asp-controller="Shop" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 </body>

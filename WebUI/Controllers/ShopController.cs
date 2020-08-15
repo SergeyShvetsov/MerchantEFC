@@ -22,7 +22,7 @@ using X.PagedList;
 
 namespace WebUI.Controllers
 {
-    public class HomeController : Controller
+    public class ShopController : Controller
     {
         private readonly ApplicationContext _cntx;
         private readonly IStringLocalizer _resources;
@@ -30,7 +30,7 @@ namespace WebUI.Controllers
         private readonly AppConfig _config;
         private readonly IEnumerable<Category> _categories;
 
-        public HomeController(ApplicationContext context, IStringLocalizerFactory localizer, ICatalogService catalog, IWebHostEnvironment _env, IOptions<AppConfig> config)
+        public ShopController(ApplicationContext context, IStringLocalizerFactory localizer, ICatalogService catalog, IWebHostEnvironment _env, IOptions<AppConfig> config)
         {
             _cntx = context;
             _resources = localizer.GetLocalResources();

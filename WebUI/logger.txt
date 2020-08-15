@@ -1,4 +1,4 @@
-Start application. 08/15/2020 16:58:26
+Start application. 08/15/2020 18:01:23
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Development
 Content root path: D:\Work\MerchantEFC\WebUI

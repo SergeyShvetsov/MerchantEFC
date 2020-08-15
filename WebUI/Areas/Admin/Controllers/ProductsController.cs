@@ -223,14 +223,12 @@ namespace WebUI.Areas.Admin.Controllers
             model.StoreList = GetStoreSelect2List("");
 
             model.ProductModels = _cntx.ProductModels.Where(x => x.ProductId == product.Id)
-                .ApplyArchivedFilter()
-                .Select(s => new ProductModelEditVM(s))
-                .ToList();
+                .ApplyArchivedFilter().ToList()
+                .Select(s => new ProductModelEditVM(s)).ToList();
             model.ProductOptions = _cntx.ProductOptions.Where(x => x.ProductId == product.Id)
-                .ApplyArchivedFilter()
-                .Select(s => new ProductOptionEditVM(s))
-                .ToList();
-            model.ProductPages = _cntx.ProductPages.Where(x => x.ProductId == product.Id)
+                .ApplyArchivedFilter().ToList()
+                .Select(s => new ProductOptionEditVM(s)).ToList();
+            model.ProductPages = _cntx.ProductPages.Where(x => x.ProductId == product.Id).ToList()
                 .Select(s => new ProductPageEditVM(s))
                 .OrderBy(o => o.SortOrder)
                 .ToList();
