@@ -7,5 +7,7 @@ namespace Data.Model.Interfaces
     public interface IArchivableEntity
     {
         bool IsArchived { get; set; }
+
+        void Archive(ApplicationContext context);
     }
 }

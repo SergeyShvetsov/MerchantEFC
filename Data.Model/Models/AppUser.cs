@@ -12,7 +12,7 @@ namespace Data.Model.Models
     //public class User : IdentityUser { }
 
     [Table("Users")]
-    public class AppUser : IArchivableEntity
+    public class AppUser : BaseEntity, IArchivableEntity
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -24,10 +24,10 @@ namespace Data.Model.Models
         public string Password { get; set; }
 
         public int? CityId { get; set; }
-        public City City { get; set; }
+        public virtual City City { get; set; }
 
         public int? StoreId { get; set; }
-        public Store Store { get; set; }
+        public virtual Store Store { get; set; }
 
 
         public RoleType UserRole { get; set; } = RoleType.User;
@@ -41,5 +41,11 @@ namespace Data.Model.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime LastVisit { get; set; }
         public int AttemptsCount { get; set; }
+
+        public void Archive(ApplicationContext context)
+        {
+            IsArchived = true;
+            context.Update(this);
+        }
     }
 }

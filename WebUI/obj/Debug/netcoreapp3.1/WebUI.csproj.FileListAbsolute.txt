@@ -352,9 +352,6 @@ D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Data.Tools.pdb
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.csprojAssemblyReference.cache
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.AssemblyInfoInputs.cache
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.AssemblyInfo.cs
-D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.csproj.CoreCompileInputs.cache
-D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.MvcApplicationPartsAssemblyInfo.cs
-D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.MvcApplicationPartsAssemblyInfo.cache
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.RazorAssemblyInfo.cache
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.RazorAssemblyInfo.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.TagHelpers.input.cache
@@ -822,3 +819,9 @@ D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Produc
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Products\_DeleteProductPageModal.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Products\EditProductPage.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Products\CreateProductPage.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Home\Catalog.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Castle.Core.dll
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.csproj.CoreCompileInputs.cache
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.MvcApplicationPartsAssemblyInfo.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.MvcApplicationPartsAssemblyInfo.cache

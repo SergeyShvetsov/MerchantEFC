@@ -3,7 +3,6 @@
 @using WebUI.Services
 @inject LocalizationService Resource
 @inject ICatalogService Catalog
-@inject IWebHostEnvironment _env
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +66,7 @@
                     Каталог
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    @foreach (var cat in Catalog.GetCategories(_env.WebRootPath).Where(x => x.IsActive).OrderBy(o => o.SortOrder))
+                    @foreach (var cat in Catalog.Categories.Where(x => x.IsActive).OrderBy(o => o.SortOrder))
                     {
                         @Html.ActionLink(Resource["cat" + cat.Code], "Category", "Home", new { cat = cat.Code }, new { @class = "dropdown-item" })
                     }

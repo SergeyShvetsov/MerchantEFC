@@ -1,5 +1,4 @@
-﻿using Data.Model.Entities;
-using Data.Model.Models;
+﻿using Data.Model.Models;
 using Data.Tools;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -56,6 +55,8 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("ProductCategories")]
         [Required(ErrorMessage = "ProductCategoriesRequired")]
         public string Categories { get; set; }
+        public IEnumerable<string> CategoryList => Categories.Split(';', options: StringSplitOptions.RemoveEmptyEntries);
+
         [DisplayName("Description")]
         public string Description { get; set; }
         [DisplayName("IsActive")]

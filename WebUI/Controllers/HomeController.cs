@@ -7,27 +7,38 @@ using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
+using Data.Tools.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using WebUI.Extensions;
+using WebUI.Models;
 using WebUI.Resources;
 using WebUI.Services;
+using X.PagedList;
 
 namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IEntityContext _cntx;
+        private readonly ApplicationContext _cntx;
         private readonly IStringLocalizer _resources;
-        private readonly List<Category> _catalog;
-        public HomeController(IEntityContext context, IStringLocalizerFactory localizer, ICatalogService catalog, IWebHostEnvironment _env)
+        private readonly ICatalogService _catalog;
+        private readonly AppConfig _config;
+        private readonly IEnumerable<Category> _categories;
+
+        public HomeController(ApplicationContext context, IStringLocalizerFactory localizer, ICatalogService catalog, IWebHostEnvironment _env, IOptions<AppConfig> config)
         {
             _cntx = context;
             _resources = localizer.GetLocalResources();
-            _catalog = catalog.GetCategories(_env.WebRootPath).ToList();
+
+            _categories = catalog.Categories;
+            _catalog = catalog;
+
+            _config = config.Value;
         }
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
@@ -41,9 +52,8 @@ namespace WebUI.Controllers
         }
         public IActionResult Index()
         {
-            var users = _cntx.Users.GetAll().ApplyArchivedFilter();
 
-            if (!users.Any())
+            if (!_cntx.AppUsers.Any())
             {
                 var admin = new AppUser()
                 {
@@ -55,8 +65,8 @@ namespace WebUI.Controllers
                     UserRole = RoleType.Admin
                 };
 
-                _cntx.Users.Insert(admin);
-                _cntx.Save();
+                _cntx.AppUsers.Add(admin);
+                _cntx.SaveChanges();
             }
 
             ViewBag.Title = "Home";
@@ -66,8 +76,27 @@ namespace WebUI.Controllers
         {
             var c = cat == null ? (string)TempData["cat"] : cat;
 
-            var model = _catalog.First(x => x.Code == c);
+            var model = _categories.First(x => x.Code == c);
             return View(model);
+        }
+
+        public IActionResult Catalog(int? page, string c)
+        {
+            var pageNumber = page ?? 1;
+            int pageSize = _config.Admin_RowsPerPage;
+            var cats = _catalog.GetProductCategories().Select(s => s.Code);
+            if (!c.IsNullOrEmpty())
+            {
+                cats = cats.Where(x => x.StartsWith(c));
+            }
+
+            var listOfProducts = _cntx.Products
+                                 .Select(s => new ProductCardVM(s));
+
+            var onePageOfStores = listOfProducts.ToPagedList(pageNumber, pageSize: pageSize);
+
+            ViewBag.Title = "Catalog";
+            return View(onePageOfStores);
         }
     }
 }

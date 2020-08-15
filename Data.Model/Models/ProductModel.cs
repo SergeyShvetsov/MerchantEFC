@@ -8,7 +8,7 @@ using System.Text;
 namespace Data.Model.Models
 {
     [Table("ProductModels")]
-    public class ProductModel : IArchivableEntity
+    public class ProductModel : BaseEntity, IArchivableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,7 +19,7 @@ namespace Data.Model.Models
         public string ShippingTime { get; set; }
 
         public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
         public double? Price { get; set; }
         public double? PriceUSD { get; set; }
@@ -37,5 +37,11 @@ namespace Data.Model.Models
         public bool IsAvailable => IsActive && !IsBlocked && !IsArchived;
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public void Archive(ApplicationContext context)
+        {
+            IsArchived = true;
+            context.ProductModels.Update(this);
+        }
     }
 }

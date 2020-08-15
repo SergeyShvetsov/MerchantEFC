@@ -84,5 +84,5 @@ else
             }
         </tbody>
     </table>
-    @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", null), Bootstrap4PagedListRenderOptions.Default)
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", new { page }), Bootstrap4PagedListRenderOptions.Default)
 }

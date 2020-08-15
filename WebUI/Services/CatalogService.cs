@@ -8,19 +8,26 @@ namespace WebUI.Services
 {
     public interface ICatalogService
     {
-        IEnumerable<Category> GetCategories(string path);
+        IEnumerable<Category> Categories { get; }
         IEnumerable<Category> GetProductCategories();
     }
     public class CatalogService : ICatalogService
     {
-        private IEnumerable<Category> _categories;
+        public IEnumerable<Category> Categories { get; }
+
+        public CatalogService(string path)
+        {
+            Categories = new List<Category>();
+            var rawJson = File.ReadAllText(Path.Combine(path, "catalog.json"));
+            Categories = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(rawJson);
+        }
 
         public IEnumerable<Category> GetProductCategories()
         {
             var result = new List<Category>();
-            if (_categories == null) return result;
+            if (Categories == null) return result;
 
-            foreach (var itm in _categories.Where(x => x.IsActive))
+            foreach (var itm in Categories.Where(x => x.IsActive))
             {
                 result.AddRange(GetRecursiveAllSubCategories(itm));
             }
@@ -41,15 +48,6 @@ namespace WebUI.Services
                 }
             }
 
-        }
-        public IEnumerable<Category> GetCategories(string path)
-        {
-            if (_categories != null) return _categories;
-
-            _categories = new List<Category>();
-            var rawJson = File.ReadAllText(Path.Combine(path, "catalog.json"));
-            _categories = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(rawJson);
-            return _categories;
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    public class City : IArchivableEntity
+    public class City : BaseEntity, IArchivableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,8 +19,28 @@ namespace Data.Model.Models
         public string Name_uz_l { get; set; }
         public string Name => GetTranslatedName();
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Store> Stores { get; set; } = new HashSet<Store>();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AppUser> Users { get; set; } = new HashSet<AppUser>();
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsArchived { get; set; }
+
+        public void Archive(ApplicationContext context)
+        {
+            IsArchived = true;
+            context.Cities.Update(this);
+            foreach(var store in Stores)
+            {
+                store.Archive(context);
+            }
+            foreach(var user in Users)
+            {
+                user.Archive(context);
+            }
+        }
 
         private string GetTranslatedName()
         {

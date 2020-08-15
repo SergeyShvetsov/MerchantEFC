@@ -1,0 +1,20 @@
+﻿@model IEnumerable<WebUI.Models.ProductCardVM>
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+<div class="row mt-5 mb-2">
+    @for (var i = 0; i < 6; i++)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col-6 col-lg-4 col-xl-3 col-xxl-auto product-card mt-5 mb-2">
+                <a href="" style="text-decoration: none;">
+                    <img src="data:image;base64,@item.Base64Image">
+                    <p>@item.Name</p>
+                    <p >@item.PriceText</p>
+                </a>
+            </div>
+        }
+    }
+</div>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Data.Model;
-using Data.Model.Entities;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
@@ -26,15 +25,15 @@ namespace WebUI.Controllers
     public class AccountController : Controller
     {
         private readonly AppConfig _config;
-        private readonly EntityContext _cntx;
+        private readonly ApplicationContext _cntx;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStringLocalizer _resources;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
 
-        public AccountController(IOptions<AppConfig> config, IEntityContext context, IHttpContextAccessor httpContextAccessor, IStringLocalizerFactory localizer)
+        public AccountController(IOptions<AppConfig> config, ApplicationContext context, IHttpContextAccessor httpContextAccessor, IStringLocalizerFactory localizer)
         {
             _config = config.Value;
-            _cntx = context as EntityContext;
+            _cntx = context;
             _httpContextAccessor = httpContextAccessor;
             _resources = localizer.GetLocalResources();
         }
@@ -72,7 +71,7 @@ namespace WebUI.Controllers
                 return View(model);
             }
             // Проверяем имя на уникальность
-            if (!_cntx.Users.IsUniqName(model.UserName))
+            if (_cntx.AppUsers.Any(x => x.UserName == model.UserName))
             {
                 ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                 model.UserName = string.Empty;
@@ -89,8 +88,8 @@ namespace WebUI.Controllers
                 UserStatus = Status.Active,
                 UserRole = RoleType.User
             };
-            _cntx.Users.Insert(userDTO);
-            _cntx.Save();
+            _cntx.AppUsers.Add(userDTO);
+            _cntx.SaveChanges();
 
             // Записать сообщение
             TempData["SM"] = _resources["YouAreRegistered"].Value;
@@ -117,7 +116,7 @@ namespace WebUI.Controllers
         {
             // Проверяем модель на валидность
             if (!ModelState.IsValid) return View(model);
-            var user = _cntx.Users.GetByName(model.UserName);
+            var user = _cntx.AppUsers.FirstOrDefault(x => x.UserName == model.UserName);
             bool hasError = false;
 
             switch (user.UserStatus)
@@ -138,7 +137,7 @@ namespace WebUI.Controllers
                     ModelState.AddModelError("", string.Format(_resources["AccountIsBlocked"], date.ToShortDateString(), date.ToShortTimeString()));
                     break;
             }
-            
+
             if (user == null || user.IsArchived || user.Password != model.Password)
             {
                 hasError = true;
@@ -154,36 +153,40 @@ namespace WebUI.Controllers
             if (hasError)
             {
                 user.LastVisit = DateTime.Now;
-                _cntx.Users.Update(user);
-                _cntx.Save();
+                _cntx.AppUsers.Update(user);
+                _cntx.SaveChanges();
                 return View(model);
             }
 
             user.LastVisit = DateTime.Now;
             user.AttemptsCount = 0;
             user.UserStatus = Status.Active;
-            _cntx.Users.Update(user);
-            _cntx.Save();
+            _cntx.AppUsers.Update(user);
+            _cntx.SaveChanges();
 
             await Authenticate(model.UserName); // аутентификация
             return Redirect("~/");
         }
         private async Task Authenticate(string userName)
         {
-            var user = _cntx.Users.GetByName(userName);
+            var user = _cntx.AppUsers.FirstOrDefault(x => x.UserName == userName);
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.UserRole.ToString())
             };
 
-            if (user.Store != null)
+            _session.Set("CurrentUser", new CurrentUser
             {
-                _session.Set<int?>("AssignedStore", user.Store.Id);
-                _session.Set<int?>("AssignedCity", user.Store?.City.Id);
-            }
+                UserId = user.Id,
+                Role = user.UserRole,
+                StoreId = user.StoreId,
+                CityId = user.CityId
+            });
+
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
@@ -202,7 +205,7 @@ namespace WebUI.Controllers
             // получаем имя пользователя
             var userName = User.Identity.Name;
             // Получаем пользователя
-            var user = _cntx.Users.GetByName(userName);
+            var user = _cntx.AppUsers.First(x => x.UserName == userName);
 
             return View(new UserProfileVM(user));
         }
@@ -223,11 +226,11 @@ namespace WebUI.Controllers
             }
 
             // Получить экземпляр UserDTO
-            var dto = _cntx.Users.GetById(model.Id);
+            var dto = _cntx.AppUsers.Find(model.Id);
             if (!dto.UserName.Equals(model.UserName))
             {
                 // Проверяем имя на уникальность
-                if (!_cntx.Users.IsUniqName(model.UserName))
+                if (_cntx.AppUsers.Any(x => x.UserName == model.UserName))
                 {
                     ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                     model.UserName = string.Empty;
@@ -243,8 +246,8 @@ namespace WebUI.Controllers
             dto.Password = model.Password;
 
             // Сохранить данные
-            _cntx.Users.Update(dto);
-            _cntx.Save();
+            _cntx.AppUsers.Update(dto);
+            _cntx.SaveChanges();
 
             // Записать сообщение
             TempData["SM"] = _resources["YourProfileEdited"].Value;

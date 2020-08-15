@@ -1,26 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Security.Policy;
-using System.Threading.Tasks;
 using Data.Model;
-using Data.Model.Entities;
-using Data.Model.Interfaces;
-using Data.Model.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,21 +21,22 @@ namespace WebUI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
-
+        private IWebHostEnvironment _env;
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
-            services.AddTransient<IEntityContext, EntityContext>();
-
-            services.AddSingleton<ICatalogService, CatalogService>();
+            services.AddDbContext<ApplicationContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connection));
+            
+            services.AddSingleton<ICatalogService>(new CatalogService(_env.WebRootPath));
 
             //// добавление сервисов Idenity
             //services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
@@ -15,53 +16,39 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WebUI.Areas.Admin.Models;
 using WebUI.Extensions;
-using X.PagedList;
 
 namespace WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin,SuperUser")]
+    [Authorize(Roles = "Admin,Supervisor")]
     public class CitiesController : Controller
     {
         private readonly AppConfig _config;
-        private readonly IEntityContext _cntx;
+        private readonly ApplicationContext _cntx;
         private readonly IStringLocalizer _resources;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
-        private readonly IEnumerable<City> _availableCities;
+        private readonly IQueryable<City> _availableCities;
 
-        public CitiesController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
+        public CitiesController(IOptions<AppConfig> config, ApplicationContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
         {
             // _cntx = cntx;
             _config = config.Value;
             _cntx = context;
             _resources = localizer.GetLocalResources();
             _httpContextAccessor = httpContextAccessor;
-            _availableCities = _cntx.GetAvailableCities(_session);
+            _availableCities = _cntx.Cities.ApplySecurityFilter(_session);
         }
 
         public ActionResult List(int? page)
         {
             ViewBag.TabItem = "Cities";
 
-            // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_RowsPerPage;
 
-            var listOfCities = _cntx.Cities.GetAll()
-                .ApplyArchivedFilter()
-                .ApplyAvailableFilter(_availableCities);
-
-            var listOfCitiesVM = listOfCities
-                .Select(s => new CityListVM(s))
-                .OrderBy(o => o.Name_ru)
-                .ToList();
-
-            // Устанавливаем постраничную навигацию
-            var onePageOfCities = listOfCitiesVM.ToPagedList(pageNumber, pageSize: pageSize);
-
-            // Возвращаем в преставление
-            return View(onePageOfCities);
+            var tmp = _availableCities.OrderBy(o => o.Name_ru);
+            return View(tmp.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpGet]
@@ -79,7 +66,7 @@ namespace WebUI.Areas.Admin.Controllers
                 return PartialView("_CreateCityModal", model);
             }
             var code = model.Code.NormalizeCode();
-            if (!_cntx.Cities.IsUniqCode(code))
+            if (_cntx.Cities.Any(x => x.Code == code && !x.IsArchived))
             {
                 model.Code = code;
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
@@ -92,8 +79,8 @@ namespace WebUI.Areas.Admin.Controllers
                 Name_uz_c = model.Name_uz_c,
                 Name_uz_l = model.Name_uz_l
             };
-            _cntx.Cities.Insert(city);
-            _cntx.Save();
+            _cntx.Cities.Add(city);
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["NewCityAdded"].Value;
             return RedirectToAction("List");
@@ -102,7 +89,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult DeleteCity(int id)
         {
-            var city = _cntx.Cities.GetById(id);
+            var city = _cntx.Cities.Find(id);
             var model = new CityDeleteVM
             {
                 Id = id,
@@ -114,9 +101,9 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DeleteCity(CityDeleteVM model)
         {
-            var city = _cntx.Cities.GetById(model.Id);
-            _cntx.Cities.Delete(city);
-            _cntx.Save();
+            var city = _cntx.Cities.Find(model.Id);
+            city.Archive(_cntx);
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["CityWasDeleted"].Value;
             return RedirectToAction("List");
@@ -126,9 +113,9 @@ namespace WebUI.Areas.Admin.Controllers
         public ActionResult EditCity(int id)
         {
             ViewBag.TabItem = "Cities";
-            var city = _cntx.Cities.GetById(id);
+            var city = _cntx.Cities.Find(id);
             var model = new CityListVM(city);
-            return PartialView("_EditCityModal",model);
+            return PartialView("_EditCityModal", model);
         }
 
         [HttpPost]
@@ -138,9 +125,9 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return PartialView("_EditCityModal", model);
             }
-            var city = _cntx.Cities.GetById(model.Id);
+            var city = _cntx.Cities.Find(model.Id);
             var code = model.Code.NormalizeCode();
-            if (city.Code != code && !_cntx.Cities.IsUniqCode(code))
+            if (city.Code != code && _cntx.Cities.Any(x => x.Code == code))
             {
                 model.Code = code;
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
@@ -153,7 +140,7 @@ namespace WebUI.Areas.Admin.Controllers
             city.Name_uz_l = model.Name_uz_l;
 
             _cntx.Cities.Update(city);
-            _cntx.Save();
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["CityEdited"].Value;
             return RedirectToAction("List");

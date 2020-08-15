@@ -8,8 +8,9 @@ namespace Data.Model
     {
         Undefined,
         User = 1,
+        Seller = 100,
         Manager = 200,
-        Superuser = 500,
+        Supervisor = 500,
         Admin = 999
     }
     public enum Status

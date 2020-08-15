@@ -1,4 +1,6 @@
 ﻿using Data.Model.Models;
+using Data.Tools.Extensions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +10,22 @@ namespace Data.Model.Extensions
 {
     public static partial class FiltrationEntensions
     {
-        public static IEnumerable<Store> ApplyAvailableFilter(this IEnumerable<Store> source, IEnumerable<Store> available)
-         => source.Where(w => available.Select(x => x.Id).Contains(w.Id));
-        public static IEnumerable<Product> ApplyAvailableFilter(this IEnumerable<Product> source, IEnumerable<Store> available)
-            => source.Where(w => available.Select(x => x.Id).Contains(w.Store.Id));
+        public static IQueryable<Store> ApplySecurityFilter(this IQueryable<Store> source, ISession session)
+        {
+            var user = session.Get<CurrentUser>("CurrentUser");
+            if (user == null) return source.Where(x => false);
+
+            var res = source.ApplyArchivedFilter();
+
+            if (user.StoreId != null)
+            {
+                res = res.Where(x => x.Id == user.StoreId);
+            }
+            else if (user.CityId != null)
+            {
+                res = res.Where(x => x.CityId == user.CityId);
+            }
+            return res;
+        }
     }
 }

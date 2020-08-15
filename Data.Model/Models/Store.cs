@@ -1,4 +1,5 @@
 ﻿using Data.Model.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,15 +10,22 @@ using System.Text;
 namespace Data.Model.Models
 {
     [Table("Stores")]
-    public class Store : IArchivableEntity
+    public class Store : BaseEntity, IArchivableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public int CityId { get; set; }
-        public City City { get; set; }
-        public virtual List<AppUser> AppUsers { get; set; }
+        public virtual City City { get; set; }
+
+        public int AppUsersId { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AppUser> Users { get; set; } = new HashSet<AppUser>();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products { get; set; } = new HashSet<Product>();
 
         public string Code { get; set; }
         public string Name { get; set; }
@@ -32,5 +40,19 @@ namespace Data.Model.Models
         public bool IsAvailable => IsActive && !IsBlocked && !IsArchived;
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public void Archive(ApplicationContext context)
+        {
+            IsArchived = true;
+            context.Stores.Update(this);
+            foreach(var user in Users)
+            {
+                user.Archive(context);
+            }
+            foreach(var prod in Products)
+            {
+                prod.Archive(context);
+            }
+        }
     }
 }

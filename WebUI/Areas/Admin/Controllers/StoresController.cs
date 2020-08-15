@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
@@ -15,7 +16,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WebUI.Areas.Admin.Models;
 using WebUI.Extensions;
-using X.PagedList;
 
 namespace WebUI.Areas.Admin.Controllers
 {
@@ -24,21 +24,21 @@ namespace WebUI.Areas.Admin.Controllers
     public class StoresController : Controller
     {
         private readonly AppConfig _config;
-        private readonly IEntityContext _cntx;
+        private readonly ApplicationContext _cntx;
         private readonly IStringLocalizer _resources;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
-        private readonly IEnumerable<Store> _availableStores;
-        private readonly IEnumerable<City> _availableCities;
+        private readonly IQueryable<Store> _availableStores;
+        private readonly IQueryable<City> _availableCities;
 
-        public StoresController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
+        public StoresController(IOptions<AppConfig> config, ApplicationContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
         {
             _config = config.Value;
             _cntx = context;
             _resources = localizer.GetLocalResources();
             _httpContextAccessor = httpContextAccessor;
-            _availableCities = _cntx.GetAvailableCities(_session);
-            _availableStores = _cntx.GetAvailableStores(_session);
+            _availableCities = _cntx.Cities.ApplySecurityFilter(_session);
+            _availableStores = _cntx.Stores.ApplySecurityFilter(_session);
         }
 
         public IActionResult List(int? page)
@@ -49,27 +49,15 @@ namespace WebUI.Areas.Admin.Controllers
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_RowsPerPage;
 
-            var listOfStores = _cntx.Stores.GetAll()
-                .ApplyArchivedFilter()
-                .ApplyAvailableFilter(_availableStores);
-
-            var listOfStoresVM = listOfStores
-                .Select(s => new StoreListVM(s))
-                .OrderBy(o => o.StoreName)
-                .ToList();
-
-            // Устанавливаем постраничную навигацию
-            var onePageOfStores = listOfStoresVM.ToPagedList(pageNumber, pageSize: pageSize);
-
-            // Возвращаем в преставление
-            return View(onePageOfStores);
+            var tmp = _availableStores.OrderBy(o => o.Name);
+            return View(tmp.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpGet]
         public ActionResult CreateStore()
         {
             ViewBag.TabItem = "Stores";
-            ViewBag.AvailableCities = _availableCities;
+            ViewBag.AvailableCities = _availableCities.ToList();
             return PartialView("_CreateStoreModal", new StoreEditVM());
         }
         [HttpPost]
@@ -77,14 +65,14 @@ namespace WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableCities = _availableCities;
+                ViewBag.AvailableCities = _availableCities.ToList();
                 return PartialView("_CreateStoreModal", model);
             }
             var code = model.Code.NormalizeCode();
-            if (!_cntx.Stores.IsUniqCode(code))
+            if (_cntx.Stores.Any(x => x.Code == code && !x.IsArchived))
             {
                 model.Code = code;
-                ViewBag.AvailableCities = _availableCities;
+                ViewBag.AvailableCities = _availableCities.ToList();
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
                 return PartialView("_CreateStoreModal", model);
             }
@@ -100,8 +88,8 @@ namespace WebUI.Areas.Admin.Controllers
                 IsBlocked = model.IsBlocked,
                 CityId = model.CityId
             };
-            _cntx.Stores.Insert(store);
-            _cntx.Save();
+            _cntx.Stores.Update(store);
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["NewStoreAdded"].Value;
             return RedirectToAction("List");
@@ -110,7 +98,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult DeleteStore(int id)
         {
-            var store = _cntx.Stores.GetById(id);
+            var store = _cntx.Stores.Find(id);
             var model = new StoreDeleteVM
             {
                 Id = id,
@@ -122,9 +110,9 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DeleteStore(StoreDeleteVM model)
         {
-            var store = _cntx.Stores.GetById(model.Id);
-            _cntx.Stores.Delete(store);
-            _cntx.Save();
+            var store = _cntx.Stores.Find(model.Id);
+            store.Archive(_cntx);
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["StoreWasDeleted"].Value;
             return RedirectToAction("List");
@@ -134,8 +122,8 @@ namespace WebUI.Areas.Admin.Controllers
         public ActionResult EditStore(int id)
         {
             ViewBag.TabItem = "Stores";
-            ViewBag.AvailableCities = _availableCities;
-            var store = _cntx.Stores.GetById(id);
+            ViewBag.AvailableCities = _availableCities.ToList();
+            var store = _cntx.Stores.Find(id);
             var model = new StoreEditVM(store);
             return PartialView("_EditStoreModal", model);
         }
@@ -144,15 +132,15 @@ namespace WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableCities = _availableCities;
+                ViewBag.AvailableCities = _availableCities.ToList();
                 return PartialView("_EditStoreModal", model);
             }
-            var store = _cntx.Stores.GetById(model.Id);
+            var store = _cntx.Stores.Find(model.Id);
             var code = model.Code.NormalizeCode();
-            if (store.Code != code && !_cntx.Stores.IsUniqCode(code))
+            if (store.Code != code && _cntx.Stores.Any(x => x.Code == code && !x.IsArchived))
             {
                 model.Code = code;
-                ViewBag.AvailableCities = _availableCities;
+                ViewBag.AvailableCities = _availableCities.ToList();
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
                 return PartialView("_EditStoreModal", model);
             }
@@ -167,7 +155,7 @@ namespace WebUI.Areas.Admin.Controllers
             store.CityId = model.CityId;
 
             _cntx.Stores.Update(store);
-            _cntx.Save();
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["StoreEdited"].Value;
             return RedirectToAction("List");

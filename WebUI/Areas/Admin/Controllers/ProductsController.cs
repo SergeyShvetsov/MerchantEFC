@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
@@ -21,57 +22,45 @@ using SixLabors.ImageSharp.Processing;
 using WebUI.Areas.Admin.Models;
 using WebUI.Extensions;
 using WebUI.Services;
-using X.PagedList;
 
 namespace WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin,SuperUser,Manager")]
+    [Authorize(Roles = "Admin,SuperVisor,Manager,Seller")]
     public class ProductsController : Controller
     {
         private readonly AppConfig _config;
-        private readonly IEntityContext _cntx;
+        private readonly ApplicationContext _cntx;
         private readonly IStringLocalizer _resources;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
-        private readonly IEnumerable<Store> _availableStores;
+        private readonly IQueryable<Store> _availableStores;
+        private readonly IQueryable<Product> _availableProducts;
         private readonly ICatalogService _catalog;
 
-        public ProductsController(IOptions<AppConfig> config, IEntityContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor, ICatalogService catalog)
+        public ProductsController(IOptions<AppConfig> config, ApplicationContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor, ICatalogService catalog)
         {
             _config = config.Value;
             _cntx = context;
             _resources = localizer.GetLocalResources();
             _httpContextAccessor = httpContextAccessor;
-            _availableStores = _cntx.GetAvailableStores(_session);
+            _availableStores = _cntx.Stores.ApplySecurityFilter(_session);
+            _availableProducts = _cntx.Products.ApplySecurityFilter(_session);
             _catalog = catalog;
         }
         public IActionResult List(int? page)
         {
             ViewBag.TabItem = "Products";
 
-            // Устанавливаем номер страницы
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_RowsPerPage;
 
-            var listOfStores = _cntx.Products.GetAll()
-                .ApplyArchivedFilter()
-                .ApplyAvailableFilter(_availableStores);
-
-            var listOfStoresVM = listOfStores
-                .Select(s => new ProductListVM(s))
-                .OrderBy(o => o.Name)
-                .ToList();
-
-            // Устанавливаем постраничную навигацию
-            var onePageOfStores = listOfStoresVM.ToPagedList(pageNumber, pageSize: pageSize);
-
-            // Возвращаем в преставление
-            return View(onePageOfStores);
+            var tmp = _availableProducts.OrderBy(o => o.Name);
+            return View(tmp.ToPagedList(pageNumber, pageSize));
         }
         private IEnumerable<Select2ListItem> GetStoreSelect2List(string search)
         {
-            var list = _availableStores
+            var list = _availableStores.AsEnumerable()
                 .Select(s => new Select2ListItem
                 {
                     id = s.Id,
@@ -180,8 +169,8 @@ namespace WebUI.Areas.Admin.Controllers
                     product.Thumbs = ms2.ToArray();
                 }
             }
-            _cntx.Products.Insert(product);
-            _cntx.Save();
+            _cntx.Products.Add(product);
+            _cntx.SaveChanges();
 
             var mod = new ProductModel()
             {
@@ -194,8 +183,8 @@ namespace WebUI.Areas.Admin.Controllers
                 Quantity = model.ProductModel.Quantity,
                 IsActive = true
             };
-            _cntx.ProductModels.Insert(mod);
-            _cntx.Save();
+            _cntx.ProductModels.Add(mod);
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["NewProductAdded"].Value;
             return RedirectToAction("List");
@@ -205,7 +194,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult DeleteProduct(int id)
         {
-            var product = _cntx.Products.GetById(id);
+            var product = _cntx.Products.Find(id);
             var model = new ProductDeleteVM
             {
                 Id = id,
@@ -217,9 +206,9 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DeleteProduct(ProductDeleteVM model)
         {
-            var product = _cntx.Products.GetById(model.Id);
-            _cntx.Products.Delete(product);
-            _cntx.Save();
+            var product = _cntx.Products.Find(model.Id);
+            product.Archive(_cntx);
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["ProductWasDeleted"].Value;
             return RedirectToAction("List");
@@ -229,25 +218,23 @@ namespace WebUI.Areas.Admin.Controllers
         public ActionResult EditProduct(int id)
         {
             ViewBag.TabItem = "Products";
-            var product = _cntx.Products.GetById(id);
+            var product = _cntx.Products.Find(id);
             var model = new ProductEditVM(product);
             model.StoreList = GetStoreSelect2List("");
 
-            model.ProductModels = _cntx.ProductModels.GetAllByProduct(product.Id)
+            model.ProductModels = _cntx.ProductModels.Where(x => x.ProductId == product.Id)
                 .ApplyArchivedFilter()
                 .Select(s => new ProductModelEditVM(s))
                 .ToList();
-            model.ProductOptions = _cntx.ProductOptions.GetByAllByProduct(product.Id)
+            model.ProductOptions = _cntx.ProductOptions.Where(x => x.ProductId == product.Id)
                 .ApplyArchivedFilter()
                 .Select(s => new ProductOptionEditVM(s))
                 .ToList();
-            model.ProductPages = _cntx.ProductPages.GetAllByProduct(product.Id)
-                .ApplyArchivedFilter()
+            model.ProductPages = _cntx.ProductPages.Where(x => x.ProductId == product.Id)
                 .Select(s => new ProductPageEditVM(s))
-                .OrderBy(o=>o.SortOrder)
+                .OrderBy(o => o.SortOrder)
                 .ToList();
-            model.Gallery = _cntx.ProductImages.GetByAllByProduct(product.Id)
-                .ApplyArchivedFilter()
+            model.Gallery = _cntx.ProductImages.Where(x => x.ProductId == product.Id)
                 .ToList();
 
             return View("EditProduct", model);
@@ -256,7 +243,7 @@ namespace WebUI.Areas.Admin.Controllers
         public ActionResult EditProduct(ProductEditVM model, IFormFile file)
         {
             var pcats = _catalog.GetProductCategories().Select(s => s.Code);
-            var cats = model.Categories.Split(';').Where(x => pcats.Contains(x.Trim())).Select(s => s.Trim()).ToList();
+            var cats = model.CategoryList.Where(x => pcats.Contains(x.Trim())).Select(s => s.Trim()).ToList();
 
             if (!ModelState.IsValid)
             {
@@ -272,7 +259,7 @@ namespace WebUI.Areas.Admin.Controllers
             }
             model.Categories = cats.ToJoinedStringOrEmpty(";");
 
-            var product = _cntx.Products.GetById(model.ProductId);
+            var product = _cntx.Products.Find(model.ProductId);
             product.StoreId = model.SelectedStore;
             product.Code = model.Code;
             product.Name = model.Name;
@@ -327,7 +314,7 @@ namespace WebUI.Areas.Admin.Controllers
                 }
             }
             _cntx.Products.Update(product);
-            _cntx.Save();
+            _cntx.SaveChanges();
 
             TempData["SM"] = _resources["ProductEdited"].Value;
             return RedirectToAction("List");
@@ -395,24 +382,24 @@ namespace WebUI.Areas.Admin.Controllers
                         simg.Save(ms2, imageEncoder);
                         model.Thumbs = ms2.ToArray();
                     }
-                    _cntx.ProductImages.Insert(model);
-                    _cntx.Save();
+                    _cntx.ProductImages.Add(model);
+                    _cntx.SaveChanges();
                 }
             }
         }
         [HttpPost]
         public void DeleteImage(string id)
         {
-            var image = _cntx.ProductImages.GetById(Convert.ToInt32(id));
-            _cntx.ProductImages.Delete(image);
-            _cntx.Save();
+            var image = _cntx.ProductImages.Find(Convert.ToInt32(id));
+            _cntx.ProductImages.Remove(image);
+            _cntx.SaveChanges();
         }
 
         #region Product Model
         [HttpGet]
         public IActionResult EditProductModel(int id)
         {
-            var productModel = _cntx.ProductModels.GetById(id);
+            var productModel = _cntx.ProductModels.Find(id);
             var model = new ProductModelEditVM(productModel);
 
             return PartialView("_EditProductModelModal", model);
@@ -430,7 +417,7 @@ namespace WebUI.Areas.Admin.Controllers
                 return PartialView("_EditProductModelModal", model);
             }
 
-            var productModel = _cntx.ProductModels.GetById(model.Id);
+            var productModel = _cntx.ProductModels.Find(model.Id);
             productModel.Name = model.Name;
             productModel.Code = model.Code;
             productModel.ShippingTime = model.ShippingTime;
@@ -441,7 +428,7 @@ namespace WebUI.Areas.Admin.Controllers
             productModel.IsBlocked = model.IsBlocked;
 
             _cntx.ProductModels.Update(productModel);
-            _cntx.Save();
+            _cntx.SaveChanges();
 
             TempData["SM_model"] = _resources["ProductModelWasEdited"].Value;
             return RedirectToAction("EditProduct", new { id = productModel.ProductId });
@@ -450,7 +437,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult DeleteProductModel(int id)
         {
-            var productModel = _cntx.ProductModels.GetById(id);
+            var productModel = _cntx.ProductModels.Find(id);
             var model = new ProductModelDeleteVM
             {
                 Id = id,
@@ -468,9 +455,9 @@ namespace WebUI.Areas.Admin.Controllers
                 return PartialView("_DeleteProductModelModal", model);
             }
 
-            var productModel = _cntx.ProductModels.GetById(model.Id);
-            _cntx.ProductModels.Delete(productModel);
-            _cntx.Save();
+            var productModel = _cntx.ProductModels.Find(model.Id);
+            productModel.Archive(_cntx);
+            _cntx.SaveChanges();
 
             TempData["SM_model"] = _resources["ProductModelWasDeleted"].Value;
             return RedirectToAction("EditProduct", new { id = model.ProductId });
@@ -507,8 +494,8 @@ namespace WebUI.Areas.Admin.Controllers
                 IsBlocked = model.IsBlocked
             };
 
-            _cntx.ProductModels.Insert(productModel);
-            _cntx.Save();
+            _cntx.ProductModels.Add(productModel);
+            _cntx.SaveChanges();
 
             TempData["SM_model"] = _resources["ProductModelWasAdded"].Value;
             return RedirectToAction("EditProduct", new { id = productModel.ProductId });
@@ -518,7 +505,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult EditProductOption(int id)
         {
-            var productOption = _cntx.ProductOptions.GetById(id);
+            var productOption = _cntx.ProductOptions.Find(id);
             var model = new ProductOptionEditVM(productOption);
 
             return PartialView("_EditProductOptionModal", model);
@@ -530,13 +517,13 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return PartialView("_EditProductOptionModal", model);
             }
-            var productOption = _cntx.ProductOptions.GetById(model.Id);
+            var productOption = _cntx.ProductOptions.Find(model.Id);
             productOption.Name = model.Name;
             productOption.IsActive = model.IsActive;
             productOption.IsBlocked = model.IsBlocked;
 
             _cntx.ProductOptions.Update(productOption);
-            _cntx.Save();
+            _cntx.SaveChanges();
 
             TempData["SM_option"] = _resources["ProductOptionWasEdited"].Value;
             return RedirectToAction("EditProduct", new { id = productOption.ProductId });
@@ -545,7 +532,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult DeleteProductOption(int id)
         {
-            var productOption = _cntx.ProductOptions.GetById(id);
+            var productOption = _cntx.ProductOptions.Find(id);
             var model = new ProductOptionDeleteVM
             {
                 Id = id,
@@ -563,9 +550,9 @@ namespace WebUI.Areas.Admin.Controllers
                 return PartialView("_DeleteProductOptionModal", model);
             }
 
-            var productOption = _cntx.ProductOptions.GetById(model.Id);
-            _cntx.ProductOptions.Delete(productOption);
-            _cntx.Save();
+            var productOption = _cntx.ProductOptions.Find(model.Id);
+            productOption.Archive(_cntx);
+            _cntx.SaveChanges();
 
             TempData["SM_option"] = _resources["ProductOptionWasDeleted"].Value;
             return RedirectToAction("EditProduct", new { id = model.ProductId });
@@ -592,8 +579,8 @@ namespace WebUI.Areas.Admin.Controllers
                 IsBlocked = model.IsBlocked
             };
 
-            _cntx.ProductOptions.Insert(productOption);
-            _cntx.Save();
+            _cntx.ProductOptions.Add(productOption);
+            _cntx.SaveChanges();
 
             TempData["SM_option"] = _resources["ProductOptionWasAdded"].Value;
             return RedirectToAction("EditProduct", new { id = productOption.ProductId });
@@ -603,7 +590,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult EditProductPage(int id)
         {
-            var productPage = _cntx.ProductPages.GetById(id);
+            var productPage = _cntx.ProductPages.Find(id);
             var model = new ProductPageEditVM(productPage);
 
             return View("EditProductPage", model);
@@ -615,7 +602,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return View("EditProductPage", model);
             }
-            var productPage = _cntx.ProductPages.GetById(model.Id);
+            var productPage = _cntx.ProductPages.Find(model.Id);
             productPage.Name_ru = model.Name_ru;
             productPage.Name_uz_c = model.Name_uz_c;
             productPage.Name_uz_l = model.Name_uz_l;
@@ -624,7 +611,7 @@ namespace WebUI.Areas.Admin.Controllers
             productPage.IsBlocked = model.IsBlocked;
 
             _cntx.ProductPages.Update(productPage);
-            _cntx.Save();
+            _cntx.SaveChanges();
 
             TempData["SM_page"] = _resources["ProductPageWasEdited"].Value;
             return RedirectToAction("EditProduct", new { id = productPage.ProductId });
@@ -633,7 +620,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult DeleteProductPage(int id)
         {
-            var productPage = _cntx.ProductPages.GetById(id);
+            var productPage = _cntx.ProductPages.Find(id);
             var model = new ProductPageDeleteVM
             {
                 Id = id,
@@ -651,9 +638,9 @@ namespace WebUI.Areas.Admin.Controllers
                 return PartialView("_DeleteProductPageModal", model);
             }
 
-            var productPage = _cntx.ProductPages.GetById(model.Id);
-            _cntx.ProductPages.Delete(productPage);
-            _cntx.Save();
+            var productPage = _cntx.ProductPages.Find(model.Id);
+            _cntx.ProductPages.Remove(productPage);
+            _cntx.SaveChanges();
 
             TempData["SM_page"] = _resources["ProductPageWasDeleted"].Value;
             return RedirectToAction("EditProduct", new { id = model.ProductId });
@@ -672,11 +659,11 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return View("CreateProductPage", model);
             }
-            var pages = _cntx.ProductPages.GetAllByProduct(model.ProductId).ApplyArchivedFilter();
+            var pages = _cntx.ProductPages.Where(x => x.ProductId == model.ProductId);
             var max = 1;
             if (pages.Any())
             {
-                max = _cntx.ProductPages.GetAllByProduct(model.ProductId).Max(m => m.SortOrder) + 1;
+                max = _cntx.ProductPages.Where(x => x.ProductId == model.ProductId).Max(m => m.SortOrder) + 1;
             }
             var productPage = new ProductPage
             {
@@ -690,8 +677,8 @@ namespace WebUI.Areas.Admin.Controllers
                 SortOrder = max
             };
 
-            _cntx.ProductPages.Insert(productPage);
-            _cntx.Save();
+            _cntx.ProductPages.Add(productPage);
+            _cntx.SaveChanges();
 
             TempData["SM_page"] = _resources["ProductPageWasAdded"].Value;
             return RedirectToAction("EditProduct", new { id = productPage.ProductId });
@@ -704,12 +691,12 @@ namespace WebUI.Areas.Admin.Controllers
             int count = 1;
 
             ProductPage page;
-            foreach (var catId in idsArray)
+            foreach (var pageId in idsArray)
             {
-                var guid = Convert.ToInt32(catId);
-                page = _cntx.ProductPages.GetById(guid);
+                var id = Convert.ToInt32(pageId);
+                page = _cntx.ProductPages.Find(id);
                 page.SortOrder = count++;
-                _cntx.Save();
+                _cntx.SaveChanges();
             }
         }
     }
