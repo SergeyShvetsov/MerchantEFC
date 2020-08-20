@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    [Table("ProductComments")]
     public class ProductComment : BaseEntity
     {
         [Key]

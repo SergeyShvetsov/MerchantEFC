@@ -8,7 +8,6 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    [Table("ProductPages")]
     public class ProductPage : BaseEntity
     {
         [Key]

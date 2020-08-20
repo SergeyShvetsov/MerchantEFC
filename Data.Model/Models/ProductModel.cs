@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    [Table("ProductModels")]
     public class ProductModel : BaseEntity, IArchivableEntity
     {
         [Key]

@@ -18,7 +18,7 @@ namespace WebUI.Areas.Admin.Models
             LastName = usr.LastName;
             Email = usr.EmailAddress;
         }
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
 
         [DisplayName("Selected")]
         public bool IsChecked { get; set; }

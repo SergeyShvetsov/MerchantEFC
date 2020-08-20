@@ -29,11 +29,10 @@ namespace Data.Model.Models
 
         public string Code { get; set; }
         public string Name { get; set; }
-        [Column(TypeName = "image")]
         public byte[] Logo { get; set; }
 
         public string EmailAddress { get; set; }
-        public string Phone  { get; set; }
+        public string Phone { get; set; }
         public string TIN { get; set; } // tax identification number
 
         public bool IsActive { get; set; }
@@ -47,11 +46,11 @@ namespace Data.Model.Models
         {
             IsArchived = true;
             context.Stores.Update(this);
-            foreach(var user in Users)
+            foreach (var user in Users)
             {
                 user.Archive(context);
             }
-            foreach(var prod in Products)
+            foreach (var prod in Products)
             {
                 prod.Archive(context);
             }

@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    [Table("ProductImages")]
     public class ProductImage : BaseEntity
     {
         [Key]
@@ -17,11 +16,8 @@ namespace Data.Model.Models
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
 
-        [Column(TypeName = "image")]
         public byte[] LargeImage { get; set; }
-        [Column(TypeName = "image")]
         public byte[] SmallImage { get; set; }
-        [Column(TypeName = "image")]
         public byte[] Thumbs { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;

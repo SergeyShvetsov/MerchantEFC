@@ -27,7 +27,7 @@ namespace WebUI.Areas.Admin.Models
             UserStatus = usr.UserStatus;
         }
        
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
 
         [DisplayName("UserName")]
         [Required(ErrorMessage = "UserNameRequired")]

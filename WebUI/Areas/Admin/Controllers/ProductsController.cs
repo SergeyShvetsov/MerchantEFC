@@ -60,18 +60,19 @@ namespace WebUI.Areas.Admin.Controllers
         }
         private IEnumerable<Select2ListItem> GetStoreSelect2List(string search)
         {
-            var list = _availableStores.AsEnumerable()
-                .Select(s => new Select2ListItem
-                {
-                    id = s.Id,
-                    text = s.Name + " (" + s.City.Name + ")"
-                });
-
+            var list = _availableStores;
             if (!(string.IsNullOrEmpty(search) || string.IsNullOrWhiteSpace(search)))
             {
-                list = list.Where(x => x.text.ToLower().StartsWith(search.ToLower()));
+                list = list.Where(x => x.Name.ToLower().StartsWith(search.ToLower()));
             }
-            return list.OrderBy(o => o.text).ToList();
+
+            var tmp = list.ToList().Select(s => new Select2ListItem
+            {
+                id = s.Id,
+                text = s.Name + " (" + s.City.Name + ")"
+            });
+
+            return tmp.OrderBy(o => o.text).ToList();
         }
         public ActionResult GetStoreList(string search)
         {

@@ -19,7 +19,7 @@ namespace WebUI.Models.Account
             EmailAddress = row.EmailAddress;
             UserName = row.UserName;
         }
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Required(ErrorMessage = "FirstNameRequired")]
         [DisplayName("FirstName")]
         public string FirstName { get; set; }

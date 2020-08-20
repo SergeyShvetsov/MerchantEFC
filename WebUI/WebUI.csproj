@@ -27,32 +27,38 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="bootstrap" Version="4.5.0" />
+    <PackageReference Include="bootstrap" Version="4.5.2" />
     <PackageReference Include="ckeditor-full" Version="4.14.1" />
     <PackageReference Include="dropzone" Version="4.3.0" />
     <PackageReference Include="Fancybox" Version="2.1.5" />
     <PackageReference Include="jQuery" Version="3.5.1" />
     <PackageReference Include="jQuery.UI" Version="1.12.1.1" />
-    <PackageReference Include="jQuery.Validation" Version="1.19.1" />
+    <PackageReference Include="jQuery.Validation" Version="1.19.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.6">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.7" />
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="3.2.11" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0003" />
-    <PackageReference Include="X.PagedList.Mvc.Bootstrap4" Version="8.0.7" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0" />
+    <PackageReference Include="X.PagedList.Mvc.Bootstrap4" Version="8.0.7.1" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="8.0.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Data.Model\Data.Model.csproj" />
     <ProjectReference Include="..\Data.Tools\Data.Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Companies\" />
+    <Folder Include="wwwroot\Images\Products\" />
+    <Folder Include="wwwroot\Pages\" />
   </ItemGroup>
 
 </Project>

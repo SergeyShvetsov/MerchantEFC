@@ -8,7 +8,6 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    [Table("Products")]
     public class Product : BaseEntity, IArchivableEntity
     {
         [Key]
@@ -28,11 +27,8 @@ namespace Data.Model.Models
 
         public string Shipping { get; set; }
 
-        [Column(TypeName = "image")]
         public byte[] LargeImage { get; set; }
-        [Column(TypeName = "image")]
         public byte[] SmallImage { get; set; }
-        [Column(TypeName = "image")]
         public byte[] Thumbs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

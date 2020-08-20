@@ -118,7 +118,11 @@ namespace WebUI.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = _cntx.AppUsers.FirstOrDefault(x => x.UserName == model.UserName);
             bool hasError = false;
-
+            if (user == null)
+            {
+                ModelState.AddModelError("", _resources["InvalidLoginOrPassword"]);
+                return View(model);
+            }
             switch (user.UserStatus)
             {
                 case Status.Pending:

@@ -34,7 +34,7 @@ namespace WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connection));
+            services.AddDbContext<ApplicationContext>(options => options.UseLazyLoadingProxies().UseMySQL(connection));
             
             services.AddSingleton<ICatalogService>(new CatalogService(_env.WebRootPath));
 

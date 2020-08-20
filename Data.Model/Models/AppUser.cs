@@ -9,13 +9,11 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    //public class User : IdentityUser { }
-
-    [Table("Users")]
     public class AppUser : BaseEntity, IArchivableEntity
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
