@@ -1,0 +1,88 @@
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList;
+@using X.PagedList.Mvc.Bootstrap4.Core
+@using WebUI.Resources
+@inject LocalizationService resources
+@model IEnumerable<WebUI.Areas.Admin.Models.CompanyListVM>
+
+@{
+    ViewData["Title"] = "CompanyList";
+}
+
+@if (TempData["SM"] != null)
+{
+
+    <div class="alert alert-success">
+        @TempData["SM"]
+    </div>
+}
+
+<div class="row">
+    <div class="col">
+        <h4>@resources["CompanyList"]</h4>
+    </div>
+    <div class="col" style="text-align: right;">
+        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                data-target="#createCompany" data-url="@Url.Action($"CreateCompany")">
+            @resources["CreateCompany"]
+        </button>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">@resources["CompanyListIsEmpty"]</h2>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsBlocked)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" value="@item.Id" />
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsBlocked)
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary" data-toggle="ajax-modal"
+                                data-target="#editCompany" data-url="@Url.Action($"EditCompany/{item.Id}")">
+                            @resources["Edit"]
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" data-toggle="ajax-modal"
+                                data-target="#deleteCompany" data-url="@Url.Action($"DeleteCompany/{item.Id}")">
+                            @resources["Delete"]
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", new { page }), Bootstrap4PagedListRenderOptions.Default)
+}

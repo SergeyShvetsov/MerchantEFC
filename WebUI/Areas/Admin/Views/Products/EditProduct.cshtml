@@ -34,6 +34,21 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                @foreach (var image in Model.Gallery)
+                {
+                    <div class="col">
+                        <div class="galleryStyle">
+                            <div style="width:50px; height:50px;">
+                                <img src="data:image;base64,@System.Convert.ToBase64String(image.Thumbs)" />
+                            </div>
+                            <div style="text-align:center;">
+                                @Html.ActionLink(linkText: "Delete", actionName: "DeleteImage", controllerName: "Products", null, new { @class = "deleteimage btn btn-danger", data_name = image.Id, style = "margin:10px;" })
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
         <div class="col-7">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -307,26 +322,6 @@
     </div>
 </form>
 <hr />
-<h4>@resources["Gallery"]</h4>
-@if (!Model.Gallery.Any())
-{
-    <h3>@resources["NoGalleryImages"]</h3>
-}
-<div class="row">
-    @foreach (var image in Model.Gallery)
-    {
-        <div class="col">
-            <div class="galleryStyle">
-                <div style="width:50px; height:50px;">
-                    <img src="data:image;base64,@System.Convert.ToBase64String(image.Thumbs)" />
-                </div>
-                <div style="text-align:center;">
-                    @Html.ActionLink(linkText: "Delete", actionName: "DeleteImage", controllerName: "Products", null, new { @class = "deleteimage btn btn-danger", data_name = image.Id, style = "margin:10px;" })
-                </div>
-            </div>
-        </div>
-    }
-</div>
 <form action="/admin/Products/SaveGalleryImages/@Model.ProductId" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
     <div class="fallback">
         <input type="file" name="file" multiple="" />

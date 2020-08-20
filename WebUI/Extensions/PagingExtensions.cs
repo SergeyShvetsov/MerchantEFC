@@ -25,6 +25,13 @@ namespace WebUI.Extensions
             IPagedList<CityListVM> pageList = new StaticPagedList<CityListVM>(res.Select(s => new CityListVM(s)).ToList(), page, itemsPerPage, totalCount);
             return pageList;
         }
+        public static IPagedList<CompanyListVM> ToPagedList(this IOrderedQueryable<Company> source, int page, int itemsPerPage)
+        {
+            var totalCount = source.Count();
+            var res = source.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage).ToList();
+            IPagedList<CompanyListVM> pageList = new StaticPagedList<CompanyListVM>(res.Select(s => new CompanyListVM(s)).ToList(), page, itemsPerPage, totalCount);
+            return pageList;
+        }
         public static IPagedList<StoreListVM> ToPagedList(this IOrderedQueryable<Store> source, int page, int itemsPerPage)
         {
             var totalCount = source.Count();

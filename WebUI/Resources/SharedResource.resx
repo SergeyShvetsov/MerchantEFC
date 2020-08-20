@@ -147,6 +147,12 @@
   <data name="AppName" xml:space="preserve">
     <value>Merchant EFC</value>
   </data>
+  <data name="AssignedCity" xml:space="preserve">
+    <value>Назначенный город</value>
+  </data>
+  <data name="AssignedCompany" xml:space="preserve">
+    <value>Назначенная компания</value>
+  </data>
   <data name="AssignedRoles" xml:space="preserve">
     <value>Назначенные роли</value>
   </data>
@@ -384,6 +390,30 @@
   <data name="CodeIsTaken" xml:space="preserve">
     <value>Этот код уже занят.</value>
   </data>
+  <data name="Companies" xml:space="preserve">
+    <value>Компании</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Компания</value>
+  </data>
+  <data name="CompanyCode" xml:space="preserve">
+    <value>Код компании</value>
+  </data>
+  <data name="CompanyCodeRequired" xml:space="preserve">
+    <value>Требуется код компании.</value>
+  </data>
+  <data name="CompanyList" xml:space="preserve">
+    <value>Список компаний</value>
+  </data>
+  <data name="CompanyListIsEmpty" xml:space="preserve">
+    <value>Компании отсутствуют</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Наименование компании</value>
+  </data>
+  <data name="CompanyNameRequired" xml:space="preserve">
+    <value>Требуется наименование компании.</value>
+  </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Подтвердите пароль</value>
   </data>
@@ -399,8 +429,11 @@
   <data name="CreateCity" xml:space="preserve">
     <value>Добавить город</value>
   </data>
+  <data name="CreateCompany" xml:space="preserve">
+    <value>Добавить компанию</value>
+  </data>
   <data name="CreateProduct" xml:space="preserve">
-    <value>Создать товар</value>
+    <value>Добавить товар</value>
   </data>
   <data name="CreateProductModel" xml:space="preserve">
     <value>Добавить модель</value>
@@ -415,7 +448,7 @@
     <value>Добавить магазин</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Создать пользователя</value>
+    <value>Добавить пользователя</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -425,6 +458,12 @@
   </data>
   <data name="DeleteCityConfirm" xml:space="preserve">
     <value>Вы действительно хотите удалить город {0}?</value>
+  </data>
+  <data name="DeleteCompany" xml:space="preserve">
+    <value>Удаление компании</value>
+  </data>
+  <data name="DeleteCompanyConfirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить компанию {0}?</value>
   </data>
   <data name="DeleteProduct" xml:space="preserve">
     <value>Удалить продукт.</value>
@@ -470,6 +509,9 @@
   </data>
   <data name="EditCity" xml:space="preserve">
     <value>Редактировать город</value>
+  </data>
+  <data name="EditCompany" xml:space="preserve">
+    <value>Редактировать</value>
   </data>
   <data name="EditProduct" xml:space="preserve">
     <value>Редактировать товар</value>
@@ -564,6 +606,9 @@
   <data name="ModelCode" xml:space="preserve">
     <value>Код модели</value>
   </data>
+  <data name="ModelCodeRequired" xml:space="preserve">
+    <value>Требуется код модели.</value>
+  </data>
   <data name="ModelDescription" xml:space="preserve">
     <value>Описание модели</value>
   </data>
@@ -599,6 +644,9 @@
   </data>
   <data name="NoGalleryImages" xml:space="preserve">
     <value>Галерея не содержит изображений.</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Не выбрано</value>
   </data>
   <data name="OptionName" xml:space="preserve">
     <value>Название опции</value>
@@ -644,6 +692,9 @@
   </data>
   <data name="Price" xml:space="preserve">
     <value>Цена</value>
+  </data>
+  <data name="PriceRequired" xml:space="preserve">
+    <value>Не указана цена товара.</value>
   </data>
   <data name="PriceUSD" xml:space="preserve">
     <value>Цена в у.е.</value>
@@ -725,6 +776,9 @@
   </data>
   <data name="StoreNameRequired" xml:space="preserve">
     <value>Требуется название магазина</value>
+  </data>
+  <data name="StoreRequired" xml:space="preserve">
+    <value>Требуется указать магазин.</value>
   </data>
   <data name="Stores" xml:space="preserve">
     <value>Магазины</value>

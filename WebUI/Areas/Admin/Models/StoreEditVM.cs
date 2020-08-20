@@ -22,6 +22,8 @@ namespace WebUI.Areas.Admin.Models
             TIN = store.TIN;
             CityName = store.City.Name;
             CityId = store.CityId;
+            CompanyName = store.Company?.Name;
+            CompanyId = store.CompanyId;
             IsActive = store.IsActive;
             IsBlocked = store.IsBlocked;
         }
@@ -50,7 +52,11 @@ namespace WebUI.Areas.Admin.Models
         public bool IsBlocked { get; set; }
 
         [DisplayName("City")]
+        [Required(ErrorMessage = "CityRequired")]
         public int CityId { get; set; }
         public string CityName { get; set; }
+        [DisplayName("Company")]
+        public int? CompanyId { get; set; }
+        public string CompanyName { get; set; }
     }
 }

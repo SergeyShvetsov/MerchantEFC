@@ -106,13 +106,6 @@ namespace WebUI.Areas.Admin.Controllers
             }
             model.Categories = cats.ToJoinedStringOrEmpty(";");
 
-            if (model.ProductModel.Price == null && model.ProductModel.PriceUSD == null)
-            {
-                model.StoreList = model.StoreList = GetStoreSelect2List("");
-                ModelState.AddModelError("", "Не указана цена товара.");
-                return View("CreateProduct", model);
-            }
-
             var product = new Product()
             {
                 StoreId = model.SelectedStore,
@@ -179,7 +172,6 @@ namespace WebUI.Areas.Admin.Controllers
                 Product = product,
                 ShippingTime = model.ProductModel.ShippingTime,
                 Price = model.ProductModel.Price,
-                PriceUSD = model.ProductModel.PriceUSD,
                 Quantity = model.ProductModel.Quantity,
                 IsActive = true
             };
@@ -409,18 +401,12 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return PartialView("_EditProductModelModal", model);
             }
-            if (model.Price == null && model.PriceUSD == null)
-            {
-                ModelState.AddModelError("", "Должна быть указана цена.");
-                return PartialView("_EditProductModelModal", model);
-            }
 
             var productModel = _cntx.ProductModels.Find(model.Id);
             productModel.Name = model.Name;
             productModel.Code = model.Code;
             productModel.ShippingTime = model.ShippingTime;
             productModel.Price = model.Price;
-            productModel.PriceUSD = model.PriceUSD;
             productModel.Quantity = model.Quantity;
             productModel.IsActive = model.IsActive;
             productModel.IsBlocked = model.IsBlocked;
@@ -474,11 +460,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return PartialView("_CreateProductModelModal", model);
             }
-            if (model.Price == null && model.PriceUSD == null)
-            {
-                ModelState.AddModelError("", "Должна быть указана цена.");
-                return PartialView("_CreateProductModelModal", model);
-            }
+
             var productModel = new ProductModel
             {
                 ProductId = model.ProductId,
@@ -486,7 +468,6 @@ namespace WebUI.Areas.Admin.Controllers
                 Code = model.Code,
                 ShippingTime = model.ShippingTime,
                 Price = model.Price,
-                PriceUSD = model.PriceUSD,
                 Quantity = model.Quantity,
                 IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked

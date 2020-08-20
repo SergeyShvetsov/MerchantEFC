@@ -181,7 +181,8 @@ namespace WebUI.Controllers
                 UserId = user.Id,
                 Role = user.UserRole,
                 StoreId = user.StoreId,
-                CityId = user.CityId
+                CityId = user.CityId,
+                CompanyId = user.CompanyId
             });
 
             // создаем объект ClaimsIdentity

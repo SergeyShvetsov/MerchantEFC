@@ -41,6 +41,33 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+            @if (ViewBag.AvailableCities != null || ViewBag.AvailableCities.Any())
+            {
+                <div class="form-group">
+                    <label asp-for="CityId" class="control-label"></label>
+                    <select asp-for="CityId" class="form-control custom-select">
+                        @if (Model.CityId == null)
+                        {
+                            <option value="0">None</option>
+                        }
+                        else
+                        {
+                            <option selected="selected" value="0">None</option>
+                        }
+                        @foreach (var item in ViewBag.AvailableCities as List<City>)
+                        {
+                            if (Model.CityId != null && item.Id == Model.CityId)
+                            {
+                                <option selected="selected" value="@item.Id">@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
             @if (ViewBag.AvailableStores != null || ViewBag.AvailableStores.Any())
             {
                 <div class="form-group">
@@ -57,6 +84,33 @@
                         @foreach (var item in ViewBag.AvailableStores as List<Store>)
                         {
                             if (Model.StoreId != null && item.Id == Model.StoreId)
+                            {
+                                <option selected="selected" value="@item.Id">@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+            @if (ViewBag.AvailableCompanies != null || ViewBag.AvailableCompanies.Any())
+            {
+                <div class="form-group">
+                    <label asp-for="CompanyId" class="control-label"></label>
+                    <select asp-for="CompanyId" class="form-control custom-select">
+                        @if (Model.CompanyId == null)
+                        {
+                            <option value="0">None</option>
+                        }
+                        else
+                        {
+                            <option selected="selected" value="0">None</option>
+                        }
+                        @foreach (var item in ViewBag.AvailableCompanies as List<Company>)
+                        {
+                            if (Model.CompanyId != null && item.Id == Model.CompanyId)
                             {
                                 <option selected="selected" value="@item.Id">@item.Name</option>
                             }
@@ -114,11 +168,6 @@
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="List">@resources["BackToList"]</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

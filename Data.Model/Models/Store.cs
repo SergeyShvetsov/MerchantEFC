@@ -18,8 +18,8 @@ namespace Data.Model.Models
 
         public int CityId { get; set; }
         public virtual City City { get; set; }
-
-        public int AppUsersId { get; set; }
+        public int? CompanyId { get; set; }
+        public virtual Company Company { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AppUser> Users { get; set; } = new HashSet<AppUser>();
@@ -29,6 +29,8 @@ namespace Data.Model.Models
 
         public string Code { get; set; }
         public string Name { get; set; }
+        [Column(TypeName = "image")]
+        public byte[] Logo { get; set; }
 
         public string EmailAddress { get; set; }
         public string Phone  { get; set; }

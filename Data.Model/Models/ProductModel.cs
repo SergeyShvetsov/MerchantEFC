@@ -21,8 +21,7 @@ namespace Data.Model.Models
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
 
-        public double? Price { get; set; }
-        public double? PriceUSD { get; set; }
+        public double Price { get; set; }
         public double? SalesPrice { get; set; }
 
         public int? Quantity { get; set; }

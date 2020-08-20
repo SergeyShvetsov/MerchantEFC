@@ -21,9 +21,16 @@ namespace Data.Model.Extensions
             {
                 res = res.Where(x => x.Id == user.StoreId);
             }
-            else if (user.CityId != null)
+            else
             {
-                res = res.Where(x => x.CityId == user.CityId);
+                if (user.CityId != null)
+                {
+                    res = res.Where(x => x.CityId == user.CityId);
+                }
+                if (user.CompanyId != null)
+                {
+                    res = res.Where(x => x.CompanyId == user.CompanyId);
+                }
             }
             return res;
         }

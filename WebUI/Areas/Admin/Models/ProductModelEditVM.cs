@@ -19,7 +19,6 @@ namespace WebUI.Areas.Admin.Models
             Name = model.Name;
             ShippingTime = model.ShippingTime;
             Price = model.Price;
-            PriceUSD = model.PriceUSD;
             SalesPrice = model.SalesPrice;
             Quantity = model.Quantity;
             IsActive = model.IsActive;
@@ -40,9 +39,8 @@ namespace WebUI.Areas.Admin.Models
         public string ShippingTime { get; set; }
 
         [DisplayName("Price")]
-        public double? Price { get; set; }
-        [DisplayName("PriceUSD")]
-        public double? PriceUSD { get; set; }
+        [Required(ErrorMessage = "PriceRequired")]
+        public double Price { get; set; }
         [DisplayName("SalesPrice")]
         public double? SalesPrice { get; set; }
         [DisplayName("Quantity")]

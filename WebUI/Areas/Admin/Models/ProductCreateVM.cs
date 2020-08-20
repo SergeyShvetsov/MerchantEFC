@@ -16,7 +16,7 @@ namespace WebUI.Areas.Admin.Models
         public ProductCreateVM() {}
 
         [DisplayName("StoreName")]
-        [Required(ErrorMessage = "ProductNameRequired")]
+        [Required(ErrorMessage = "StoreRequired")]
         public int SelectedStore { get; set; }
         //public List<SelectListItem> StoreList { get; set; }
         public IEnumerable<Select2ListItem> StoreList { get; set; 

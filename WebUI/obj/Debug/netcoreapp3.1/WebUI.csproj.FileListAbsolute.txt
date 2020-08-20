@@ -825,3 +825,7 @@ D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\WebUI.MvcApplicationPartsAssem
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shop\Catalog.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shop\Category.cshtml.g.cs
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shop\Index.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Companies\List.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Companies\_CreateCompanyModal.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Companies\_DeleteCompanyModal.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Companies\_EditCompanyModal.cshtml.g.cs

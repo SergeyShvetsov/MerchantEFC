@@ -31,7 +31,9 @@ namespace WebUI.Areas.Admin.Controllers
 
         private IEnumerable<RoleType> _availableRoles => _cntx.GetAvailableRoles(User);
         private IEnumerable<Status> _availableStatuses => _cntx.GetAvailableStatuses(User);
+        private readonly IQueryable<City> _availableCities;
         private readonly IQueryable<Store> _availableStores;
+        private readonly IQueryable<Company> _availableCompanies;
         private readonly IQueryable<AppUser> _availableUsers;
 
         public UsersController(IOptions<AppConfig> config, ApplicationContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
@@ -41,9 +43,22 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx = context;
             _resources = localizer.GetLocalResources();
             _httpContextAccessor = httpContextAccessor;
+            _availableCities = _cntx.Cities.ApplySecurityFilter(_session);
             _availableStores = _cntx.Stores.ApplySecurityFilter(_session);
+            _availableCompanies = _cntx.Companies.ApplySecurityFilter(_session);
             _availableUsers = _cntx.AppUsers.ApplySecurityFilter(_session);
         }
+
+        private void SetViewBag()
+        {
+            ViewBag.TabItem = "Users";
+            ViewBag.AvailableRoles = _availableRoles;
+            ViewBag.AvailableCities = _availableCities.ToList();
+            ViewBag.AvailableStores = _availableStores.ToList();
+            ViewBag.AvailableCompanies = _availableCompanies.ToList();
+            ViewBag.AvailableStatuses = _availableStatuses;
+        }
+
         // GET: UsersController
         public ActionResult List(int? page, int roleId)
         {
@@ -96,11 +111,7 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUser(Guid? roleId, int? storeId)
         {
-            ViewBag.TabItem = "Users";
-            ViewBag.AvailableRoles = _availableRoles;
-            ViewBag.AvailableStores = _availableStores.ToList();
-            ViewBag.AvailableStatuses = _availableStatuses;
-
+            SetViewBag();
             var model = new UserEditVM()
             {
                 Password = Data.Tools.Pasword.Generate(_config.PasswordLenght),
@@ -119,17 +130,13 @@ namespace WebUI.Areas.Admin.Controllers
             //Проверяем модель на валидность
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableRoles = _availableRoles;
-                ViewBag.AvailableStores = _availableStores.ToList();
-                ViewBag.AvailableStatuses = _availableStatuses;
+                SetViewBag();
                 return View(model);
             }
 
             if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
             {
-                ViewBag.AvailableRoles = _availableRoles;
-                ViewBag.AvailableStores = _availableStores.ToList();
-                ViewBag.AvailableStatuses = _availableStatuses;
+                SetViewBag();
                 ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
                 return View(model);
             }
@@ -137,9 +144,7 @@ namespace WebUI.Areas.Admin.Controllers
             // Проверяем имя на уникальность
             if (_cntx.AppUsers.Any(x => x.UserName == model.UserName && !x.IsArchived))
             {
-                ViewBag.AvailableRoles = _availableRoles;
-                ViewBag.AvailableStores = _availableStores.ToList();
-                ViewBag.AvailableStatuses = _availableStatuses;
+                SetViewBag();
                 ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                 model.UserName = string.Empty;
                 return View(model);
@@ -154,7 +159,9 @@ namespace WebUI.Areas.Admin.Controllers
                 UserName = model.UserName,
                 Password = model.Password,
                 UserRole = model.UserRole,
-                StoreId = model.StoreId
+                CityId = model.CityId == 0 ? null : model.CityId,
+                StoreId = model.StoreId == 0 ? null : model.StoreId,
+                CompanyId = model.CompanyId == 0 ? null : model.CompanyId
             };
 
             _cntx.AppUsers.Add(userDTO);
@@ -170,9 +177,7 @@ namespace WebUI.Areas.Admin.Controllers
         public IActionResult EditUser(Guid id)
         {
             ViewBag.TabItem = "Users";
-            ViewBag.AvailableRoles = _availableRoles;
-            ViewBag.AvailableStores = _availableStores.ToList();
-            ViewBag.AvailableStatuses = _availableStatuses;
+            SetViewBag();
             var user = _cntx.AppUsers.Find(id);
 
             return View("EditUser", new UserEditVM(user));
@@ -185,17 +190,13 @@ namespace WebUI.Areas.Admin.Controllers
             //Проверяем модель на валидность
             if (!ModelState.IsValid)
             {
-                ViewBag.AvailableRoles = _availableRoles;
-                ViewBag.AvailableStores = _availableStores.ToList();
-                ViewBag.AvailableStatuses = _availableStatuses;
+                SetViewBag();
                 return View(model);
             }
 
             if (string.IsNullOrEmpty(model.Password) || model.Password.Length < _config.PasswordLenght)
             {
-                ViewBag.AvailableRoles = _availableRoles;
-                ViewBag.AvailableStores = _availableStores.ToList();
-                ViewBag.AvailableStatuses = _availableStatuses;
+                SetViewBag();
                 ModelState.AddModelError("", string.Format(_resources["InvalidPasswordLenght"], _config.PasswordLenght));
                 return View(model);
             }
@@ -209,13 +210,13 @@ namespace WebUI.Areas.Admin.Controllers
             userDTO.UserName = model.UserName;
             userDTO.Password = model.Password;
             userDTO.UserRole = model.UserRole;
-            userDTO.StoreId = (int)model.StoreId;
+            userDTO.CityId = model.CityId == 0 ? null : model.CityId;
+            userDTO.StoreId = model.StoreId == 0 ? null : model.StoreId;
+            userDTO.CompanyId = model.CompanyId == 0 ? null : model.CompanyId;
 
             if (userDTO.UserName != model.UserName && _cntx.AppUsers.Any(x => x.UserName == model.UserName && !x.IsArchived))
             {
-                ViewBag.AvailableRoles = _availableRoles;
-                ViewBag.AvailableStores = _availableStores.ToList();
-                ViewBag.AvailableStatuses = _availableStatuses;
+                SetViewBag();
                 ModelState.AddModelError("", string.Format(_resources["LoginIsTaken"], model.UserName));
                 model.UserName = userDTO.UserName;
                 return View(model);

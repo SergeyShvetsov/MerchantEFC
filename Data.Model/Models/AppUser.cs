@@ -26,12 +26,18 @@ namespace Data.Model.Models
         public int? CityId { get; set; }
         public virtual City City { get; set; }
 
+        public int? CompanyId { get; set; }
+        public virtual Company Company { get; set; }
+
         public int? StoreId { get; set; }
         public virtual Store Store { get; set; }
 
 
         public RoleType UserRole { get; set; } = RoleType.User;
         public Status UserStatus { get; set; } = Status.Active;
+        
+        public int Votes { get; set; }
+        public int Points { get; set; }
 
         public bool IsActive { get; set; }
         public bool IsBlocked { get; set; }

@@ -13,5 +13,6 @@ namespace Data.Model
         public RoleType Role { get; set; }
         public int? StoreId { get; set; }
         public int? CityId { get; set; }
+        public int? CompanyId { get; set; }
     }
 }

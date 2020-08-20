@@ -20,8 +20,8 @@ namespace WebUI.Models
                 Name = product.Name;
             }
             Image = product.SmallImage;
-            MinPrice = product.Models?.Min(x => x.SalesPrice ?? x.Price ?? 0);
-            MaxPrice = product.Models?.Max(x => x.SalesPrice ?? x.Price ?? 0);
+            MinPrice = product.Models?.Min(x => x.SalesPrice ?? x.Price);
+            MaxPrice = product.Models?.Max(x => x.SalesPrice ?? x.Price);
         }
 
         public string Name { get; set; }

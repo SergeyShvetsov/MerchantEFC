@@ -21,6 +21,8 @@ namespace WebUI.Areas.Admin.Models
             Email = usr.EmailAddress;
             Password = usr.Password;
             StoreId = usr.Store?.Id;
+            CityId = usr.City?.Id;
+            CompanyId = usr.Company?.Id;
             UserRole = usr.UserRole;
             UserStatus = usr.UserStatus;
         }
@@ -40,6 +42,7 @@ namespace WebUI.Areas.Admin.Models
         [Required(ErrorMessage = "EmailRequired")]
         [DataType(DataType.EmailAddress, ErrorMessage = "EmailWrongFormat")]
         public string Email { get; set; }
+        [DisplayName("Password")]
         [Required(ErrorMessage = "PasswordRequired")]
         public string Password { get; set; }
         [Required(ErrorMessage = "AssignedRoleRequired")]
@@ -47,6 +50,10 @@ namespace WebUI.Areas.Admin.Models
         public RoleType UserRole { get; set; }
         [DisplayName("AssignedStore")]
         public int? StoreId { get; set; }
+        [DisplayName("AssignedCity")]
+        public int? CityId { get; set; }
+        [DisplayName("AssignedCompany")]
+        public int? CompanyId { get; set; }
         [DisplayName("UserStatus")]
         public Status UserStatus { get; set; } = Status.Active;
     }

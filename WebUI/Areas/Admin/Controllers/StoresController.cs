@@ -30,6 +30,7 @@ namespace WebUI.Areas.Admin.Controllers
         private ISession _session => _httpContextAccessor.HttpContext.Session;
         private readonly IQueryable<Store> _availableStores;
         private readonly IQueryable<City> _availableCities;
+        private readonly IQueryable<Company> _availableCompanies;
 
         public StoresController(IOptions<AppConfig> config, ApplicationContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor)
         {
@@ -38,6 +39,7 @@ namespace WebUI.Areas.Admin.Controllers
             _resources = localizer.GetLocalResources();
             _httpContextAccessor = httpContextAccessor;
             _availableCities = _cntx.Cities.ApplySecurityFilter(_session);
+            _availableCompanies = _cntx.Companies.ApplySecurityFilter(_session);
             _availableStores = _cntx.Stores.ApplySecurityFilter(_session);
         }
 
@@ -58,6 +60,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             ViewBag.TabItem = "Stores";
             ViewBag.AvailableCities = _availableCities.ToList();
+            ViewBag.AvailableCompanies = _availableCompanies.ToList();
             return PartialView("_CreateStoreModal", new StoreEditVM());
         }
         [HttpPost]
@@ -66,6 +69,7 @@ namespace WebUI.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.AvailableCities = _availableCities.ToList();
+                ViewBag.AvailableCompanies = _availableCompanies.ToList();
                 return PartialView("_CreateStoreModal", model);
             }
             var code = model.Code.NormalizeCode();
@@ -73,6 +77,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 model.Code = code;
                 ViewBag.AvailableCities = _availableCities.ToList();
+                ViewBag.AvailableCompanies = _availableCompanies.ToList();
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
                 return PartialView("_CreateStoreModal", model);
             }
@@ -86,7 +91,8 @@ namespace WebUI.Areas.Admin.Controllers
                 TIN = model.TIN,
                 IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked,
-                CityId = model.CityId
+                CityId = model.CityId,
+                CompanyId = model.CompanyId == 0 ? null : model.CompanyId
             };
             _cntx.Stores.Update(store);
             _cntx.SaveChanges();
@@ -123,6 +129,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             ViewBag.TabItem = "Stores";
             ViewBag.AvailableCities = _availableCities.ToList();
+            ViewBag.AvailableCompanies = _availableCompanies.ToList();
             var store = _cntx.Stores.Find(id);
             var model = new StoreEditVM(store);
             return PartialView("_EditStoreModal", model);
@@ -133,6 +140,7 @@ namespace WebUI.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.AvailableCities = _availableCities.ToList();
+                ViewBag.AvailableCompanies = _availableCompanies.ToList();
                 return PartialView("_EditStoreModal", model);
             }
             var store = _cntx.Stores.Find(model.Id);
@@ -141,6 +149,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 model.Code = code;
                 ViewBag.AvailableCities = _availableCities.ToList();
+                ViewBag.AvailableCompanies = _availableCompanies.ToList();
                 ModelState.AddModelError("", string.Format(_resources["CodeIsTaken"], code));
                 return PartialView("_EditStoreModal", model);
             }
@@ -153,7 +162,7 @@ namespace WebUI.Areas.Admin.Controllers
             store.IsActive = model.IsActive;
             store.IsBlocked = model.IsBlocked;
             store.CityId = model.CityId;
-
+            store.CompanyId = model.CompanyId == 0 ? null : model.CompanyId;
             _cntx.Stores.Update(store);
             _cntx.SaveChanges();
 

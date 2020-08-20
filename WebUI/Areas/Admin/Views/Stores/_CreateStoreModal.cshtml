@@ -7,7 +7,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editStoreLabel">@resources["EditStore"]</h5>
+                <h5 class="modal-title" id="editStoreLabel">@resources["CreateStore"]</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body">
@@ -24,6 +24,34 @@
                                 @foreach (var item in ViewBag.AvailableCities as List<City>)
                                 {
                                     if (item.Id == Model.CityId)
+                                    {
+                                        <option selected="selected" value="@item.Id">@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    }
+                    @if (ViewBag.AvailableCompanies != null || ViewBag.AvailableCompanies.Any())
+                    {
+                        <div class="form-group">
+                            <label asp-for="CompanyId" class="control-label"></label>
+                            <br />
+                            <select asp-for="CompanyId" class="form-control custom-select">
+                                @if (Model.CompanyId == null)
+                                {
+                                    <option value="0">None</option>
+                                }
+                                else
+                                {
+                                    <option selected="selected" value="0">None</option>
+                                }
+                                @foreach (var item in ViewBag.AvailableCompanies as List<Company>)
+                                {
+                                    if (Model.CompanyId != null && item.Id == Model.CompanyId)
                                     {
                                         <option selected="selected" value="@item.Id">@item.Name</option>
                                     }
