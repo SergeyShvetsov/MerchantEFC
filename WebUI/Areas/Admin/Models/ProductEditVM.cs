@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
+using Data.Tools.Extensions;
 
 namespace WebUI.Areas.Admin.Models
 {
@@ -22,11 +22,10 @@ namespace WebUI.Areas.Admin.Models
             Code = product.Code;
             Brand = product.Brand;
             Shipping = product.Shipping;
-            Categories = product.Categories;
+            Categories = product.Categories.Select(s=>s.Category).ToJoinedStringOrEmpty(";");
             Description = product.Description;
             IsActive = product.IsActive;
             IsBlocked = product.IsBlocked;
-            LargeImage = product.LargeImage;
             ModelSectionName_ru = product.ModelSectionName_ru;
             ModelSectionName_uz_c = product.ModelSectionName_uz_c;
             ModelSectionName_uz_l = product.ModelSectionName_uz_l;
@@ -66,9 +65,8 @@ namespace WebUI.Areas.Admin.Models
         public bool IsBlocked { get; set; }
 
         public bool ProductImageChanged { get; set; }
-        public byte[] LargeImage { get; set; }
 
-        public virtual List<ProductImage> Gallery { get; set; }
+        public List<int> Gallery { get; set; }
 
         [DisplayName("Русский")]
         public string ModelSectionName_ru { get; set; }

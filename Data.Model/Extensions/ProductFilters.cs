@@ -1,9 +1,6 @@
-﻿using Data.Model.Interfaces;
-using Data.Model.Models;
+﻿using Data.Model.Models;
 using Data.Tools.Extensions;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Data.Model.Extensions
@@ -34,5 +31,6 @@ namespace Data.Model.Extensions
             }
             return res;
         }
+
     }
 }

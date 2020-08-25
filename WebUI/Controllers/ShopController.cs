@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WebUI.Extensions;
@@ -28,13 +31,23 @@ namespace WebUI.Controllers
         private readonly IStringLocalizer _resources;
         private readonly ICatalogService _catalog;
         private readonly AppConfig _config;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
+
         private readonly IEnumerable<Category> _categories;
 
-        public ShopController(ApplicationContext context, IStringLocalizerFactory localizer, ICatalogService catalog, IWebHostEnvironment _env, IOptions<AppConfig> config)
+        public ShopController(ApplicationContext context,
+            IStringLocalizerFactory localizer,
+            ICatalogService catalog,
+            IWebHostEnvironment env,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<AppConfig> config)
         {
             _cntx = context;
             _resources = localizer.GetLocalResources();
-
+            _env = env;
+            _httpContextAccessor = httpContextAccessor;
             _categories = catalog.Categories;
             _catalog = catalog;
 
@@ -80,23 +93,106 @@ namespace WebUI.Controllers
             return View(model);
         }
 
-        public IActionResult Catalog(int? page, string c)
+        public IActionResult Catalog(int? page)
         {
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_RowsPerPage;
-            var cats = _catalog.GetProductCategories().Select(s => s.Code);
-            if (!c.IsNullOrEmpty())
+
+            var filters = _session.Get<Filters>("Filters");
+            if (filters == null)
             {
-                cats = cats.Where(x => x.StartsWith(c));
+                filters = new Filters();
+                _session.Set<Filters>("Filters", filters);
+            }
+            var noCat = filters.Category == string.Empty;
+            var products = _cntx.Products
+                                .Where(w => noCat || _cntx.ProductCategories.Any(x => x.ProductId == w.Id && x.Category.StartsWith(filters.Category)))
+                                .AsNoTracking()
+                                .ApplyArchivedFilter()
+                                .ApplyAvailableFilter();
+
+            var models = _cntx.ProductModels
+                              .AsNoTracking()
+                              .Where(pm => !pm.IsArchived && !pm.IsBlocked && pm.IsActive);
+
+            var items = (from pm in models
+                         join p in products on pm.ProductId equals p.Id
+                         join s in _cntx.Stores.AsNoTracking() on p.StoreId equals s.Id
+                         where !s.IsArchived && !s.IsBlocked && s.IsActive
+                         select new CatalogItem()
+                         {
+                             ProductId = p.Id,
+                             StoreId = p.StoreId,
+                             CityId = s.CityId,
+                             Name = p.Name,
+                             ModelCount = models.Where(x => x.ProductId == p.Id).Count(),
+                             Points = p.Points,
+                             Votes = p.Votes,
+                             Availability = pm.Availability,
+                             Price = pm.Price,
+                             SalesPrice = pm.SalesPrice,
+                             SalesQuantity = pm.SalesQuantity,
+                         });
+
+            switch (filters.OrderBy)
+            {
+                case OrderBy.PriceDesc:
+                    items = items.OrderByDescending(o => o.SalesPrice ?? o.Price);
+                    break;
+                default:
+                    items = items.OrderByDescending(o => o.Votes == 0 ? 0 : (double)o.Points / o.Votes);
+                    break;
             }
 
-            var listOfProducts = _cntx.Products
-                                 .Select(s => new ProductCardVM(s));
-
-            var onePageOfStores = listOfProducts.ToPagedList(pageNumber, pageSize: pageSize);
+            var onePageOfStores = items.ToPagedList(pageNumber, pageSize: pageSize);
 
             ViewBag.Title = "Catalog";
             return View(onePageOfStores);
+        }
+        public IActionResult SetCategory(string c)
+        {
+            var filters = _session.Get<Filters>("Filters");
+            if (filters == null) filters = new Filters();
+            filters.Category = c;
+            _session.Set("Filters", filters);
+
+            return RedirectToAction("Catalog");
+        }
+        public IActionResult ProductImage(int? id, ImageSize s = ImageSize.Medium)
+        {
+            byte[] buffer;
+
+            var pr = _cntx.SiteImages.AsNoTracking().FirstOrDefault(x => x.ObjectId == id && x.ImageType == ImageType.ProductImage);
+            if (pr == null)
+            {
+                var uplDir = Path.Combine(_env.WebRootPath, "Images\\no_image.png");
+                buffer = System.IO.File.ReadAllBytes(uplDir);
+            }
+            else
+            {
+                buffer = pr.ObjImage;
+            }
+
+            var img = buffer.GetImage().Scale((int)s).ToArray();
+            return File(img, "image/png");
+        }
+        public IActionResult SiteImage(int? id, ImageSize s = ImageSize.Medium)
+        {
+            byte[] buffer;
+
+            var pr = _cntx.SiteImages.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            if (pr == null)
+            {
+                var uplDir = Path.Combine(_env.WebRootPath, "Images\\no_image.png");
+                buffer = System.IO.File.ReadAllBytes(uplDir);
+            }
+            else
+            {
+                buffer = pr.ObjImage;
+            }
+
+            var img = buffer.GetImage().Scale((int)s).ToArray();
+            return File(img, "image/png");
         }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WebUI.Areas.Admin.Models;
@@ -47,7 +48,7 @@ namespace WebUI.Areas.Admin.Controllers
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_RowsPerPage;
 
-            var tmp = _availableCities.OrderBy(o => o.Name_ru);
+            var tmp = _availableCities.AsNoTracking().OrderBy(o => o.Name_ru);
             return View(tmp.ToPagedList(pageNumber, pageSize));
         }
 

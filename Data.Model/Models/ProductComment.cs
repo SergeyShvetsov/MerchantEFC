@@ -16,12 +16,13 @@ namespace Data.Model.Models
         public int AuthorId { get; set; }
         public virtual AppUser Author { get; set; }
 
-        public int ModelId { get; set; }
-        public virtual ProductModel Model { get; set; }
+        public int ProductId { get; set; }
+        public virtual Product Product { get; set; }
 
         public string Comment { get; set; }
-        public int ProductRating { get; set; }
-        public int StoreRating { get; set; }
+
+        public int ProductPoints { get; set; }
+        public int StorePoints { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

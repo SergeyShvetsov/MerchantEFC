@@ -7,14 +7,13 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    public class Company : BaseEntity, IArchivableEntity
+    public class Company : BaseEntity, IArchivableEntity, IAvailableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public byte[] Logo { get; set; }
 
         public string EmailAddress { get; set; }
         public string Phone { get; set; }

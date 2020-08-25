@@ -10,7 +10,7 @@ using System.Text;
 namespace Data.Model.Models
 {
     [Table("Stores")]
-    public class Store : BaseEntity, IArchivableEntity
+    public class Store : BaseEntity, IArchivableEntity, IAvailableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -29,11 +29,14 @@ namespace Data.Model.Models
 
         public string Code { get; set; }
         public string Name { get; set; }
-        public byte[] Logo { get; set; }
 
         public string EmailAddress { get; set; }
         public string Phone { get; set; }
         public string TIN { get; set; } // tax identification number
+
+        public int Points { get; set; }
+        public int Votes { get; set; }
+        public double Rating => Votes != 0 ? (double)Points / Votes : 0;
 
         public bool IsActive { get; set; }
         public bool IsBlocked { get; set; }

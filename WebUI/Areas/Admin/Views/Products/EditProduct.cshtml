@@ -17,16 +17,7 @@
     <div class="row">
         <div class="col-5">
             <div class="row">
-                @if (Model.LargeImage != null)
-                {
-                    <img id="productimage" style="width: 100%; border:solid 1px lightgray; display:normal;" src="data:image;base64,@System.Convert.ToBase64String(Model.LargeImage)" />
-                    <img id="noproductimage" style="display: none;" />
-                }
-                else
-                {
-                    <img id="productimage" style="display: none;" />
-                    <img id="noproductimage" style="width: 100%; border:solid 1px lightgray; display:normal;" src="~/Images/no_image.png" />
-                }
+                <img id="productimage" style="width: 100%; border:solid 1px lightgray; display:normal;" src="/Shop/ProductImage?id=@Model.ProductId&s=@ImageSize.Large" />
                 <div class="input-group mb-3">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="file" name="file" onchange="onImageSelected(event)">
@@ -40,10 +31,10 @@
                     <div class="col">
                         <div class="galleryStyle">
                             <div style="width:50px; height:50px;">
-                                <img src="data:image;base64,@System.Convert.ToBase64String(image.Thumbs)" />
+                                <img src="/Shop/SiteImage?id=@image&s=@ImageSize.Small" />
                             </div>
                             <div style="text-align:center;">
-                                @Html.ActionLink(linkText: "Delete", actionName: "DeleteImage", controllerName: "Products", null, new { @class = "deleteimage btn btn-danger", data_name = image.Id, style = "margin:10px;" })
+                                @Html.ActionLink(linkText: "Delete", actionName: "DeleteImage", controllerName: "Products", null, new { @class = "deleteimage btn btn-danger", data_name = image, style = "margin:10px;" })
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    public class ProductOption : BaseEntity, IArchivableEntity
+    public class ProductOption : BaseEntity, IArchivableEntity, IAvailableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

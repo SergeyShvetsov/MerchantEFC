@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    public class ProductModel : BaseEntity, IArchivableEntity
+    public class ProductModel : BaseEntity, IArchivableEntity, IAvailableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,6 +20,7 @@ namespace Data.Model.Models
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
 
+        public Available Availability { get; set; }
         public double Price { get; set; }
         public double? SalesPrice { get; set; }
 

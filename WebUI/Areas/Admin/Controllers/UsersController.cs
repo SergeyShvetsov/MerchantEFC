@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WebUI.Areas.Admin.Models;
@@ -72,7 +73,7 @@ namespace WebUI.Areas.Admin.Controllers
             ViewBag.AvailableRoles = _availableRoles;
             ViewBag.SelectedRole = roleId;
 
-            var listOfUsers = _availableUsers;
+            var listOfUsers = _availableUsers.AsNoTracking();
 
             if (roleId != 0)
             {

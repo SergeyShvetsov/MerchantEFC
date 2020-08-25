@@ -8,19 +8,19 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    public class ProductPage : BaseEntity
+    public class ProductPage : BaseEntity, IAvailableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public virtual Product Product { get; set; }
 
         public string Name_ru { get; set; }
         public string Name_uz_c { get; set; }
         public string Name_uz_l { get; set; }
         public string Name => GetTranslatedName();
 
+        [Column("Body", TypeName = "MEDIUMTEXT")]
         public string Body { get; set; }
         public int SortOrder { get; set; }
 

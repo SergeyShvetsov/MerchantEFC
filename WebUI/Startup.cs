@@ -109,6 +109,7 @@ namespace WebUI
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
 
+
             app.UseSession();
 
             app.UseMvc(routes =>
@@ -118,13 +119,6 @@ namespace WebUI
                 routes.MapRoute(name: "default", template: "{controller=Shop}/{action=Index}/{id?}");
             });
 
-            //app.UseRouting();
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "Areas",
-            //      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             //    endpoints.MapControllerRoute(
             //        name: "Pages",
             //        pattern: "{controller=Pages}/{action=Index}/{page?}");

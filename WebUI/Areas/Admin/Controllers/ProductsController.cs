@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
@@ -105,7 +106,6 @@ namespace WebUI.Areas.Admin.Controllers
                 ModelState.AddModelError("", "Не выбраны активные категории.");
                 return View("CreateProduct", model);
             }
-            model.Categories = cats.ToJoinedStringOrEmpty(";");
 
             var product = new Product()
             {
@@ -113,7 +113,6 @@ namespace WebUI.Areas.Admin.Controllers
                 Code = model.Code,
                 Name = model.Name,
                 Brand = model.Brand,
-                Categories = model.Categories,
                 Shipping = model.Shipping,
                 ModelSectionName_ru = model.ModelSectionName_ru,
                 ModelSectionName_uz_c = model.ModelSectionName_uz_c,
@@ -124,6 +123,14 @@ namespace WebUI.Areas.Admin.Controllers
                 IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked
             };
+            _cntx.Products.Add(product);
+            _cntx.SaveChanges();
+
+            foreach (var c in cats)
+            {
+                _cntx.ProductCategories.Add(new ProductCategory { ProductId = product.Id, Category = c });
+            }
+            _cntx.SaveChanges();
 
             if (file != null && file.Length > 0)
             {
@@ -133,38 +140,16 @@ namespace WebUI.Areas.Admin.Controllers
                     ModelState.AddModelError("", "The product image was not uploaded - wrong image format!");
                     return View("CreateProduct", model);
                 }
-                var img = Image.Load(file.OpenReadStream());
 
-                var size = img.ScaledImageSize(new Size(450, 450));
-                var limg = img.Clone(i => i.Resize(size));
-                size = img.ScaledImageSize(new Size(150, 150));
-                var mimg = img.Clone(i => i.Resize(size));
-                size = img.ScaledImageSize(new Size(50, 50));
-                var simg = img.Clone(i => i.Resize(size));
-
-                IImageEncoder imageEncoder = new PngEncoder()
+                var siteImage = new SiteImage
                 {
-                    CompressionLevel = PngCompressionLevel.DefaultCompression
+                    ObjectId = product.Id,
+                    ImageType = ImageType.ProductImage,
+                    ObjImage = file.GetImage().Scale((int)ImageSize.Large).ToArray()
                 };
-
-                using (var ms = new MemoryStream())
-                {
-                    limg.Save(ms, imageEncoder);
-                    product.LargeImage = ms.ToArray();
-                }
-                using (var ms1 = new MemoryStream())
-                {
-                    mimg.Save(ms1, imageEncoder);
-                    product.SmallImage = ms1.ToArray();
-                }
-                using (var ms2 = new MemoryStream())
-                {
-                    simg.Save(ms2, imageEncoder);
-                    product.Thumbs = ms2.ToArray();
-                }
+                _cntx.SiteImages.Add(siteImage);
+                _cntx.SaveChanges();
             }
-            _cntx.Products.Add(product);
-            _cntx.SaveChanges();
 
             var mod = new ProductModel()
             {
@@ -173,6 +158,7 @@ namespace WebUI.Areas.Admin.Controllers
                 Product = product,
                 ShippingTime = model.ProductModel.ShippingTime,
                 Price = model.ProductModel.Price,
+                SalesPrice = model.ProductModel.SalesPrice,
                 Quantity = model.ProductModel.Quantity,
                 IsActive = true
             };
@@ -225,7 +211,9 @@ namespace WebUI.Areas.Admin.Controllers
                 .Select(s => new ProductPageEditVM(s))
                 .OrderBy(o => o.SortOrder)
                 .ToList();
-            model.Gallery = _cntx.ProductImages.Where(x => x.ProductId == product.Id)
+
+            model.Gallery = _cntx.SiteImages.Where(x => x.ObjectId == product.Id && x.ImageType == ImageType.GalleryImage)
+                .Select(s => s.Id)
                 .ToList();
 
             return View("EditProduct", model);
@@ -248,14 +236,12 @@ namespace WebUI.Areas.Admin.Controllers
                 ModelState.AddModelError("", "Не выбраны активные категории.");
                 return View("EditProduct", model);
             }
-            model.Categories = cats.ToJoinedStringOrEmpty(";");
 
             var product = _cntx.Products.Find(model.ProductId);
             product.StoreId = model.SelectedStore;
             product.Code = model.Code;
             product.Name = model.Name;
             product.Brand = model.Brand;
-            product.Categories = model.Categories;
             product.Shipping = model.Shipping;
             product.ModelSectionName_ru = model.ModelSectionName_ru;
             product.ModelSectionName_uz_c = model.ModelSectionName_uz_c;
@@ -265,6 +251,16 @@ namespace WebUI.Areas.Admin.Controllers
             product.OptionSectionName_uz_l = model.OptionSectionName_uz_l;
             product.IsActive = model.IsActive;
             product.IsBlocked = model.IsBlocked;
+            _cntx.Products.Update(product);
+
+            foreach (var c in _cntx.ProductCategories.Where(x => x.ProductId == product.Id))
+            {
+                _cntx.ProductCategories.Remove(c);
+            }
+            foreach (var c in cats)
+            {
+                _cntx.ProductCategories.Add(new ProductCategory { ProductId = product.Id, Category = c });
+            }
 
             if (file != null && file.Length > 0)
             {
@@ -274,37 +270,26 @@ namespace WebUI.Areas.Admin.Controllers
                     ModelState.AddModelError("", "The product image was not uploaded - wrong image format!");
                     return View("EditProduct", model);
                 }
-                var img = Image.Load(file.OpenReadStream());
 
-                var size = img.ScaledImageSize(new Size(450, 450));
-                var limg = img.Clone(i => i.Resize(size));
-                size = img.ScaledImageSize(new Size(150, 150));
-                var mimg = img.Clone(i => i.Resize(size));
-                size = img.ScaledImageSize(new Size(50, 50));
-                var simg = img.Clone(i => i.Resize(size));
-
-                IImageEncoder imageEncoder = new PngEncoder()
+                var img = _cntx.SiteImages.FirstOrDefault(x => x.ObjectId == product.Id && x.ImageType == ImageType.ProductImage);
+                if (img == null)
                 {
-                    CompressionLevel = PngCompressionLevel.DefaultCompression
-                };
+                    var siteImage = new SiteImage
+                    {
+                        ObjectId = product.Id,
+                        ImageType = ImageType.ProductImage,
+                        ObjImage = file.GetImage().Scale((int)ImageSize.Large).ToArray()
+                    };
+                    _cntx.SiteImages.Add(siteImage);
 
-                using (var ms = new MemoryStream())
-                {
-                    limg.Save(ms, imageEncoder);
-                    product.LargeImage = ms.ToArray();
                 }
-                using (var ms1 = new MemoryStream())
+                else
                 {
-                    mimg.Save(ms1, imageEncoder);
-                    product.SmallImage = ms1.ToArray();
-                }
-                using (var ms2 = new MemoryStream())
-                {
-                    simg.Save(ms2, imageEncoder);
-                    product.Thumbs = ms2.ToArray();
+                    img.ObjImage = file.GetImage().Scale((int)ImageSize.Large).ToArray();
+                    _cntx.SiteImages.Update(img);
                 }
             }
-            _cntx.Products.Update(product);
+
             _cntx.SaveChanges();
 
             TempData["SM"] = _resources["ProductEdited"].Value;
@@ -340,40 +325,13 @@ namespace WebUI.Areas.Admin.Controllers
                 if (file != null && file.Length > 0)
                 {
                     if (!file.IsImage()) continue;
-                    var model = new ProductImage()
+                    var img = new SiteImage()
                     {
-                        ProductId = id
+                        ObjectId = id,
+                        ImageType = ImageType.GalleryImage,
+                        ObjImage = file.GetImage().Scale((int)ImageSize.Large).ToArray()
                     };
-                    var img = Image.Load(file.OpenReadStream());
-
-                    var size = img.ScaledImageSize(new Size(450, 450));
-                    var limg = img.Clone(i => i.Resize(size));
-                    size = img.ScaledImageSize(new Size(150, 150));
-                    var mimg = img.Clone(i => i.Resize(size));
-                    size = img.ScaledImageSize(new Size(50, 50));
-                    var simg = img.Clone(i => i.Resize(size));
-
-                    IImageEncoder imageEncoder = new PngEncoder()
-                    {
-                        CompressionLevel = PngCompressionLevel.DefaultCompression
-                    };
-
-                    using (var ms = new MemoryStream())
-                    {
-                        limg.Save(ms, imageEncoder);
-                        model.LargeImage = ms.ToArray();
-                    }
-                    using (var ms1 = new MemoryStream())
-                    {
-                        mimg.Save(ms1, imageEncoder);
-                        model.SmallImage = ms1.ToArray();
-                    }
-                    using (var ms2 = new MemoryStream())
-                    {
-                        simg.Save(ms2, imageEncoder);
-                        model.Thumbs = ms2.ToArray();
-                    }
-                    _cntx.ProductImages.Add(model);
+                    _cntx.SiteImages.Add(img);
                     _cntx.SaveChanges();
                 }
             }
@@ -381,8 +339,8 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public void DeleteImage(string id)
         {
-            var image = _cntx.ProductImages.Find(Convert.ToInt32(id));
-            _cntx.ProductImages.Remove(image);
+            var image = _cntx.SiteImages.Find(Convert.ToInt32(id));
+            _cntx.SiteImages.Remove(image);
             _cntx.SaveChanges();
         }
 
@@ -408,6 +366,7 @@ namespace WebUI.Areas.Admin.Controllers
             productModel.Code = model.Code;
             productModel.ShippingTime = model.ShippingTime;
             productModel.Price = model.Price;
+            productModel.SalesPrice = model.SalesPrice;
             productModel.Quantity = model.Quantity;
             productModel.IsActive = model.IsActive;
             productModel.IsBlocked = model.IsBlocked;
@@ -469,6 +428,7 @@ namespace WebUI.Areas.Admin.Controllers
                 Code = model.Code,
                 ShippingTime = model.ShippingTime,
                 Price = model.Price,
+                SalesPrice = model.SalesPrice,
                 Quantity = model.Quantity,
                 IsActive = model.IsActive,
                 IsBlocked = model.IsBlocked

@@ -20,4 +20,35 @@ namespace Data.Model
         InActive,
         Blocked
     }
+
+    public enum ImageType
+    {
+        CompanyLogo,
+        ShopLogo,
+        ProductImage,
+        GalleryImage
+    }
+    public enum ImageSize
+    {
+        Small = 50,
+        Medium = 150,
+        Large = 450
+    }
+
+    public enum OrderBy
+    {
+        RatingDesc,
+        RatingAsc,
+        NameDesc,
+        NameAsc,
+        PriceDesc,
+        PriceAsc
+    }
+
+    public enum Available
+    {
+        Available,
+        NotAvailable,
+        OnDemand
+    }
 }

@@ -18,5 +18,7 @@ namespace Data.Model.Extensions
             }
             return source;
         }
+
+        public static IQueryable<T> ApplyAvailableFilter<T>(this IQueryable<T> source) => source.Where(w => !((IAvailableEntity)w).IsBlocked && ((IAvailableEntity)w).IsActive);
     }
 }

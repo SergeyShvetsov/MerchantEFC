@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebUI.Models.ProductCardVM>
+﻿@model IEnumerable<Data.Model.Models.CatalogItem>
 
 @{
     ViewData["Title"] = "Catalog";
@@ -10,16 +10,11 @@
         {
             <div class="col-6 col-lg-4 col-xl-3 col-xxl-auto product-card mt-5 mb-2">
                 <a href="" style="text-decoration: none;">
-                    @if (item.Image == null)
-                    {
-                        <img src="~/Images/no_image.png" />
-                    }
-                    else
-                    {
-                        <img src="data:image;base64,@item.Base64Image">
-                    }
+                    <img src="/Shop/ProductImage?id=@item.ProductId&s=@ImageSize.Medium">
+
                     <p>@item.Name</p>
-                    <p>@item.PriceText</p>
+                    <p>вариантов - @item.ModelCount</p>
+                    <p>@(item.SalesPrice??item.Price)</p>
                 </a>
             </div>
         }

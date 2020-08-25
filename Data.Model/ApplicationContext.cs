@@ -15,11 +15,13 @@ namespace Data.Model
         public DbSet<Company> Companies { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductComment> ProductComments { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductModel> ProductModels { get; set; }
         public DbSet<ProductOption> ProductOptions { get; set; }
+
+        public DbSet<SiteImage> SiteImages { get; set; }
         public DbSet<ProductPage> ProductPages { get; set; }
+        public DbSet<ProductComment> ProductComments { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
@@ -31,6 +33,8 @@ namespace Data.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<SiteImage>().Property(p => p.ObjImage).HasColumnType("MediumBlob");
+
             base.OnModelCreating(modelBuilder);
 
             //modelBuilder.Entity<UserRole>()

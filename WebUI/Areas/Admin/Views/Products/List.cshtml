@@ -41,14 +41,7 @@ else
                         <div class="card mb-3" style="max-width: 540px;">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
-                                    @if (item.Image == null)
-                                    {
-                                        <img src="~/Images/no_image.png" class="card-img" />
-                                    }
-                                    else
-                                    {
-                                        <img src="data:image;base64,@System.Convert.ToBase64String(item.Image)" class="card-img">
-                                    }
+                                    <img src="/Shop/ProductImage?id=@item.ProductId&s=@ImageSize.Medium" />
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">

@@ -14,13 +14,11 @@ namespace WebUI.Areas.Admin.Models
         public ProductListVM(Product product)
         {
             ProductId = product.Id;
-            Image = product.SmallImage;
             minPrice = product.Models?.Min(x => x.Price);
             maxPrice = product.Models?.Max(x => x.Price);
             Name = product.Name;
         }
         public int ProductId { get; set; }
-        public byte[] Image { get; set; }
         public string Name { get; set; }
         private double? minPrice { get; set; }
         private double? maxPrice { get; set; }

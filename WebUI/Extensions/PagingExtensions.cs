@@ -46,5 +46,12 @@ namespace WebUI.Extensions
             IPagedList<ProductListVM> pageList = new StaticPagedList<ProductListVM>(res.Select(s => new ProductListVM(s)).ToList(), page, itemsPerPage, totalCount);
             return pageList;
         }
+        public static IPagedList<CatalogItem> ToPagedList(this IOrderedQueryable<CatalogItem> source, int page, int itemsPerPage)
+        {
+            var totalCount = source.Count();
+            var res = source.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage).ToList();
+            IPagedList<CatalogItem> pageList = new StaticPagedList<CatalogItem>(res.Select(s => s).ToList(), page, itemsPerPage, totalCount);
+            return pageList;
+        }
     }
 }

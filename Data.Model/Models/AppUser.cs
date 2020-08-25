@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Data.Model.Models
 {
-    public class AppUser : BaseEntity, IArchivableEntity
+    public class AppUser : BaseEntity, IArchivableEntity, IAvailableEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

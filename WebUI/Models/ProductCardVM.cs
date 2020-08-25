@@ -11,6 +11,7 @@ namespace WebUI.Models
         public ProductCardVM() { }
         public ProductCardVM(Product product)
         {
+            ProductId = product.Id;
             if (product.Name.Length > 60)
             {
                 Name = (string)product.Name.Take(55) + "(...)";
@@ -19,14 +20,12 @@ namespace WebUI.Models
             {
                 Name = product.Name;
             }
-            Image = product.SmallImage;
             MinPrice = product.Models?.Min(x => x.SalesPrice ?? x.Price);
             MaxPrice = product.Models?.Max(x => x.SalesPrice ?? x.Price);
         }
 
+        public int ProductId { get; set; }
         public string Name { get; set; }
-        public byte[] Image { get; set; }
-        public string Base64Image => Image != null ? Convert.ToBase64String(Image) : "";
         public double? MinPrice { get; set; }
         public double? MaxPrice { get; set; }
         public string PriceText

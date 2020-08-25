@@ -12,6 +12,7 @@ using Data.Tools.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WebUI.Areas.Admin.Models;
@@ -38,8 +39,8 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx = context;
             _resources = localizer.GetLocalResources();
             _httpContextAccessor = httpContextAccessor;
-            _availableCities = _cntx.Cities.ApplySecurityFilter(_session);
-            _availableCompanies = _cntx.Companies.ApplySecurityFilter(_session);
+            _availableCities = _cntx.Cities.AsNoTracking().ApplySecurityFilter(_session);
+            _availableCompanies = _cntx.Companies.AsNoTracking().ApplySecurityFilter(_session);
             _availableStores = _cntx.Stores.ApplySecurityFilter(_session);
         }
 
