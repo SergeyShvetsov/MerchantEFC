@@ -20,6 +20,7 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\Hal2020\.nuget\packages\microsoft.entityframeworkcore.tools\3.1.7</PkgMicrosoft_EntityFrameworkCore_Tools>
+    <PkgLucene_Net Condition=" '$(PkgLucene_Net)' == '' ">C:\Users\Hal2020\.nuget\packages\lucene.net\4.8.0-beta00011</PkgLucene_Net>
     <PkgjQuery Condition=" '$(PkgjQuery)' == '' ">C:\Users\Hal2020\.nuget\packages\jquery\3.1.1</PkgjQuery>
     <PkgFontAwesome Condition=" '$(PkgFontAwesome)' == '' ">C:\Users\Hal2020\.nuget\packages\fontawesome\4.7.0</PkgFontAwesome>
   </PropertyGroup>

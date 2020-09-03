@@ -1,4 +1,5 @@
-﻿using Data.Model.Models;
+﻿using Data.Model;
+using Data.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,6 +22,7 @@ namespace WebUI.Areas.Admin.Models
             Price = model.Price;
             SalesPrice = model.SalesPrice;
             Quantity = model.Quantity;
+            Availability = model.Availability;
             IsActive = model.IsActive;
             IsBlocked = model.IsBlocked;
         }
@@ -45,6 +47,10 @@ namespace WebUI.Areas.Admin.Models
         public double? SalesPrice { get; set; }
         [DisplayName("Quantity")]
         public int? Quantity { get; set; }
+        [DisplayName("Availability")]
+        [Required(ErrorMessage = "ModelAvailabilityRequired")]
+        public Available Availability { get; set; }
+
         [DisplayName("IsActive")]
         public bool IsActive { get; set; }
         [DisplayName("IsBlocked")]

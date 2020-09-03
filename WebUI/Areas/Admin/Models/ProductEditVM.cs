@@ -23,7 +23,7 @@ namespace WebUI.Areas.Admin.Models
             Brand = product.Brand;
             Shipping = product.Shipping;
             Categories = product.Categories.Select(s=>s.Category).ToJoinedStringOrEmpty(";");
-            Description = product.Description;
+            Tags = product.Tags;
             IsActive = product.IsActive;
             IsBlocked = product.IsBlocked;
             ModelSectionName_ru = product.ModelSectionName_ru;
@@ -48,6 +48,8 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("ProductName")]
         [Required(ErrorMessage = "ProductNameRequired")]
         public string Name { get; set; }
+        [DisplayName("Tags")]
+        public string Tags { get; set; }
         [DisplayName("Brand")]
         public string Brand { get; set; }
         [DisplayName("Shipping")]
@@ -57,8 +59,6 @@ namespace WebUI.Areas.Admin.Models
         public string Categories { get; set; }
         public IEnumerable<string> CategoryList => Categories.Split(';', options: StringSplitOptions.RemoveEmptyEntries);
 
-        [DisplayName("Description")]
-        public string Description { get; set; }
         [DisplayName("IsActive")]
         public bool IsActive { get; set; }
         [DisplayName("IsBlocked")]

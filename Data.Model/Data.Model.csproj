@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <PackageReference Include="AdminLTE" Version="2.4.0" />
+    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00011" />
+    <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00011" />
+    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00011" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />

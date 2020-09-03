@@ -830,3 +830,9 @@ D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\System.Configuration.Configura
 D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
 D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\J2N.dll
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.dll
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.Analysis.Common.dll
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.Queries.dll
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.QueryParser.dll
+D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.Sandbox.dll

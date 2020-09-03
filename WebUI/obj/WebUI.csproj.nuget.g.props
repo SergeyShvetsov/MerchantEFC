@@ -164,6 +164,7 @@
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\Hal2020\.nuget\packages\microsoft.codeanalysis.analyzers\2.9.4</PkgMicrosoft_CodeAnalysis_Analyzers>
     <PkgjQuery Condition=" '$(PkgjQuery)' == '' ">C:\Users\Hal2020\.nuget\packages\jquery\3.5.1</PkgjQuery>
+    <PkgLucene_Net Condition=" '$(PkgLucene_Net)' == '' ">C:\Users\Hal2020\.nuget\packages\lucene.net\4.8.0-beta00011</PkgLucene_Net>
     <PkgFontAwesome Condition=" '$(PkgFontAwesome)' == '' ">C:\Users\Hal2020\.nuget\packages\fontawesome\4.7.0</PkgFontAwesome>
     <PkgFancybox Condition=" '$(PkgFancybox)' == '' ">C:\Users\Hal2020\.nuget\packages\fancybox\2.1.5</PkgFancybox>
   </PropertyGroup>

@@ -59,6 +59,9 @@
                     @Html.ActionLink(Resource["Products"], "List", "Products", new { area = "Admin" }, new { @class = "nav-link" + (ViewBag.TabItem == "Products" ? " active" : "") })
                 </li>
                 <li class="nav-item">
+                    @Html.ActionLink(Resource["Services"], "Index", "Services", new { area = "Admin" }, new { @class = "nav-link" + (ViewBag.TabItem == "Services" ? " active" : "") })
+                </li>
+                <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
             </ul>

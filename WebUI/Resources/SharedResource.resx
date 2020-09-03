@@ -750,6 +750,9 @@
   <data name="SelectStore" xml:space="preserve">
     <value>Укажите магазин</value>
   </data>
+  <data name="Services" xml:space="preserve">
+    <value>Сервисы</value>
+  </data>
   <data name="Shipping" xml:space="preserve">
     <value>Условия доставки</value>
   </data>

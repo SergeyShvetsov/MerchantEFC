@@ -51,6 +51,18 @@
               "target": "Package",
               "version": "[2.4.0, )"
             },
+            "Lucene.Net": {
+              "target": "Package",
+              "version": "[4.8.0-beta00011, )"
+            },
+            "Lucene.Net.Analysis.Common": {
+              "target": "Package",
+              "version": "[4.8.0-beta00011, )"
+            },
+            "Lucene.Net.QueryParser": {
+              "target": "Package",
+              "version": "[4.8.0-beta00011, )"
+            },
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",
               "version": "[3.1.7, )"
