@@ -735,6 +735,9 @@
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
   </data>
+  <data name="RebuildSearchIndex" xml:space="preserve">
+    <value>Пересоздать индекс текстового поиска.</value>
+  </data>
   <data name="SalesPrice" xml:space="preserve">
     <value>Цена со скидкой</value>
   </data>

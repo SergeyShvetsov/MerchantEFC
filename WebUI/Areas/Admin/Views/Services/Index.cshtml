@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using WebUI.Resources
+@inject LocalizationService resources
+
+@{
+    ViewData["Title"] = "Services";
+}
+@if (TempData["SM"] != null)
+{
+    <div class="alert alert-success">
+
+        @TempData["SM"]
+    </div>
+}
+
+<div class="row">
+    <div class="col">
+        @Html.ActionLink(resources["RebuildSearchIndex"], "RebuildSearchIndex", "Services", null, htmlAttributes: new { @class = "btn btn-outline-primary" })
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function disable() {
+            document.getElementById("rebuildIndex").disable = true;
+        }
+    </script>
+}

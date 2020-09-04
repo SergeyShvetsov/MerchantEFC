@@ -8,10 +8,13 @@ namespace Data.Model.Models
     public class CatalogItem
     {
         public int ProductId { get; set; }
+        public int ModelId { get; set; }
         public int CityId { get; set; }
         public int StoreId { get; set; }
 
         public string Name { get; set; }
+        public string Tags { get; set; }
+        public string Categories { get; set; }
 
         public Available Availability { get; set; }
         public int ModelCount { get; set; }

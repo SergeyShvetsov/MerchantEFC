@@ -98,41 +98,14 @@ namespace WebUI.Controllers
             var pageNumber = page ?? 1;
             int pageSize = _config.Admin_RowsPerPage;
 
-            var filters = _session.Get<Filters>("Filters");
+            var filters = _session.Get<CatalogFilters>("Filters");
             if (filters == null)
             {
-                filters = new Filters();
-                _session.Set<Filters>("Filters", filters);
+                filters = new CatalogFilters();
+                _session.Set<CatalogFilters>("Filters", filters);
             }
-            var noCat = filters.Category == string.Empty;
-            var products = _cntx.Products
-                                .Where(w => noCat || _cntx.ProductCategories.Any(x => x.ProductId == w.Id && x.Category.StartsWith(filters.Category)))
-                                .AsNoTracking()
-                                .ApplyArchivedFilter()
-                                .ApplyAvailableFilter();
 
-            var models = _cntx.ProductModels
-                              .AsNoTracking()
-                              .Where(pm => !pm.IsArchived && !pm.IsBlocked && pm.IsActive);
-
-            var items = (from pm in models
-                         join p in products on pm.ProductId equals p.Id
-                         join s in _cntx.Stores.AsNoTracking() on p.StoreId equals s.Id
-                         where !s.IsArchived && !s.IsBlocked && s.IsActive
-                         select new CatalogItem()
-                         {
-                             ProductId = p.Id,
-                             StoreId = p.StoreId,
-                             CityId = s.CityId,
-                             Name = p.Name,
-                             ModelCount = models.Where(x => x.ProductId == p.Id).Count(),
-                             Points = p.Points,
-                             Votes = p.Votes,
-                             Availability = pm.Availability,
-                             Price = pm.Price,
-                             SalesPrice = pm.SalesPrice,
-                             SalesQuantity = pm.SalesQuantity,
-                         });
+            var items = _cntx.GetAllCatalogItems(filters.Category);
 
             switch (filters.OrderBy)
             {
@@ -151,8 +124,8 @@ namespace WebUI.Controllers
         }
         public IActionResult SetCategory(string c)
         {
-            var filters = _session.Get<Filters>("Filters");
-            if (filters == null) filters = new Filters();
+            var filters = _session.Get<CatalogFilters>("Filters");
+            if (filters == null) filters = new CatalogFilters();
             filters.Category = c;
             _session.Set("Filters", filters);
 

@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Data.Model
 {
-    public class Filters
+    public class CatalogFilters
     {
+        public string SearchText { get; set; }
         public string Category { get; set; }
         public int? CityId { get; set; }
         public int? StoreId { get; set; }

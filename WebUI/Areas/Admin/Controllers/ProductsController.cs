@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
+using Data.Model.Lucene;
 using Data.Model.Models;
 using Data.Tools;
 using Data.Tools.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -38,11 +40,18 @@ namespace WebUI.Areas.Admin.Controllers
         private readonly IQueryable<Store> _availableStores;
         private readonly IQueryable<Product> _availableProducts;
         private readonly ICatalogService _catalog;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductsController(IOptions<AppConfig> config, ApplicationContext context, IStringLocalizerFactory localizer, IHttpContextAccessor httpContextAccessor, ICatalogService catalog)
+        public ProductsController(IOptions<AppConfig> config,
+            ApplicationContext context,
+            IStringLocalizerFactory localizer,
+            IHttpContextAccessor httpContextAccessor,
+            IWebHostEnvironment env,
+            ICatalogService catalog)
         {
             _config = config.Value;
             _cntx = context;
+            _env = env;
             _resources = localizer.GetLocalResources();
             _httpContextAccessor = httpContextAccessor;
             _availableStores = _cntx.Stores.ApplySecurityFilter(_session);
@@ -165,6 +174,28 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx.ProductModels.Add(mod);
             _cntx.SaveChanges();
 
+            var idx = new CatalogItem
+            {
+                ProductId = product.Id,
+                ModelId = mod.Id,
+                StoreId = product.StoreId,
+                CityId = product.Store.CityId,
+                Name = product.Name,
+                Tags = product.Tags,
+                Categories = cats.ToJoinedStringOrEmpty(";"),
+                ModelCount = 1,
+                Points = product.Points,
+                Votes = product.Votes,
+                Availability = mod.Availability,
+                Price = mod.Price,
+                SalesPrice = mod.SalesPrice,
+                SalesQuantity = mod.SalesQuantity,
+            };
+
+            var Indexer = new ProductIndex(_env.WebRootPath);
+            Indexer.Add(idx);
+            Indexer.Dispose();
+
             TempData["SM"] = _resources["NewProductAdded"].Value;
             return RedirectToAction("List");
             //return View("CreateProduct", model);
@@ -188,6 +219,10 @@ namespace WebUI.Areas.Admin.Controllers
             var product = _cntx.Products.Find(model.Id);
             product.Archive(_cntx);
             _cntx.SaveChanges();
+
+            var Indexer = new ProductIndex(_env.WebRootPath);
+            Indexer.DeleteProduct(product.Id);
+            Indexer.Dispose();
 
             TempData["SM"] = _resources["ProductWasDeleted"].Value;
             return RedirectToAction("List");
@@ -292,6 +327,30 @@ namespace WebUI.Areas.Admin.Controllers
 
             _cntx.SaveChanges();
 
+            var Indexer = new ProductIndex(_env.WebRootPath);
+            foreach (var mod in product.Models)
+            {
+                var idx = new CatalogItem
+                {
+                    ProductId = product.Id,
+                    ModelId = mod.Id,
+                    StoreId = product.StoreId,
+                    CityId = product.Store.CityId,
+                    Name = product.Name,
+                    Tags = product.Tags,
+                    Categories = cats.ToJoinedStringOrEmpty(";"),
+                    ModelCount = 1,
+                    Points = product.Points,
+                    Votes = product.Votes,
+                    Availability = mod.Availability,
+                    Price = mod.Price,
+                    SalesPrice = mod.SalesPrice,
+                    SalesQuantity = mod.SalesQuantity,
+                };
+                Indexer.Add(idx);
+            }
+            Indexer.Dispose();
+
             TempData["SM"] = _resources["ProductEdited"].Value;
             return RedirectToAction("List");
         }
@@ -374,6 +433,30 @@ namespace WebUI.Areas.Admin.Controllers
             _cntx.ProductModels.Update(productModel);
             _cntx.SaveChanges();
 
+            var product = _cntx.Products.Find(productModel.ProductId);
+
+            var idx = new CatalogItem
+            {
+                ProductId = product.Id,
+                ModelId = productModel.Id,
+                StoreId = product.StoreId,
+                CityId = product.Store.CityId,
+                Name = product.Name,
+                Tags = product.Tags,
+                Categories = string.Join(";", product.Categories.Select(s => s.Category).Where(x => !string.IsNullOrWhiteSpace(x))),
+                ModelCount = 1,
+                Points = product.Points,
+                Votes = product.Votes,
+                Availability = productModel.Availability,
+                Price = productModel.Price,
+                SalesPrice = productModel.SalesPrice,
+                SalesQuantity = productModel.SalesQuantity,
+            };
+
+            var Indexer = new ProductIndex(_env.WebRootPath);
+            Indexer.Update(idx);
+            Indexer.Dispose();
+
             TempData["SM_model"] = _resources["ProductModelWasEdited"].Value;
             return RedirectToAction("EditProduct", new { id = productModel.ProductId });
         }
@@ -402,6 +485,10 @@ namespace WebUI.Areas.Admin.Controllers
             var productModel = _cntx.ProductModels.Find(model.Id);
             productModel.Archive(_cntx);
             _cntx.SaveChanges();
+
+            var Indexer = new ProductIndex(_env.WebRootPath);
+            Indexer.Delete(productModel.Id);
+            Indexer.Dispose();
 
             TempData["SM_model"] = _resources["ProductModelWasDeleted"].Value;
             return RedirectToAction("EditProduct", new { id = model.ProductId });
@@ -436,6 +523,30 @@ namespace WebUI.Areas.Admin.Controllers
 
             _cntx.ProductModels.Add(productModel);
             _cntx.SaveChanges();
+            
+            var product = _cntx.Products.Find(productModel.ProductId);
+
+            var idx = new CatalogItem
+            {
+                ProductId = product.Id,
+                ModelId = productModel.Id,
+                StoreId = product.StoreId,
+                CityId = product.Store.CityId,
+                Name = product.Name,
+                Tags = product.Tags,
+                Categories = string.Join(";", product.Categories.Select(s => s.Category).Where(x => !string.IsNullOrWhiteSpace(x))),
+                ModelCount = 1,
+                Points = product.Points,
+                Votes = product.Votes,
+                Availability = productModel.Availability,
+                Price = productModel.Price,
+                SalesPrice = productModel.SalesPrice,
+                SalesQuantity = productModel.SalesQuantity,
+            };
+
+            var Indexer = new ProductIndex(_env.WebRootPath);
+            Indexer.Add(idx);
+            Indexer.Dispose();
 
             TempData["SM_model"] = _resources["ProductModelWasAdded"].Value;
             return RedirectToAction("EditProduct", new { id = productModel.ProductId });

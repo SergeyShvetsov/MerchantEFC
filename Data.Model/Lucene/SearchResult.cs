@@ -15,6 +15,14 @@ namespace Data.Model.Lucene
     public class Hit
     {
         public float Score { get; set; }
-        public int? Id { get; set; }
+        public int? ProductId { get; set; }
+        public int? ModelId { get; set; }
+        public int? StoreId { get; set; }
+        public int? CityId { get; set; }
+        public string[] Categories { get; set; }
+        public string Name { get; set; }
+        public double? Rating { get; set; }
+        public double? Price { get; set; }
+
     }
 }
