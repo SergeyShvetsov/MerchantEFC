@@ -162,6 +162,12 @@
   <data name="AssignedStore" xml:space="preserve">
     <value>Назначенный магазин</value>
   </data>
+  <data name="Availability" xml:space="preserve">
+    <value>Доступность</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Доступно</value>
+  </data>
   <data name="BackToList" xml:space="preserve">
     <value>Назад</value>
   </data>
@@ -546,6 +552,9 @@
   <data name="ExchangeValue" xml:space="preserve">
     <value>Обменный курс</value>
   </data>
+  <data name="Expected" xml:space="preserve">
+    <value>Ожидается</value>
+  </data>
   <data name="FieldMustBeNumeric" xml:space="preserve">
     <value>Значение {0}  должно быть числовым.</value>
   </data>
@@ -647,6 +656,12 @@
   </data>
   <data name="None" xml:space="preserve">
     <value>Не выбрано</value>
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value>Не доступно</value>
+  </data>
+  <data name="OnDemand" xml:space="preserve">
+    <value>На заказ</value>
   </data>
   <data name="OptionName" xml:space="preserve">
     <value>Название опции</value>
@@ -794,6 +809,9 @@
   </data>
   <data name="Superuser" xml:space="preserve">
     <value>Управляющий</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Ключевые слова</value>
   </data>
   <data name="TaxIndividualNumber" xml:space="preserve">
     <value>ИНН</value>

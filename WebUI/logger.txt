@@ -1,6 +1,4 @@
-Start application. 09/04/2020 16:39:37
+Start application. 09/08/2020 12:23:32
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Development
 Content root path: D:\Work\MerchantEFC\WebUI
-An unhandled exception has occurred while executing the request.
-An unhandled exception has occurred while executing the request.

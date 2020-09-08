@@ -28,6 +28,23 @@
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="Availability" class="control-label"></label>
+                        <br />
+                        <select asp-for="Availability" class="form-control custom-select">
+                            @foreach (var item in ViewBag.Availability as List<Available>)
+                            {
+                                if (Model.Availability == item)
+                                {
+                                    <option selected="selected" value="@((int)item)">@resources[item.ToString()]</option>
+                                }
+                                else
+                                {
+                                    <option value="@((int)item)">@resources[item.ToString()]</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label asp-for="ShippingTime" class="control-label"></label>
                         <input asp-for="ShippingTime" class="form-control" />
                         <span asp-validation-for="ShippingTime" class="text-danger"></span>

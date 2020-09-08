@@ -49,6 +49,7 @@ namespace Data.Model
     {
         Available,
         NotAvailable,
+        Expected,
         OnDemand
     }
 }

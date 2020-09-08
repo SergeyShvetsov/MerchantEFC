@@ -19,11 +19,11 @@ namespace WebUI.Areas.Admin.Models
             ProductId = product.Id;
             SelectedStore = product.StoreId;
             Name = product.Name;
+            Tags = product.Tags;
             Code = product.Code;
             Brand = product.Brand;
             Shipping = product.Shipping;
             Categories = product.Categories.Select(s=>s.Category).ToJoinedStringOrEmpty(";");
-            Tags = product.Tags;
             IsActive = product.IsActive;
             IsBlocked = product.IsBlocked;
             ModelSectionName_ru = product.ModelSectionName_ru;

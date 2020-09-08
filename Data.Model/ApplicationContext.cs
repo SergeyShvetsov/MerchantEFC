@@ -81,6 +81,7 @@ namespace Data.Model
             return new List<RoleType>();
         }
 
+        public IEnumerable<Available> GetProductAvailability() => Enum.GetValues(typeof(Available)).Cast<Available>().Select(v => v).ToList();
         public IEnumerable<Status> GetAllStatuses() => Enum.GetValues(typeof(Status)).Cast<Status>().Select(v => v).ToList();
         public IEnumerable<Status> GetAvailableStatuses(ClaimsPrincipal user)
         {

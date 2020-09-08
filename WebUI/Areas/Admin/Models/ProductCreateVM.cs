@@ -27,6 +27,8 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("ProductName")]
         [Required(ErrorMessage = "ProductNameRequired")]
         public string Name { get; set; }
+        [DisplayName("Tags")]
+        public string Tags { get; set; }
         [DisplayName("Brand")]
         public string Brand { get; set; }
         [DisplayName("Shipping")]

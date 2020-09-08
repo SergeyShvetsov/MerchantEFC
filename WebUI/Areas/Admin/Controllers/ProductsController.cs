@@ -121,6 +121,7 @@ namespace WebUI.Areas.Admin.Controllers
                 StoreId = model.SelectedStore,
                 Code = model.Code,
                 Name = model.Name,
+                Tags = model.Tags,
                 Brand = model.Brand,
                 Shipping = model.Shipping,
                 ModelSectionName_ru = model.ModelSectionName_ru,
@@ -276,6 +277,7 @@ namespace WebUI.Areas.Admin.Controllers
             product.StoreId = model.SelectedStore;
             product.Code = model.Code;
             product.Name = model.Name;
+            product.Tags = model.Tags;
             product.Brand = model.Brand;
             product.Shipping = model.Shipping;
             product.ModelSectionName_ru = model.ModelSectionName_ru;
@@ -410,11 +412,14 @@ namespace WebUI.Areas.Admin.Controllers
             var productModel = _cntx.ProductModels.Find(id);
             var model = new ProductModelEditVM(productModel);
 
+            ViewBag.Availability = _cntx.GetProductAvailability();
             return PartialView("_EditProductModelModal", model);
         }
         [HttpPost]
         public IActionResult EditProductModel(ProductModelEditVM model)
         {
+            ViewBag.Availability = _cntx.GetProductAvailability();
+
             if (!ModelState.IsValid)
             {
                 return PartialView("_EditProductModelModal", model);
@@ -429,6 +434,7 @@ namespace WebUI.Areas.Admin.Controllers
             productModel.Quantity = model.Quantity;
             productModel.IsActive = model.IsActive;
             productModel.IsBlocked = model.IsBlocked;
+            productModel.Availability = model.Availability;
 
             _cntx.ProductModels.Update(productModel);
             _cntx.SaveChanges();
@@ -498,11 +504,13 @@ namespace WebUI.Areas.Admin.Controllers
         public IActionResult CreateProductModel(int id)
         {
             var model = new ProductModelEditVM() { ProductId = id };
+            ViewBag.Availability = _cntx.GetProductAvailability();
             return PartialView("_CreateProductModelModal", model);
         }
         [HttpPost]
         public IActionResult CreateProductModel(ProductModelEditVM model)
         {
+            ViewBag.Availability = _cntx.GetProductAvailability();
             if (!ModelState.IsValid)
             {
                 return PartialView("_CreateProductModelModal", model);
@@ -518,7 +526,8 @@ namespace WebUI.Areas.Admin.Controllers
                 SalesPrice = model.SalesPrice,
                 Quantity = model.Quantity,
                 IsActive = model.IsActive,
-                IsBlocked = model.IsBlocked
+                IsBlocked = model.IsBlocked,
+                Availability = model.Availability
             };
 
             _cntx.ProductModels.Add(productModel);
