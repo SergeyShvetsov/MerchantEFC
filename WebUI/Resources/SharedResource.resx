@@ -141,6 +141,9 @@
   <data name="All" xml:space="preserve">
     <value>Все</value>
   </data>
+  <data name="AllProducts" xml:space="preserve">
+    <value>Все товары</value>
+  </data>
   <data name="Append" xml:space="preserve">
     <value>Добавить</value>
   </data>
@@ -776,6 +779,9 @@
   </data>
   <data name="SiteName" xml:space="preserve">
     <value>Green Leaf</value>
+  </data>
+  <data name="Store" xml:space="preserve">
+    <value>Магазин</value>
   </data>
   <data name="StoreCode" xml:space="preserve">
     <value>Код магазина</value>

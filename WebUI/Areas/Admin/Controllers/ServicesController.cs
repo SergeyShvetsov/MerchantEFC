@@ -56,7 +56,7 @@ namespace WebUI.Areas.Admin.Controllers
         public IActionResult RebuildSearchIndex()
         {
             var Indexer = new ProductIndex(_env.WebRootPath);
-            var cnt = Indexer.Build(_cntx.GetAllCatalogItems(""));
+            var cnt = Indexer.Build(_cntx.GetAllCatalogItems(new CatalogFilters()));
             Indexer.Dispose();
 
             TempData["SM"] = $"Создано {cnt} индексов.";

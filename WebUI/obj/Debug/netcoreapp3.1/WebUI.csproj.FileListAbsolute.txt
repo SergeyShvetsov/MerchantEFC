@@ -837,3 +837,4 @@ D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.Queries.dll
 D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.QueryParser.dll
 D:\Work\MerchantEFC\WebUI\bin\Debug\netcoreapp3.1\Lucene.Net.Sandbox.dll
 D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Services\Index.cshtml.g.cs
+D:\Work\MerchantEFC\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_NavigationPartial.cshtml.g.cs

@@ -10,11 +10,11 @@ namespace Data.Model.Extensions
 {
     public static class ApplicationContextExtensions
     {
-        public static IQueryable<CatalogItem> GetAllCatalogItems(this ApplicationContext cntx,  string cat)
+        public static IQueryable<CatalogItem> GetAllCatalogItems(this ApplicationContext cntx, CatalogFilters filters)
         {
-            var noCat = cat == string.Empty;
+            var noCat = string.IsNullOrWhiteSpace(filters.Category);
             var products = cntx.Products
-                                .Where(w => noCat || cntx.ProductCategories.Any(x => x.ProductId == w.Id && x.Category.StartsWith(cat)))
+                                .Where(w => noCat || cntx.ProductCategories.Any(x => x.ProductId == w.Id && x.Category.StartsWith(filters.Category)))
                                 .AsNoTracking()
                                 .ApplyArchivedFilter()
                                 .ApplyAvailableFilter();
@@ -44,6 +44,11 @@ namespace Data.Model.Extensions
                              SalesPrice = pm.SalesPrice,
                              SalesQuantity = pm.SalesQuantity,
                          });
+
+            if (filters.CityId != 0)
+                items = items.Where(c => c.CityId == filters.CityId);
+            if (filters.StoreId != 0)
+                items = items.Where(s => s.StoreId == filters.StoreId);
 
             return items;
         }

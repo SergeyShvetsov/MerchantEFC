@@ -1,0 +1,85 @@
+﻿@using WebUI.Resources
+@using WebUI.Services
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.EntityFrameworkCore;
+@using Data.Tools.Extensions;
+@using Data.Model.Extensions;
+@using  Data.Tools;
+
+@inject LocalizationService Resource
+@inject ICatalogService Catalog
+@inject IHttpContextAccessor httpContextAccessor
+@inject ApplicationContext context;
+
+@{
+    var _session = httpContextAccessor.HttpContext.Session;
+    var filters = _session.Get<CatalogFilters>("Filters");
+    if (filters == null)
+    {
+        filters = new CatalogFilters();
+        _session.Set<CatalogFilters>("Filters", filters);
+    }
+
+    var availableCities = context.Cities.AsNoTracking().ApplyArchivedFilter().
+        Select(s => new SelectListItem { Text = s.Name, Value = s.Id.ToString() }).ToList();
+    availableCities.Insert(0, new SelectListItem { Value = "0", Text = Resource["All"] });
+
+    var availableStores = context.Stores.AsNoTracking().ApplyAvailableFilter().
+        Select(s => new Select2ListItem { text = s.Name, id = s.Id }).ToList();
+    availableStores.Insert(0, new Select2ListItem { id = 0, text = Resource["All"] });
+
+}
+<div class="dropdown">
+    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Каталог
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @Html.ActionLink(Resource["AllProducts"], "SetCategory", "Shop", null, new { @class = "dropdown-item" })
+        @foreach (var cat in Catalog.Categories.Where(x => x.IsActive).OrderBy(o => o.SortOrder))
+        {
+            @Html.ActionLink(Resource["cat" + cat.Code], "Category", "Shop", new { cat = cat.Code }, new { @class = "dropdown-item" })
+        }
+    </div>
+</div>
+<div class="form-inline">
+    <div class="form-group">
+        <label class="control-label">@Resource["City"]</label>
+        <span>&nbsp;</span>
+        <select id="cityId" name="cityId" class="form-control custom-select" onchange="setCityFilter(this.value);">
+            @foreach (var item in availableCities)
+            {
+                if (item.Value == filters.CityId.ToString())
+                {
+                    <option selected="selected" value="@item.Value">@item.Text</option>
+                }
+                else
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
+        </select>
+    </div>
+    <span>&nbsp;</span>
+    <div class="form-group">
+        <label class="control-label">@Resource["Store"]</label>
+        <span>&nbsp;</span>
+        <select id="storeId" name="storeId" class="choose-store form-control" style="width:200px;" onchange="setStoreFilter(this.value);">
+            @foreach (var itm in availableStores)
+            {
+                if (itm.id == filters.StoreId)
+                {
+                    <option value="@itm.id" selected="selected">@itm.text</option>
+                }
+                else
+                {
+                    <option value="@itm.id">@itm.text</option>
+                }
+            }
+        </select>
+    </div>
+    <span>&nbsp;</span>
+    <form class="my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="@Resource["Search"]" aria-label="@Resource["Search"]">
+        <button class="btn btn-success my-2 my-sm-0" type="submit">@Resource["Search"]</button>
+    </form>
+</div>

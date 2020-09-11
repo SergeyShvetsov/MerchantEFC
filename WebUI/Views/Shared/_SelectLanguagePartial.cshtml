@@ -6,14 +6,13 @@
 
 @inject IViewLocalizer Localizer
 @inject IOptions<RequestLocalizationOptions> LocOptions
-
 @{
     // получаем сервис IRequestCultureFeature
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    // получаем список поддерживаемых культур
-    var cultureItems = LocOptions.Value.SupportedUICultures
-        .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName.FirstCharToUpper() })
-        .ToList();
+ // получаем список поддерживаемых культур
+ var cultureItems = LocOptions.Value.SupportedUICultures
+     .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName.FirstCharToUpper() })
+     .ToList();
 }
 
 <form asp-controller="Shop" asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path" method="post" class="form-horizontal">

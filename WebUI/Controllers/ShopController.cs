@@ -9,6 +9,7 @@ using Data.Model;
 using Data.Model.Extensions;
 using Data.Model.Interfaces;
 using Data.Model.Models;
+using Data.Tools;
 using Data.Tools.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -85,7 +86,7 @@ namespace WebUI.Controllers
             ViewBag.Title = "Home";
             return View();
         }
-        public IActionResult Category(string cat, IFormCollection form)
+        public IActionResult Category(string cat)
         {
             var c = cat == null ? (string)TempData["cat"] : cat;
 
@@ -105,7 +106,7 @@ namespace WebUI.Controllers
                 _session.Set<CatalogFilters>("Filters", filters);
             }
 
-            var items = _cntx.GetAllCatalogItems(filters.Category);
+            var items = _cntx.GetAllCatalogItems(filters);
 
             switch (filters.OrderBy)
             {
@@ -122,15 +123,55 @@ namespace WebUI.Controllers
             ViewBag.Title = "Catalog";
             return View(onePageOfStores);
         }
-        public IActionResult SetCategory(string c)
+        public IActionResult SetCategory(string f)
         {
             var filters = _session.Get<CatalogFilters>("Filters");
             if (filters == null) filters = new CatalogFilters();
-            filters.Category = c;
+            filters.Category = f;
             _session.Set("Filters", filters);
 
             return RedirectToAction("Catalog");
         }
+        public IActionResult SetCity(string f)
+        {
+            var filters = _session.Get<CatalogFilters>("Filters");
+            if (filters == null) filters = new CatalogFilters();
+            filters.CityId = Int32.Parse(f);
+            _session.Set("Filters", filters);
+
+            return RedirectToAction("Catalog");
+        }
+        public IActionResult SetStore(string f)
+        {
+            var filters = _session.Get<CatalogFilters>("Filters");
+            if (filters == null) filters = new CatalogFilters();
+            filters.StoreId = Int32.Parse(f);
+            _session.Set("Filters", filters);
+
+            return RedirectToAction("Catalog");
+        }
+        private IEnumerable<Select2ListItem> GetStoreSelect2List(string search)
+        {
+            var list = _cntx.Stores.ApplyArchivedFilter().ApplyAvailableFilter();
+            if (!(string.IsNullOrEmpty(search) || string.IsNullOrWhiteSpace(search)))
+            {
+                list = list.Where(x => x.Name.ToLower().StartsWith(search.ToLower()));
+            }
+
+            var tmp = list.ToList().Select(s => new Select2ListItem
+            {
+                id = s.Id,
+                text = s.Name + " (" + s.City.Name + ")"
+            });
+            var res = tmp.OrderBy(o => o.text).ToList();
+            res.Insert(0, new Select2ListItem { id = 0, text = _resources["All"] });
+            return res;
+        }
+        public ActionResult GetStoreList(string search)
+        {
+            return Json(new { items = GetStoreSelect2List(search) });
+        }
+
         public IActionResult ProductImage(int? id, ImageSize s = ImageSize.Medium)
         {
             byte[] buffer;

@@ -9,8 +9,8 @@ namespace Data.Model
     {
         public string SearchText { get; set; }
         public string Category { get; set; }
-        public int? CityId { get; set; }
-        public int? StoreId { get; set; }
+        public int CityId { get; set; }
+        public int StoreId { get; set; }
 
         public OrderBy OrderBy { get; set; }
     }

@@ -20,7 +20,7 @@
                 <ul>
                     @foreach (var sc in cat.Subcategories)
                     {
-                        <li class="category-item"><a href="/Shop/SetCategory?c=@sc.Code">@Resource["cat" + sc.Code]</a></li>
+                        <li class="category-item"><a href="/Shop/SetCategory?f=@sc.Code">@Resource["cat" + sc.Code]</a></li>
                     }
                 </ul>
             }
