@@ -1,7 +1,10 @@
 ﻿using Data.Model.Models;
 using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore.Proxies;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -23,6 +26,16 @@ namespace Data.Model
         public DbSet<ProductPage> ProductPages { get; set; }
         public DbSet<ProductComment> ProductComments { get; set; }
 
+        //public ApplicationContext(IConfiguration configuration)
+        //{
+        //    var connection = configuration.GetConnectionString("DefaultConnection");
+        //    var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
+
+        //var options = optionsBuilder
+        //    .UseLazyLoadingProxies()
+        //    .UseMySQL(connection);
+
+        //}
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
         {

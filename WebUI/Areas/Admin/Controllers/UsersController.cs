@@ -175,7 +175,7 @@ namespace WebUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditUser(Guid id)
+        public IActionResult EditUser(int id)
         {
             ViewBag.TabItem = "Users";
             SetViewBag();
